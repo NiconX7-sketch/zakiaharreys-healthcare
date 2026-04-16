@@ -37,6 +37,20 @@
         .service-title { color: var(--primary-color); margin-bottom: 10px; font-size: 1.3rem; }
         .service-description { color: var(--text-light); line-height: 1.6; }
         
+        .programs-section { padding: 60px 0; background: white; }
+        .programs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; margin-top: 40px; }
+        .program-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); transition: all 0.3s; border: 1px solid var(--border); }
+        .program-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); border-color: var(--primary-color); }
+        .program-image { width: 100%; height: 220px; object-fit: cover; }
+        .program-content { padding: 25px; }
+        .program-type { display: inline-block; padding: 5px 12px; background: #e8f5e9; color: var(--primary-color); border-radius: 20px; font-size: 0.8rem; margin-bottom: 15px; }
+        .program-title { color: var(--primary-color); margin-bottom: 10px; font-size: 1.3rem; }
+        .program-features { list-style: none; margin: 20px 0; }
+        .program-features li { padding: 8px 0; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #f0f0f0; }
+        .program-features li:last-child { border-bottom: none; }
+        .program-features i { color: var(--primary-color); width: 20px; }
+        .program-price { font-size: 1.5rem; color: var(--primary-color); font-weight: bold; margin: 15px 0; }
+        
         .disclaimer-box { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px; border-radius: 8px; margin: 40px auto; max-width: 900px; }
         .disclaimer-box strong { color: #b45309; display: block; margin-bottom: 10px; }
         .disclaimer-box p { color: #78350f; margin: 0; }
@@ -44,10 +58,19 @@
         .contact-form-section { background: var(--primary-color); padding: 60px 0; color: white; }
         .corporate-form-container { max-width: 600px; margin: 0 auto; background: white; padding: 40px; border-radius: 12px; color: var(--text-dark); }
         .corporate-form-container h2 { color: var(--primary-color); margin-bottom: 25px; text-align: center; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; }
+        .btn-primary { background: var(--primary-color); color: white; padding: 12px 30px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; width: 100%; }
+        .btn-primary:hover { background: var(--primary-dark); }
+        
+        .loader { text-align: center; padding: 40px; }
+        .loader i { font-size: 2rem; color: var(--primary-color); animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
         
         @media (max-width: 768px) {
             .corporate-hero h1 { font-size: 1.8rem; }
-            .services-grid { grid-template-columns: 1fr; }
+            .services-grid, .programs-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -55,8 +78,8 @@
     <div class="top-bar">
         <div class="container">
             <div class="contact-info">
-                <span><i class="fas fa-phone"></i> <span class="contact-phone">+254746800330</span> / 254722151351</span>
-                <span><i class="fas fa-envelope"></i> <span class="contact-email">zakiyaharreyshealthcare@gmail.com</span></span>
+                <span><i class="fas fa-phone"></i> +254746800330 / 254722151351</span>
+                <span><i class="fas fa-envelope"></i> zakiyaharreyshealthcare@gmail.com</span>
             </div>
             <div class="currency-selector">
                 <button class="currency-btn" data-currency="USD">USD $</button>
@@ -83,13 +106,11 @@
                     <li><a href="corporate-wellness.html" class="active">Corporate Wellness</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
-                <div class="cart-icon" onclick="window.location.href='cart.html'">
+                <div class="cart-icon" onclick="location.href='cart.html'">
                     <i class="fas fa-shopping-cart"></i>
                     <span class="cart-count">0</span>
                 </div>
-                <div class="mobile-menu">
-                    <i class="fas fa-bars"></i>
-                </div>
+                <div class="mobile-menu"><i class="fas fa-bars"></i></div>
             </nav>
         </div>
     </header>
@@ -115,47 +136,38 @@
         <div class="container">
             <h2 class="section-title">Our Corporate Wellness Services</h2>
             <div class="services-grid">
-                <!-- Service 1: Reflexology -->
                 <div class="service-card">
-                    <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=500" alt="Reflexology Wellness Sessions" class="service-image" onerror="this.src='https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=500'">
+                    <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=500" alt="Reflexology" class="service-image" onerror="this.src='https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=500'">
                     <div class="service-content">
                         <div class="service-icon"><i class="fas fa-hand-holding-heart"></i></div>
                         <h3 class="service-title">Reflexology Wellness Sessions</h3>
                         <p class="service-description">We offer workplace reflexology sessions aimed at promoting relaxation and general wellbeing. Reflexology focuses on applying gentle pressure to specific areas of the feet to support relaxation and help employees manage workplace stress and physical tension.</p>
                     </div>
                 </div>
-                
-                <!-- Service 2: Mental Health -->
                 <div class="service-card">
-                    <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=500" alt="Mental Health Awareness" class="service-image" onerror="this.src='https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=500'">
+                    <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=500" alt="Mental Health" class="service-image" onerror="this.src='https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=500'">
                     <div class="service-content">
                         <div class="service-icon"><i class="fas fa-brain"></i></div>
                         <h3 class="service-title">Mental Health & Wellbeing Awareness</h3>
                         <p class="service-description">Our mental health awareness programs help employees understand the importance of emotional wellbeing, stress management, and healthy coping strategies. These sessions encourage supportive workplace environments and promote overall mental wellness.</p>
                     </div>
                 </div>
-                
-                <!-- Service 3: Pain Management -->
                 <div class="service-card">
                     <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500" alt="Pain Management" class="service-image" onerror="this.src='https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500'">
                     <div class="service-content">
                         <div class="service-icon"><i class="fas fa-spine"></i></div>
                         <h3 class="service-title">Pain Management & Workplace Comfort</h3>
-                        <p class="service-description">We provide pain management education and wellness guidance to help employees better understand common workplace discomforts such as back pain, muscle tension, and posture-related strain. Our approach focuses on wellness education and healthy lifestyle practices.</p>
+                        <p class="service-description">We provide pain management education and wellness guidance to help employees better understand common workplace discomforts such as back pain, muscle tension, and posture-related strain.</p>
                     </div>
                 </div>
-                
-                <!-- Service 4: Fatigue Management -->
                 <div class="service-card">
                     <img src="https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=500" alt="Fatigue Management" class="service-image" onerror="this.src='https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=500'">
                     <div class="service-content">
                         <div class="service-icon"><i class="fas fa-charging-station"></i></div>
                         <h3 class="service-title">Fatigue Management & Energy Wellness</h3>
-                        <p class="service-description">Fatigue can affect productivity and wellbeing in the workplace. Our fatigue management programs provide guidance on healthy routines, stress reduction, rest, and lifestyle habits that help employees maintain energy and balance during demanding work schedules.</p>
+                        <p class="service-description">Our fatigue management programs provide guidance on healthy routines, stress reduction, rest, and lifestyle habits that help employees maintain energy and balance during demanding work schedules.</p>
                     </div>
                 </div>
-                
-                <!-- Service 5: Stress Management -->
                 <div class="service-card">
                     <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500" alt="Stress Management" class="service-image" onerror="this.src='https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500'">
                     <div class="service-content">
@@ -165,27 +177,72 @@
                     </div>
                 </div>
             </div>
-            
-            <div class="disclaimer-box">
-                <strong><i class="fas fa-info-circle"></i> Disclaimer:</strong>
-                <p>The wellness services and information provided by Zakiyah Arreys Healthcare are intended for educational and preventive wellness purposes and should not replace professional medical advice, diagnosis, or treatment.</p>
+        </div>
+    </section>
+
+    <!-- Dynamic Programs from Database -->
+    <section class="programs-section">
+        <div class="container">
+            <h2 class="section-title">Available Wellness Programs</h2>
+            <div class="programs-grid" id="programsGrid">
+                <div class="loader"><i class="fas fa-spinner"></i> Loading programs...</div>
             </div>
         </div>
     </section>
+
+    <div class="container">
+        <div class="disclaimer-box">
+            <strong><i class="fas fa-info-circle"></i> Disclaimer:</strong>
+            <p>The wellness services and information provided by Zakiyah Arreys Healthcare are intended for educational and preventive wellness purposes and should not replace professional medical advice, diagnosis, or treatment.</p>
+        </div>
+    </div>
 
     <section class="contact-form-section">
         <div class="container">
             <div class="corporate-form-container">
                 <h2><i class="fas fa-building"></i> Request Corporate Wellness Quote</h2>
                 <form id="corporateInquiryForm">
-                    <div class="form-group"><label>Company Name *</label><input type="text" id="companyName" required></div>
-                    <div class="form-group"><label>Your Name *</label><input type="text" id="contactName" required></div>
-                    <div class="form-group"><label>Email Address *</label><input type="email" id="contactEmail" required></div>
-                    <div class="form-group"><label>Phone Number *</label><input type="tel" id="contactPhone" required></div>
-                    <div class="form-group"><label>Number of Employees</label><select id="employeeCount"><option>1-50</option><option>51-200</option><option>201-500</option><option>500+</option></select></div>
-                    <div class="form-group"><label>Service Interested In</label><select id="serviceInterest"><option>Reflexology Wellness Sessions</option><option>Mental Health & Wellbeing Awareness</option><option>Pain Management & Workplace Comfort</option><option>Fatigue Management & Energy Wellness</option><option>Stress Management & Lifestyle Wellness</option><option>Custom Program</option></select></div>
-                    <div class="form-group"><label>Additional Information</label><textarea id="message" rows="4" placeholder="Tell us about your corporate wellness needs..."></textarea></div>
-                    <button type="submit" class="btn btn-primary" style="width:100%">Request Quote</button>
+                    <div class="form-group">
+                        <label>Company Name *</label>
+                        <input type="text" id="companyName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Your Name *</label>
+                        <input type="text" id="contactName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address *</label>
+                        <input type="email" id="contactEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number *</label>
+                        <input type="tel" id="contactPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Number of Employees</label>
+                        <select id="employeeCount">
+                            <option>1-50</option>
+                            <option>51-200</option>
+                            <option>201-500</option>
+                            <option>500+</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Service Interested In</label>
+                        <select id="serviceInterest">
+                            <option>Reflexology Wellness Sessions</option>
+                            <option>Mental Health & Wellbeing Awareness</option>
+                            <option>Pain Management & Workplace Comfort</option>
+                            <option>Fatigue Management & Energy Wellness</option>
+                            <option>Stress Management & Lifestyle Wellness</option>
+                            <option>Custom Program</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Additional Information</label>
+                        <textarea id="message" rows="4" placeholder="Tell us about your corporate wellness needs..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary">Request Quote</button>
                 </form>
             </div>
         </div>
@@ -217,8 +274,8 @@
                 </div>
                 <div class="footer-contact">
                     <h4>Contact Us</h4>
-                    <p><i class="fas fa-phone"></i> <span class="contact-phone">+254746800330</span> / 254722151351</p>
-                    <p><i class="fas fa-envelope"></i> <span class="contact-email">zakiyaharreyshealthcare@gmail.com</span></p>
+                    <p><i class="fas fa-phone"></i> +254746800330 / 254722151351</p>
+                    <p><i class="fas fa-envelope"></i> zakiyaharreyshealthcare@gmail.com</p>
                 </div>
                 <div class="footer-social">
                     <h4>Follow Us</h4>
@@ -240,54 +297,219 @@
     <script src="js/currency.js"></script>
     <script src="js/cart.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            updateCartCount();
-            setupFormSubmit();
-            
-            const mobileMenu = document.querySelector('.mobile-menu');
-            const navMenu = document.querySelector('.nav-menu');
-            if (mobileMenu) mobileMenu.addEventListener('click', () => navMenu.classList.toggle('active'));
-        });
+        // Supabase configuration
+        const SUPABASE_URL = 'https://qczrxqxwowfkltkbcyho.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFjenJ4cXh3b3dma2x0a2JjeWhvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzMjE1MDgsImV4cCI6MjA5MTg5NzUwOH0.VPDdz5bGuneuXSxAlhjMpFZbAzAkYeF9nYfgbopkZoE';
         
+        let supabaseClient = null;
+        let corporatePrograms = [];
+        
+        // Initialize Supabase
+        function initSupabase() {
+            if (typeof supabase !== 'undefined' && supabase.createClient) {
+                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                console.log('Supabase initialized');
+                loadCorporatePrograms();
+                return true;
+            }
+            setTimeout(initSupabase, 500);
+            return false;
+        }
+        
+        // Load corporate wellness programs from database
+        async function loadCorporatePrograms() {
+            if (!supabaseClient) return;
+            
+            try {
+                const { data, error } = await supabaseClient
+                    .from('corporate_wellness')
+                    .select('*')
+                    .eq('active', true)
+                    .order('created_at', { ascending: false });
+                
+                if (error) throw error;
+                
+                corporatePrograms = data;
+                displayPrograms();
+            } catch (error) {
+                console.error('Error loading programs:', error);
+                displayPrograms([]);
+            }
+        }
+        
+        // Display programs on page
+        function displayPrograms() {
+            const container = document.getElementById('programsGrid');
+            if (!container) return;
+            
+            const currency = localStorage.getItem('currency') || 'USD';
+            const exchangeRate = parseFloat(localStorage.getItem('exchangeRate')) || 115;
+            
+            if (!corporatePrograms || corporatePrograms.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align:center; grid-column:1/-1; padding:40px;">
+                        <i class="fas fa-calendar-alt" style="font-size:3rem; color:#ccc;"></i>
+                        <p>No wellness programs available at the moment. Check back soon!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = corporatePrograms.map(program => {
+                const priceUSD = program.price;
+                const priceKES = Math.round(priceUSD * exchangeRate);
+                const displayPrice = currency === 'USD' ? `$${priceUSD.toFixed(2)}` : `KSh ${priceKES.toLocaleString()}`;
+                
+                return `
+                    <div class="program-card">
+                        <img src="${program.image_url || 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=500'}" 
+                             alt="${escapeHtml(program.title)}" 
+                             class="program-image"
+                             onerror="this.src='https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=500'">
+                        <div class="program-content">
+                            <span class="program-type">${escapeHtml(program.program_type || 'Wellness Program')}</span>
+                            <h3 class="program-title">${escapeHtml(program.title)}</h3>
+                            <p>${escapeHtml(program.description)}</p>
+                            ${program.features && program.features.length > 0 ? `
+                            <ul class="program-features">
+                                ${program.features.map(f => `<li><i class="fas fa-check-circle"></i> ${escapeHtml(f)}</li>`).join('')}
+                            </ul>
+                            ` : ''}
+                            <div class="program-price">${displayPrice}</div>
+                            <button class="btn-primary" onclick="inquireProgram('${escapeHtml(program.title)}')">
+                                <i class="fas fa-building"></i> Inquire Now
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Inquire about program via WhatsApp
+        function inquireProgram(programName) {
+            const phone = '254746800330';
+            const message = `Hello, I'm interested in your corporate wellness program: ${programName}. Please provide more information for my company.`;
+            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+        }
+        
+        // Handle corporate inquiry form submission
         async function setupFormSubmit() {
             const form = document.getElementById('corporateInquiryForm');
-            if (form) {
-                form.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    const formData = {
-                        company_name: document.getElementById('companyName').value,
-                        name: document.getElementById('contactName').value,
-                        email: document.getElementById('contactEmail').value,
-                        phone: document.getElementById('contactPhone').value,
-                        employees: document.getElementById('employeeCount').value,
-                        service: document.getElementById('serviceInterest').value,
-                        message: document.getElementById('message').value,
-                        type: 'corporate_inquiry'
-                    };
-                    
-                    try {
-                        await supabase.from('contact_messages').insert([{
+            if (!form) return;
+            
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const submitBtn = form.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                
+                const formData = {
+                    company_name: document.getElementById('companyName').value,
+                    name: document.getElementById('contactName').value,
+                    email: document.getElementById('contactEmail').value,
+                    phone: document.getElementById('contactPhone').value,
+                    employees: document.getElementById('employeeCount').value,
+                    service: document.getElementById('serviceInterest').value,
+                    message: document.getElementById('message').value
+                };
+                
+                try {
+                    if (supabaseClient) {
+                        await supabaseClient.from('contact_messages').insert([{
                             name: formData.name,
                             email: formData.email,
                             phone: formData.phone,
                             subject: `Corporate Wellness Inquiry - ${formData.company_name}`,
                             message: `Company: ${formData.company_name}\nEmployees: ${formData.employees}\nService: ${formData.service}\n\n${formData.message}`
                         }]);
-                        alert('Thank you! We will contact you within 24 hours.');
-                        form.reset();
-                    } catch (error) {
-                        alert('Message sent! We will contact you soon.');
-                        form.reset();
                     }
+                    alert('Thank you! We will contact you within 24 hours.');
+                    form.reset();
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Message sent! We will contact you soon.');
+                    form.reset();
+                }
+                
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            });
+        }
+        
+        // Update cart count
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('zakiyah_cart')) || [];
+            const count = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            document.querySelectorAll('.cart-count').forEach(el => {
+                el.textContent = count;
+            });
+        }
+        
+        // Load logo from settings
+        async function loadLogoSettings() {
+            if (!supabaseClient) return;
+            
+            try {
+                const { data } = await supabaseClient
+                    .from('site_settings')
+                    .select('value')
+                    .eq('key', 'logo_url')
+                    .single();
+                
+                if (data && data.value) {
+                    const logoImg = document.getElementById('header-logo');
+                    const logoText = document.querySelector('.logo-text');
+                    if (logoImg && logoText) {
+                        logoImg.src = data.value;
+                        logoImg.style.display = 'block';
+                        logoText.style.display = 'none';
+                    }
+                }
+            } catch (error) {
+                console.log('Using default logo');
+            }
+        }
+        
+        // Escape HTML
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+        
+        // Mobile menu toggle
+        function setupMobileMenu() {
+            const mobileMenu = document.querySelector('.mobile-menu');
+            const navMenu = document.querySelector('.nav-menu');
+            if (mobileMenu) {
+                mobileMenu.addEventListener('click', () => {
+                    navMenu.classList.toggle('active');
                 });
             }
         }
         
-        function updateCartCount() {
-            const cart = JSON.parse(localStorage.getItem('zakiyah_cart')) || [];
-            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
-            document.querySelectorAll('.cart-count').forEach(el => el.textContent = count);
-        }
+        // Listen for currency changes
+        window.addEventListener('currencyChanged', function() {
+            displayPrograms();
+        });
+        
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            setupMobileMenu();
+            updateCartCount();
+            setupFormSubmit();
+            initSupabase();
+            loadLogoSettings();
+        });
+        
+        // Make functions global
+        window.inquireProgram = inquireProgram;
     </script>
 </body>
 </html>
