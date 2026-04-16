@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Failed - Zakiyah Arreys Healthcare</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .failure-section { padding: 100px 0; background: #f9f9f9; min-height: 500px; display: flex; align-items: center; }
+        .failure-box { background: white; max-width: 600px; margin: 0 auto; padding: 50px; border-radius: 12px; box-shadow: var(--shadow); text-align: center; }
+        .failure-icon { width: 100px; height: 100px; background: #f8d7da; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 30px; }
+        .failure-icon i { font-size: 50px; color: #721c24; }
+        .failure-box h1 { color: #dc3545; margin-bottom: 10px; }
+        .btn-group { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="top-bar"><div class="container"><div class="contact-info"><span><i class="fas fa-phone"></i> +254746800330</span><span><i class="fas fa-envelope"></i> zakiyaharreyshealthcare@gmail.com</span></div></div></div>
+
+    <header><div class="container"><div class="logo"><div class="logo-text"><h1>Zakiyah Arreys Healthcare</h1><p class="tagline">Your Partner in Wellness</p></div></div><nav><ul class="nav-menu"><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="products.html">Products</a></li><li><a href="blog.html">Blog</a></li><li><a href="corporate-wellness.html">Corporate Wellness</a></li><li><a href="contact.html">Contact</a></li></ul><div class="cart-icon" onclick="window.location.href='cart.html'"><i class="fas fa-shopping-cart"></i><span class="cart-count">0</span></div><div class="mobile-menu"><i class="fas fa-bars"></i></div></nav></div></header>
+
+    <section class="failure-section"><div class="container"><div class="failure-box"><div class="failure-icon"><i class="fas fa-times-circle"></i></div><h1>Payment Failed</h1><p>We couldn't process your payment. Please try again or use a different payment method.</p><div class="btn-group"><a href="checkout.html" class="btn btn-primary">Try Again</a><a href="cart.html" class="btn btn-secondary">Return to Cart</a><a href="contact.html" class="btn btn-secondary">Contact Support</a></div></div></div></section>
+
+    <footer><div class="container"><div class="footer-grid"><div class="footer-about"><h4>Zakiyah Arreys Healthcare</h4><p>Supporting healthier communities.</p></div><div class="footer-links"><h4>Quick Links</h4><ul><li><a href="about.html">About Us</a></li><li><a href="products.html">Products</a></li><li><a href="contact.html">Contact</a></li></ul></div><div class="footer-contact"><h4>Contact Us</h4><p><i class="fas fa-phone"></i> +254746800330</p><p><i class="fas fa-envelope"></i> zakiyaharreyshealthcare@gmail.com</p></div></div><div class="footer-bottom"><p>&copy; 2026 Zakiyah Arreys Healthcare. All rights reserved.</p></div></div></footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenu = document.querySelector('.mobile-menu');
+            const navMenu = document.querySelector('.nav-menu');
+            if (mobileMenu) mobileMenu.addEventListener('click', () => navMenu.classList.toggle('active'));
+        });
+    </script>
+</body>
+</html>

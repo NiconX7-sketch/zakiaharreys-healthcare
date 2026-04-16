@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Blog - Zakiyah Arreys Healthcare</title>
+    <meta name="description" content="Read the latest health articles, wellness tips, and supplement guides from our experts.">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        .blog-header { background: linear-gradient(rgba(46,125,50,0.9), rgba(46,125,50,0.8)), url('https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1350'); background-size: cover; color: white; padding: 80px 0; text-align: center; }
+        .blog-header h1 { font-size: 2.5rem; margin-bottom: 15px; }
+        .blog-section { padding: 60px 0; }
+        @media (max-width: 768px) { .blog-header h1 { font-size: 1.8rem; } }
+    </style>
+</head>
+<body>
+    <div class="top-bar"><div class="container"><div class="contact-info"><span><i class="fas fa-phone"></i> <span class="contact-phone">+254746800330</span> / 254722151351</span><span><i class="fas fa-envelope"></i> <span class="contact-email">zakiyaharreyshealthcare@gmail.com</span></span></div><div class="currency-selector"><button class="currency-btn" data-currency="USD">USD $</button><button class="currency-btn" data-currency="KES">KES KSh</button></div></div></div>
+
+    <header><div class="container"><div class="logo"><img src="" alt="Zakiyah Arreys Healthcare" id="header-logo" style="max-height: 60px; display: none;"><div class="logo-text"><h1>Zakiyah Arreys Healthcare</h1><p class="tagline">Your Partner in Wellness</p></div></div><nav><ul class="nav-menu"><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="products.html">Products</a></li><li><a href="blog.html" class="active">Blog</a></li><li><a href="corporate-wellness.html">Corporate Wellness</a></li><li><a href="contact.html">Contact</a></li></ul><div class="cart-icon" onclick="window.location.href='cart.html'"><i class="fas fa-shopping-cart"></i><span class="cart-count">0</span></div><div class="mobile-menu"><i class="fas fa-bars"></i></div></nav></div></header>
+
+    <section class="blog-header"><div class="container"><h1>Health & Wellness Blog</h1><p>Expert insights, tips, and guides for better health</p></div></section>
+
+    <section class="blog-section"><div class="container"><div class="blog-grid" id="all-blogs"><div class="loader"><i class="fas fa-spinner"></i> Loading articles...</div></div></div></section>
+
+    <div class="whatsapp-float"><a href="https://wa.me/254746800330" target="_blank"><i class="fab fa-whatsapp"></i><span>Chat with us</span></a></div>
+
+    <footer><div class="container"><div class="footer-grid"><div class="footer-about"><h4>Zakiyah Arreys Healthcare</h4><p>Supporting healthier communities.</p></div><div class="footer-links"><h4>Quick Links</h4><ul><li><a href="about.html">About Us</a></li><li><a href="products.html">Products</a></li><li><a href="contact.html">Contact</a></li></ul></div><div class="footer-contact"><h4>Contact Us</h4><p><i class="fas fa-phone"></i> +254746800330</p><p><i class="fas fa-envelope"></i> zakiyaharreyshealthcare@gmail.com</p></div></div><div class="footer-bottom"><p>&copy; 2026 Zakiyah Arreys Healthcare. All rights reserved.</p></div></div></footer>
+
+    <script src="js/supabase-config.js"></script>
+    <script src="js/currency.js"></script>
+    <script src="js/cart.js"></script>
+    <script>
+        let allBlogPosts = [];
+        
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadBlogPosts();
+            updateCartCount();
+            
+            const mobileMenu = document.querySelector('.mobile-menu');
+            const navMenu = document.querySelector('.nav-menu');
+            if (mobileMenu) mobileMenu.addEventListener('click', () => navMenu.classList.toggle('active'));
+        });
+        
+        async function loadBlogPosts() {
+            try {
+                const { data, error } = await supabase
+                    .from('blog_posts')
+                    .select('*')
+                    .eq('published', true)
+                    .order('created_at', { ascending: false });
+                
+                if (error) throw error;
+                allBlogPosts = data;
+                displayBlogPosts();
+            } catch (error) {
+                console.error('Error loading blog posts:', error);
+                displayBlogPosts();
+            }
+        }
+        
+        function displayBlogPosts() {
+            const container = document.getElementById('all-blogs');
+            if (!allBlogPosts || allBlogPosts.length === 0) {
+                container.innerHTML = '<p style="text-align:center; grid-column:1/-1;">No blog posts yet. Check back soon!</p>';
+                return;
+            }
+            
+            container.innerHTML = allBlogPosts.map(post => {
+                const date = new Date(post.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                return `
+                    <div class="blog-card">
+                        <img src="${post.image_url || 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500'}" alt="${escapeHtml(post.title)}" class="blog-image" onerror="this.src='https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500'">
+                        <div class="blog-content">
+                            <h3 class="blog-title">${escapeHtml(post.title)}</h3>
+                            <p class="blog-meta"><i class="far fa-calendar-alt"></i> ${date} | by ${escapeHtml(post.author || 'Dr. Zakiyah Arrey')}</p>
+                            <p class="blog-excerpt">${escapeHtml(post.excerpt || (post.content ? post.content.substring(0, 120) + '...' : ''))}</p>
+                            <a href="blog-post.html?slug=${post.slug}" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('zakiyah_cart')) || [];
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.querySelectorAll('.cart-count').forEach(el => el.textContent = count);
+        }
+        
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+    </script>
+</body>
+</html>

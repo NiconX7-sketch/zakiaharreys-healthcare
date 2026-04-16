@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - Zakiyah Arreys Healthcare</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        .products-header {
+            background: linear-gradient(rgba(46,125,50,0.9), rgba(46,125,50,0.8)), url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=1350');
+            background-size: cover;
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        .products-header h1 { font-size: 2.5rem; margin-bottom: 15px; }
+        .filter-bar { background: white; padding: 20px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 80px; z-index: 99; }
+        .filter-container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .category-filter { display: flex; gap: 10px; flex-wrap: wrap; }
+        .filter-btn { padding: 8px 20px; border: 1px solid #ddd; background: white; border-radius: 30px; cursor: pointer; }
+        .filter-btn.active, .filter-btn:hover { background: #2e7d32; color: white; }
+        .sort-select { padding: 8px 15px; border: 1px solid #ddd; border-radius: 8px; }
+        .products-section { padding: 60px 0; min-height: 500px; }
+        @media (max-width: 768px) { .filter-container { flex-direction: column; } }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="container">
+            <div class="contact-info">
+                <span><i class="fas fa-phone"></i> +254746800330 / 254722151351</span>
+                <span><i class="fas fa-envelope"></i> zakiyaharreyshealthcare@gmail.com</span>
+            </div>
+            <div class="currency-selector">
+                <button class="currency-btn" data-currency="USD">USD $</button>
+                <button class="currency-btn" data-currency="KES">KES KSh</button>
+            </div>
+        </div>
+    </div>
+
+    <header>
+        <div class="container">
+            <div class="logo"><img src="" alt="Logo" id="header-logo"><div class="logo-text"><h1>Zakiyah Arreys Healthcare</h1><p class="tagline">Your Partner in Wellness</p></div></div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="products.html" class="active">Products</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="corporate-wellness.html">Corporate Wellness</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <div class="cart-icon" onclick="location.href='cart.html'"><i class="fas fa-shopping-cart"></i><span class="cart-count">0</span></div>
+                <div class="mobile-menu"><i class="fas fa-bars"></i></div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="products-header"><div class="container"><h1>Our Products</h1><p>Premium wellness supplements for your health journey</p></div></section>
+
+    <div class="filter-bar"><div class="container"><div class="filter-container"><div class="category-filter" id="categoryFilter"><button class="filter-btn active" data-category="all">All Products</button></div><select class="sort-select" id="sortSelect"><option value="default">Sort by: Default</option><option value="price-asc">Price: Low to High</option><option value="price-desc">Price: High to Low</option></select></div></div></div>
+
+    <section class="products-section"><div class="container"><div class="products-grid" id="allProducts"><div class="loader"><i class="fas fa-spinner"></i> Loading products...</div></div></div></section>
+
+    <div class="whatsapp-float"><a href="https://wa.me/254746800330" target="_blank"><i class="fab fa-whatsapp"></i><span>Chat with us</span></a></div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-about"><h4>Zakiyah Arreys Healthcare</h4><p>Supporting healthier communities.</p></div>
+                <div class="footer-links"><h4>Quick Links</h4><ul><li><a href="about.html">About Us</a></li><li><a href="products.html">Products</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+                <div class="footer-contact"><h4>Contact Us</h4><p><i class="fas fa-phone"></i> +254746800330 / 254722151351</p><p><i class="fas fa-envelope"></i> zakiyaharreyshealthcare@gmail.com</p></div>
+            </div>
+            <div class="footer-bottom"><p>&copy; 2026 Zakiyah Arreys Healthcare. All rights reserved.</p></div>
+        </div>
+    </footer>
+
+    <script src="js/supabase-config.js"></script>
+    <script src="js/currency.js"></script>
+    <script src="js/cart.js"></script>
+    <script>
+        let allProducts = [];
+        let currentCategory = 'all';
+        let currentSort = 'default';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProducts();
+            setupEventListeners();
+            updateCartCount();
+        });
+        
+        async function loadProducts() {
+            if (!window.supabase) { setTimeout(loadProducts, 500); return; }
+            
+            try {
+                const { data } = await supabase.from('products').select('*').order('created_at', { ascending: false });
+                if (data) { allProducts = data; displayProducts(); }
+                loadCategories();
+            } catch(e) { console.error(e); }
+        }
+        
+        function loadCategories() {
+            const categories = [...new Set(allProducts.map(p => p.category))].filter(Boolean);
+            const container = document.getElementById('categoryFilter');
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = 'filter-btn';
+                btn.dataset.category = cat;
+                btn.textContent = cat;
+                btn.onclick = () => filterByCategory(cat);
+                container.appendChild(btn);
+            });
+        }
+        
+        function filterByCategory(category) {
+            currentCategory = category;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.filter-btn[data-category="${category}"]`)?.classList.add('active');
+            displayProducts();
+        }
+        
+        function sortProducts(products) {
+            const sorted = [...products];
+            if (currentSort === 'price-asc') sorted.sort((a,b) => a.price - b.price);
+            if (currentSort === 'price-desc') sorted.sort((a,b) => b.price - a.price);
+            return sorted;
+        }
+        
+        function displayProducts() {
+            const container = document.getElementById('allProducts');
+            let filtered = currentCategory === 'all' ? allProducts : allProducts.filter(p => p.category === currentCategory);
+            filtered = sortProducts(filtered);
+            
+            if (filtered.length === 0) {
+                container.innerHTML = '<p style="text-align:center;padding:60px;">No products found.</p>';
+                return;
+            }
+            
+            container.innerHTML = filtered.map(product => createProductCard(product)).join('');
+            
+            if (window.currencySystem) {
+                setTimeout(() => window.currencySystem.updateAllPrices(), 100);
+            }
+        }
+        
+        function createProductCard(product) {
+            return `
+                <div class="product-card">
+                    <img src="${product.image_url || 'https://images.unsplash.com/photo-1584017911766-451b3d0e8434?w=500'}" class="product-image" onerror="this.src='https://images.unsplash.com/photo-1584017911766-451b3d0e8434?w=500'">
+                    <div class="product-info">
+                        <h3 class="product-title">${escapeHtml(product.name)}</h3>
+                        <p class="product-description">${escapeHtml(product.description || 'High-quality supplement')}</p>
+                        <div class="product-price" data-usd="${product.price}">$${product.price.toFixed(2)}</div>
+                        <button class="add-to-cart" onclick="cartSystem.addItem(${product.id}, '${escapeHtml(product.name)}', ${product.price}, '${product.image_url}')">Add to Cart</button>
+                        <button class="whatsapp-inquiry" onclick="window.open('https://wa.me/254746800330?text=${encodeURIComponent('Hello, interested in ' + product.name)}', '_blank')"><i class="fab fa-whatsapp"></i> Inquire</button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function setupEventListeners() {
+            document.getElementById('sortSelect')?.addEventListener('change', (e) => {
+                currentSort = e.target.value;
+                displayProducts();
+            });
+            
+            const mobileMenu = document.querySelector('.mobile-menu');
+            const navMenu = document.querySelector('.nav-menu');
+            if (mobileMenu) mobileMenu.addEventListener('click', () => navMenu.classList.toggle('active'));
+        }
+        
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('zakiyah_cart')) || [];
+            const count = cart.reduce((s, i) => s + i.quantity, 0);
+            document.querySelectorAll('.cart-count').forEach(el => el.textContent = count);
+        }
+        
+        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m])); }
+        
+        window.filterByCategory = filterByCategory;
+        window.addEventListener('currencyChanged', () => displayProducts());
+    </script>
+</body>
+</html>

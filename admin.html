@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Zakiyah Arreys Healthcare</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .login-container { background: white; border-radius: 12px; width: 100%; max-width: 400px; padding: 40px; }
+        .login-header { text-align: center; margin-bottom: 30px; }
+        .login-header i { font-size: 48px; color: #2e7d32; }
+        .form-group { margin-bottom: 20px; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; }
+        .login-btn { width: 100%; padding: 12px; background: #2e7d32; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600; }
+        .login-btn:hover { background: #1b5e20; }
+        .login-btn:disabled { background: #ccc; cursor: not-allowed; }
+        .error-message { background: #fee; color: #c62828; padding: 12px; border-radius: 8px; margin-top: 15px; display: none; text-align: center; font-size: 14px; }
+        .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid #fff; border-radius: 50%; border-top-color: transparent; animation: spin 0.6s linear infinite; margin-right: 8px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .info-note { margin-top: 20px; padding: 12px; background: #f0fdf4; border-radius: 8px; font-size: 12px; color: #166534; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <i class="fas fa-leaf"></i>
+            <h1>Admin Login</h1>
+            <p>Zakiyah Arreys Healthcare</p>
+        </div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <input type="email" id="email" placeholder="Email Address" required>
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" placeholder="Password" required>
+            </div>
+            <button type="submit" class="login-btn" id="loginBtn">Login</button>
+            <div class="error-message" id="errorMsg"></div>
+        </form>
+        
+        <div class="info-note">
+            <i class="fas fa-shield-alt"></i> Secure admin area. Only authorized personnel have access.
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://qczrxqxwowfkltkbcyho.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFjenJ4cXh3b3dma2x0a2JjeWhvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzMjE1MDgsImV4cCI6MjA5MTg5NzUwOH0.VPDdz5bGuneuXSxAlhjMpFZbAzAkYeF9nYfgbopkZoE';
+        
+        let supabaseClient = null;
+        
+        function initSupabase() {
+            if (typeof supabase !== 'undefined' && supabase.createClient) {
+                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                console.log('Supabase initialized');
+                return true;
+            }
+            return false;
+        }
+        
+        initSupabase();
+        
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!supabaseClient) {
+                document.getElementById('errorMsg').innerHTML = 'Loading... Please try again.';
+                document.getElementById('errorMsg').style.display = 'block';
+                return;
+            }
+            
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('loginBtn');
+            const errorDiv = document.getElementById('errorMsg');
+            
+            if (!email || !password) {
+                errorDiv.innerHTML = 'Please enter both email and password';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<span class="spinner"></span> Logging in...';
+            errorDiv.style.display = 'none';
+            
+            try {
+                // Sign in
+                const { data, error } = await supabaseClient.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+                
+                if (error) {
+                    throw new Error(error.message);
+                }
+                
+                if (data.user) {
+                    // Check if user has admin role
+                    const { data: profile, error: profileError } = await supabaseClient
+                        .from('profiles')
+                        .select('role')
+                        .eq('id', data.user.id)
+                        .single();
+                    
+                    console.log('Profile:', profile);
+                    
+                    if (profileError) {
+                        console.error('Profile error:', profileError);
+                        throw new Error('User profile not found. Please contact support.');
+                    }
+                    
+                    if (!profile || profile.role !== 'admin') {
+                        // Not an admin, sign out
+                        await supabaseClient.auth.signOut();
+                        throw new Error('Admin privileges required. This account does not have admin access.');
+                    }
+                    
+                    // Store admin info
+                    localStorage.setItem('adminEmail', email);
+                    localStorage.setItem('adminLoggedIn', 'true');
+                    
+                    // Redirect to dashboard
+                    window.location.href = 'dashboard.html';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                errorDiv.innerHTML = error.message || 'Invalid email or password';
+                errorDiv.style.display = 'block';
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = 'Login';
+            }
+        });
+    </script>
+</body>
+</html>

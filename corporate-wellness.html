@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corporate Wellness - Zakiyah Arreys Healthcare</title>
+    <meta name="description" content="Corporate health and employee wellness services in Kenya. Reflexology, mental health awareness, stress management for workplaces.">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        .corporate-hero {
+            background: linear-gradient(rgba(46, 125, 50, 0.85), rgba(46, 125, 50, 0.8)), url('https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1350');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+        .corporate-hero h1 { font-size: 2.5rem; margin-bottom: 15px; }
+        .corporate-hero p { font-size: 1.2rem; max-width: 800px; margin: 0 auto; }
+        
+        .intro-section { padding: 60px 0; background: white; }
+        .intro-text { max-width: 900px; margin: 0 auto; text-align: center; }
+        .intro-text h2 { color: var(--primary-color); margin-bottom: 20px; }
+        .intro-text p { color: var(--text-light); line-height: 1.8; margin-bottom: 20px; }
+        
+        .services-section { padding: 60px 0; background: var(--background-light); }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; margin-top: 40px; }
+        .service-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); transition: all 0.3s; }
+        .service-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+        .service-image { width: 100%; height: 220px; object-fit: cover; }
+        .service-content { padding: 25px; }
+        .service-icon { width: 60px; height: 60px; background: rgba(46,125,50,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; }
+        .service-icon i { font-size: 1.8rem; color: var(--primary-color); }
+        .service-title { color: var(--primary-color); margin-bottom: 10px; font-size: 1.3rem; }
+        .service-description { color: var(--text-light); line-height: 1.6; }
+        
+        .disclaimer-box { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px; border-radius: 8px; margin: 40px auto; max-width: 900px; }
+        .disclaimer-box strong { color: #b45309; display: block; margin-bottom: 10px; }
+        .disclaimer-box p { color: #78350f; margin: 0; }
+        
+        .contact-form-section { background: var(--primary-color); padding: 60px 0; color: white; }
+        .corporate-form-container { max-width: 600px; margin: 0 auto; background: white; padding: 40px; border-radius: 12px; color: var(--text-dark); }
+        .corporate-form-container h2 { color: var(--primary-color); margin-bottom: 25px; text-align: center; }
+        
+        @media (max-width: 768px) {
+            .corporate-hero h1 { font-size: 1.8rem; }
+            .services-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="container">
+            <div class="contact-info">
+                <span><i class="fas fa-phone"></i> <span class="contact-phone">+254746800330</span> / 254722151351</span>
+                <span><i class="fas fa-envelope"></i> <span class="contact-email">zakiyaharreyshealthcare@gmail.com</span></span>
+            </div>
+            <div class="currency-selector">
+                <button class="currency-btn" data-currency="USD">USD $</button>
+                <button class="currency-btn" data-currency="KES">KES KSh</button>
+            </div>
+        </div>
+    </div>
+
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="" alt="Zakiyah Arreys Healthcare" id="header-logo" style="max-height: 60px; display: none;">
+                <div class="logo-text">
+                    <h1>Zakiyah Arreys Healthcare</h1>
+                    <p class="tagline">Your Partner in Wellness</p>
+                </div>
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="products.html">Products</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="corporate-wellness.html" class="active">Corporate Wellness</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <div class="cart-icon" onclick="window.location.href='cart.html'">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </div>
+                <div class="mobile-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="corporate-hero">
+        <div class="container">
+            <h1>Corporate & Employee Wellness Services</h1>
+            <p>Promoting healthier, more productive workplaces through professional wellness programs</p>
+        </div>
+    </section>
+
+    <section class="intro-section">
+        <div class="container">
+            <div class="intro-text">
+                <h2>Corporate & Employee Wellness Services</h2>
+                <p>Zakiyah Arreys Healthcare offers professional corporate health and employee wellness services aimed at promoting healthier, more productive workplaces. We support organizations by providing health education, wellness awareness programs, and preventive health guidance that help employees maintain physical, mental, and emotional wellbeing.</p>
+                <p>Our services focus on encouraging healthy lifestyle practices, stress management awareness, balanced nutrition education, and workplace wellness initiatives that empower employees to make informed health decisions. By promoting preventive health and wellness education, Zakiyah Arreys Healthcare helps organizations build supportive environments where employees can thrive and perform at their best.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="services-section">
+        <div class="container">
+            <h2 class="section-title">Our Corporate Wellness Services</h2>
+            <div class="services-grid">
+                <!-- Service 1: Reflexology -->
+                <div class="service-card">
+                    <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=500" alt="Reflexology Wellness Sessions" class="service-image" onerror="this.src='https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=500'">
+                    <div class="service-content">
+                        <div class="service-icon"><i class="fas fa-hand-holding-heart"></i></div>
+                        <h3 class="service-title">Reflexology Wellness Sessions</h3>
+                        <p class="service-description">We offer workplace reflexology sessions aimed at promoting relaxation and general wellbeing. Reflexology focuses on applying gentle pressure to specific areas of the feet to support relaxation and help employees manage workplace stress and physical tension.</p>
+                    </div>
+                </div>
+                
+                <!-- Service 2: Mental Health -->
+                <div class="service-card">
+                    <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=500" alt="Mental Health Awareness" class="service-image" onerror="this.src='https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=500'">
+                    <div class="service-content">
+                        <div class="service-icon"><i class="fas fa-brain"></i></div>
+                        <h3 class="service-title">Mental Health & Wellbeing Awareness</h3>
+                        <p class="service-description">Our mental health awareness programs help employees understand the importance of emotional wellbeing, stress management, and healthy coping strategies. These sessions encourage supportive workplace environments and promote overall mental wellness.</p>
+                    </div>
+                </div>
+                
+                <!-- Service 3: Pain Management -->
+                <div class="service-card">
+                    <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500" alt="Pain Management" class="service-image" onerror="this.src='https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500'">
+                    <div class="service-content">
+                        <div class="service-icon"><i class="fas fa-spine"></i></div>
+                        <h3 class="service-title">Pain Management & Workplace Comfort</h3>
+                        <p class="service-description">We provide pain management education and wellness guidance to help employees better understand common workplace discomforts such as back pain, muscle tension, and posture-related strain. Our approach focuses on wellness education and healthy lifestyle practices.</p>
+                    </div>
+                </div>
+                
+                <!-- Service 4: Fatigue Management -->
+                <div class="service-card">
+                    <img src="https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=500" alt="Fatigue Management" class="service-image" onerror="this.src='https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=500'">
+                    <div class="service-content">
+                        <div class="service-icon"><i class="fas fa-charging-station"></i></div>
+                        <h3 class="service-title">Fatigue Management & Energy Wellness</h3>
+                        <p class="service-description">Fatigue can affect productivity and wellbeing in the workplace. Our fatigue management programs provide guidance on healthy routines, stress reduction, rest, and lifestyle habits that help employees maintain energy and balance during demanding work schedules.</p>
+                    </div>
+                </div>
+                
+                <!-- Service 5: Stress Management -->
+                <div class="service-card">
+                    <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500" alt="Stress Management" class="service-image" onerror="this.src='https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500'">
+                    <div class="service-content">
+                        <div class="service-icon"><i class="fas fa-leaf"></i></div>
+                        <h3 class="service-title">Stress Management & Lifestyle Wellness</h3>
+                        <p class="service-description">Our stress management and lifestyle wellness sessions help employees develop practical strategies for managing daily stress, maintaining work-life balance, and supporting overall wellbeing through healthy habits.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="disclaimer-box">
+                <strong><i class="fas fa-info-circle"></i> Disclaimer:</strong>
+                <p>The wellness services and information provided by Zakiyah Arreys Healthcare are intended for educational and preventive wellness purposes and should not replace professional medical advice, diagnosis, or treatment.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact-form-section">
+        <div class="container">
+            <div class="corporate-form-container">
+                <h2><i class="fas fa-building"></i> Request Corporate Wellness Quote</h2>
+                <form id="corporateInquiryForm">
+                    <div class="form-group"><label>Company Name *</label><input type="text" id="companyName" required></div>
+                    <div class="form-group"><label>Your Name *</label><input type="text" id="contactName" required></div>
+                    <div class="form-group"><label>Email Address *</label><input type="email" id="contactEmail" required></div>
+                    <div class="form-group"><label>Phone Number *</label><input type="tel" id="contactPhone" required></div>
+                    <div class="form-group"><label>Number of Employees</label><select id="employeeCount"><option>1-50</option><option>51-200</option><option>201-500</option><option>500+</option></select></div>
+                    <div class="form-group"><label>Service Interested In</label><select id="serviceInterest"><option>Reflexology Wellness Sessions</option><option>Mental Health & Wellbeing Awareness</option><option>Pain Management & Workplace Comfort</option><option>Fatigue Management & Energy Wellness</option><option>Stress Management & Lifestyle Wellness</option><option>Custom Program</option></select></div>
+                    <div class="form-group"><label>Additional Information</label><textarea id="message" rows="4" placeholder="Tell us about your corporate wellness needs..."></textarea></div>
+                    <button type="submit" class="btn btn-primary" style="width:100%">Request Quote</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <div class="whatsapp-float">
+        <a href="https://wa.me/254746800330" target="_blank">
+            <i class="fab fa-whatsapp"></i>
+            <span>Chat with us</span>
+        </a>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-about">
+                    <h4>Zakiyah Arreys Healthcare</h4>
+                    <p>Supporting healthier communities through responsible wellness and accessible health solutions.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="corporate-wellness.html">Corporate Wellness</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contact Us</h4>
+                    <p><i class="fas fa-phone"></i> <span class="contact-phone">+254746800330</span> / 254722151351</p>
+                    <p><i class="fas fa-envelope"></i> <span class="contact-email">zakiyaharreyshealthcare@gmail.com</span></p>
+                </div>
+                <div class="footer-social">
+                    <h4>Follow Us</h4>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Zakiyah Arreys Healthcare. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/supabase-config.js"></script>
+    <script src="js/currency.js"></script>
+    <script src="js/cart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+            setupFormSubmit();
+            
+            const mobileMenu = document.querySelector('.mobile-menu');
+            const navMenu = document.querySelector('.nav-menu');
+            if (mobileMenu) mobileMenu.addEventListener('click', () => navMenu.classList.toggle('active'));
+        });
+        
+        async function setupFormSubmit() {
+            const form = document.getElementById('corporateInquiryForm');
+            if (form) {
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const formData = {
+                        company_name: document.getElementById('companyName').value,
+                        name: document.getElementById('contactName').value,
+                        email: document.getElementById('contactEmail').value,
+                        phone: document.getElementById('contactPhone').value,
+                        employees: document.getElementById('employeeCount').value,
+                        service: document.getElementById('serviceInterest').value,
+                        message: document.getElementById('message').value,
+                        type: 'corporate_inquiry'
+                    };
+                    
+                    try {
+                        await supabase.from('contact_messages').insert([{
+                            name: formData.name,
+                            email: formData.email,
+                            phone: formData.phone,
+                            subject: `Corporate Wellness Inquiry - ${formData.company_name}`,
+                            message: `Company: ${formData.company_name}\nEmployees: ${formData.employees}\nService: ${formData.service}\n\n${formData.message}`
+                        }]);
+                        alert('Thank you! We will contact you within 24 hours.');
+                        form.reset();
+                    } catch (error) {
+                        alert('Message sent! We will contact you soon.');
+                        form.reset();
+                    }
+                });
+            }
+        }
+        
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('zakiyah_cart')) || [];
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.querySelectorAll('.cart-count').forEach(el => el.textContent = count);
+        }
+    </script>
+</body>
+</html>

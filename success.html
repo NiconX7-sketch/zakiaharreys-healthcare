@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful - Zakiyah Arreys Healthcare</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .success-section { padding: 100px 0; background: #f9f9f9; min-height: 500px; display: flex; align-items: center; }
+        .success-box { background: white; max-width: 600px; margin: 0 auto; padding: 50px; border-radius: 12px; box-shadow: var(--shadow); text-align: center; }
+        .success-icon { width: 100px; height: 100px; background: #d4edda; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 30px; }
+        .success-icon i { font-size: 50px; color: #155724; }
+        .success-box h1 { color: var(--primary-color); margin-bottom: 10px; }
+        .success-box p { color: var(--text-light); margin-bottom: 30px; }
+        .order-details { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: left; }
+        .btn-group { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+        @media (max-width: 768px) { .success-box { margin: 0 20px; padding: 30px; } }
+    </style>
+</head>
+<body>
+    <div class="top-bar"><div class="container"><div class="contact-info"><span><i class="fas fa-phone"></i> +254746800330</span><span><i class="fas fa-envelope"></i> zakiyaharreyshealthcare@gmail.com</span></div></div></div>
+
+    <header><div class="container"><div class="logo"><div class="logo-text"><h1>Zakiyah Arreys Healthcare</h1><p class="tagline">Your Partner in Wellness</p></div></div><nav><ul class="nav-menu"><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="products.html">Products</a></li><li><a href="blog.html">Blog</a></li><li><a href="corporate-wellness.html">Corporate Wellness</a></li><li><a href="contact.html">Contact</a></li></ul><div class="cart-icon" onclick="window.location.href='cart.html'"><i class="fas fa-shopping-cart"></i><span class="cart-count">0</span></div><div class="mobile-menu"><i class="fas fa-bars"></i></div></nav></div></header>
+
+    <section class="success-section"><div class="container"><div class="success-box"><div class="success-icon"><i class="fas fa-check-circle"></i></div><h1>Payment Successful!</h1><p>Thank you for your purchase. Your order has been confirmed.</p><div class="order-details" id="orderDetails"><p><i class="fas fa-spinner fa-spin"></i> Loading order details...</p></div><div class="btn-group"><a href="products.html" class="btn btn-primary">Continue Shopping</a><a href="contact.html" class="btn btn-secondary">Contact Support</a></div></div></div></section>
+
+    <footer><div class="container"><div class="footer-grid"><div class="footer-about"><h4>Zakiyah Arreys Healthcare</h4><p>Supporting healthier communities.</p></div><div class="footer-links"><h4>Quick Links</h4><ul><li><a href="about.html">About Us</a></li><li><a href="products.html">Products</a></li><li><a href="contact.html">Contact</a></li></ul></div><div class="footer-contact"><h4>Contact Us</h4><p><i class="fas fa-phone"></i> +254746800330</p><p><i class="fas fa-envelope"></i> zakiyaharreyshealthcare@gmail.com</p></div></div><div class="footer-bottom"><p>&copy; 2026 Zakiyah Arreys Healthcare. All rights reserved.</p></div></div></footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get('orderId') || urlParams.get('id');
+            
+            if (orderId) {
+                document.getElementById('orderDetails').innerHTML = `<p><i class="fas fa-check-circle"></i> Order #${orderId} has been confirmed.</p><p>You will receive a confirmation email shortly.</p>`;
+            }
+            
+            localStorage.removeItem('zakiyah_cart');
+            document.querySelectorAll('.cart-count').forEach(el => el.textContent = 0);
+            
+            const mobileMenu = document.querySelector('.mobile-menu');
+            const navMenu = document.querySelector('.nav-menu');
+            if (mobileMenu) mobileMenu.addEventListener('click', () => navMenu.classList.toggle('active'));
+        });
+    </script>
+</body>
+</html>
