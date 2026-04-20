@@ -6,23 +6,24 @@
     <title>Admin Login - Zakiyah Arreys Healthcare</title>
     <meta name="robots" content="noindex, nofollow">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
         .login-container { background: white; border-radius: 12px; width: 100%; max-width: 400px; padding: 40px; text-align: center; }
         .login-header i { font-size: 48px; color: #2e7d32; margin-bottom: 15px; }
-        .login-header h1 { color: #333; margin-bottom: 5px; }
+        .login-header h1 { color: #333; margin-bottom: 5px; font-size: 1.8rem; }
         .login-header p { color: #666; margin-bottom: 20px; }
         .form-group { margin-bottom: 20px; }
-        .form-group input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; }
-        .login-btn { width: 100%; padding: 12px; background: #2e7d32; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600; }
-        .login-btn:hover { background: #1b5e20; }
-        .login-btn:disabled { background: #ccc; cursor: not-allowed; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; transition: border-color 0.3s; }
+        .form-group input:focus { outline: none; border-color: #2e7d32; box-shadow: 0 0 0 3px rgba(46,125,50,0.1); }
+        .login-btn { width: 100%; padding: 12px; background: #2e7d32; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600; transition: all 0.3s; }
+        .login-btn:hover { background: #1b5e20; transform: translateY(-2px); }
+        .login-btn:disabled { background: #ccc; cursor: not-allowed; transform: none; }
         .error-message { background: #fee; color: #c62828; padding: 12px; border-radius: 8px; margin-top: 15px; display: none; text-align: center; font-size: 14px; }
         .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid #fff; border-radius: 50%; border-top-color: transparent; animation: spin 0.6s linear infinite; margin-right: 8px; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .info-note { margin-top: 20px; padding: 12px; background: #f0fdf4; border-radius: 8px; font-size: 12px; color: #166534; }
+        .info-note i { margin-right: 5px; }
     </style>
 </head>
 <body>
@@ -35,126 +36,86 @@
         
         <form id="loginForm">
             <div class="form-group">
-                <input type="email" id="email" placeholder="Email Address" required>
+                <input type="text" id="username" placeholder="Username" required autocomplete="off">
             </div>
             <div class="form-group">
-                <input type="password" id="password" placeholder="Password" required>
+                <input type="password" id="password" placeholder="Password" required autocomplete="off">
             </div>
             <button type="submit" class="login-btn" id="loginBtn">Login</button>
-            <div class="error-message" id="errorMsg"></div>
+            <div class="error-message" id="errorMsg">Invalid username or password</div>
         </form>
         
         <div class="info-note">
-            <i class="fas fa-shield-alt"></i> Secure Admin Area - Supabase Authentication
+            <i class="fas fa-shield-alt"></i> Secure Admin Area - Authorized Personnel Only
         </div>
     </div>
 
     <script>
-        // Supabase Configuration
-        const SUPABASE_URL = 'https://qczrxqxwowfkltkbcyho.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFjenJ4cXh3b3dma2x0a2JjeWhvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzMjE1MDgsImV4cCI6MjA5MTg5NzUwOH0.VPDdz5bGuneuXSxAlhjMpFZbAzAkYeF9nYfgbopkZoE';
-        
-        let supabaseClient = null;
-        
-        // Initialize Supabase
-        function initSupabase() {
-            if (typeof supabase !== 'undefined' && supabase.createClient) {
-                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                console.log('Supabase initialized');
-                checkSession();
-                return true;
-            }
-            setTimeout(initSupabase, 100);
-        }
+        // ============================================
+        // ADMIN CREDENTIALS - CHANGE THESE VALUES
+        // ============================================
+        const ADMIN_USERNAME = 'zakiyah_admin';
+        const ADMIN_PASSWORD = 'Zakiyah@2024!Secure';
         
         // Check if already logged in
-        async function checkSession() {
-            if (!supabaseClient) return;
-            
-            const { data: { session } } = await supabaseClient.auth.getSession();
-            if (session) {
-                // Verify admin role
-                const { data: profile } = await supabaseClient
-                    .from('profiles')
-                    .select('role')
-                    .eq('id', session.user.id)
-                    .single();
-                
-                if (profile && profile.role === 'admin') {
-                    window.location.href = 'dashboard.html';
-                } else {
-                    // Not admin, sign out
-                    await supabaseClient.auth.signOut();
-                }
-            }
+        if (localStorage.getItem('adminLoggedIn') === 'true') {
+            window.location.href = 'dashboard.html';
         }
         
-        // Handle login form submission
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        // Login attempt counter for security
+        let loginAttempts = 0;
+        let lockoutUntil = null;
+        
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            if (!supabaseClient) {
-                document.getElementById('errorMsg').innerHTML = 'Loading... Please try again.';
+            // Check lockout
+            if (lockoutUntil && Date.now() < lockoutUntil) {
+                const remaining = Math.ceil((lockoutUntil - Date.now()) / 1000);
+                document.getElementById('errorMsg').innerHTML = `Too many failed attempts. Try again in ${remaining} seconds.`;
                 document.getElementById('errorMsg').style.display = 'block';
                 return;
             }
             
-            const email = document.getElementById('email').value.trim();
+            const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value;
             const loginBtn = document.getElementById('loginBtn');
             const errorDiv = document.getElementById('errorMsg');
             
-            if (!email || !password) {
-                errorDiv.innerHTML = 'Please enter both email and password';
+            if (!username || !password) {
+                errorDiv.innerHTML = 'Please enter both username and password';
                 errorDiv.style.display = 'block';
                 return;
             }
             
+            // Simulate loading
             loginBtn.disabled = true;
-            loginBtn.innerHTML = '<span class="spinner"></span> Logging in...';
+            loginBtn.innerHTML = '<span class="spinner"></span> Verifying...';
             errorDiv.style.display = 'none';
             
-            try {
-                // Sign in with Supabase
-                const { data, error } = await supabaseClient.auth.signInWithPassword({
-                    email: email,
-                    password: password
-                });
-                
-                if (error) throw error;
-                
-                if (data.user) {
-                    // Check if user has admin role
-                    const { data: profile, error: profileError } = await supabaseClient
-                        .from('profiles')
-                        .select('role')
-                        .eq('id', data.user.id)
-                        .single();
-                    
-                    if (profileError || !profile || profile.role !== 'admin') {
-                        // Not an admin, sign out
-                        await supabaseClient.auth.signOut();
-                        throw new Error('Admin privileges required. This account does not have admin access.');
-                    }
-                    
-                    // Store admin info
-                    localStorage.setItem('adminEmail', email);
+            setTimeout(() => {
+                if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+                    // Successful login
+                    loginAttempts = 0;
                     localStorage.setItem('adminLoggedIn', 'true');
-                    
-                    // Redirect to dashboard
+                    localStorage.setItem('adminUser', username);
+                    localStorage.setItem('adminLoginTime', Date.now());
                     window.location.href = 'dashboard.html';
+                } else {
+                    // Failed login
+                    loginAttempts++;
+                    if (loginAttempts >= 5) {
+                        lockoutUntil = Date.now() + 15 * 60 * 1000; // 15 minute lockout
+                        errorDiv.innerHTML = 'Too many failed attempts. Account locked for 15 minutes.';
+                    } else {
+                        errorDiv.innerHTML = `Invalid username or password. ${5 - loginAttempts} attempts remaining.`;
+                    }
+                    errorDiv.style.display = 'block';
+                    loginBtn.disabled = false;
+                    loginBtn.innerHTML = 'Login';
                 }
-            } catch (error) {
-                console.error('Login error:', error);
-                errorDiv.innerHTML = error.message || 'Invalid email or password';
-                errorDiv.style.display = 'block';
-                loginBtn.disabled = false;
-                loginBtn.innerHTML = 'Login';
-            }
+            }, 800);
         });
-        
-        // Initialize
-        initSupabase();
     </script>
 </body>
 </html>
