@@ -50,6 +50,8 @@
         .program-features li:last-child { border-bottom: none; }
         .program-features i { color: var(--primary-color); width: 20px; }
         .program-price { font-size: 1.5rem; color: var(--primary-color); font-weight: bold; margin: 15px 0; }
+        .btn-primary { background: var(--primary-color); color: white; padding: 12px 30px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; width: 100%; }
+        .btn-primary:hover { background: var(--primary-dark); }
         
         .disclaimer-box { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px; border-radius: 8px; margin: 40px auto; max-width: 900px; }
         .disclaimer-box strong { color: #b45309; display: block; margin-bottom: 10px; }
@@ -61,12 +63,13 @@
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
         .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; }
-        .btn-primary { background: var(--primary-color); color: white; padding: 12px 30px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; width: 100%; }
-        .btn-primary:hover { background: var(--primary-dark); }
         
-        .loader { text-align: center; padding: 40px; }
+        .loader { text-align: center; padding: 40px; grid-column: 1/-1; }
         .loader i { font-size: 2rem; color: var(--primary-color); animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .no-programs { text-align: center; padding: 60px; grid-column: 1/-1; }
+        .no-programs i { font-size: 3rem; color: #ccc; margin-bottom: 15px; }
         
         @media (max-width: 768px) {
             .corporate-hero h1 { font-size: 1.8rem; }
@@ -308,17 +311,23 @@
         function initSupabase() {
             if (typeof supabase !== 'undefined' && supabase.createClient) {
                 supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                console.log('Supabase initialized');
+                console.log('Supabase initialized - Corporate Wellness Page');
                 loadCorporatePrograms();
+                loadLogoSettings();
                 return true;
             }
             setTimeout(initSupabase, 500);
-            return false;
         }
         
         // Load corporate wellness programs from database
         async function loadCorporatePrograms() {
-            if (!supabaseClient) return;
+            if (!supabaseClient) {
+                console.log('Waiting for Supabase...');
+                setTimeout(loadCorporatePrograms, 500);
+                return;
+            }
+            
+            console.log('Loading corporate programs from database...');
             
             try {
                 const { data, error } = await supabaseClient
@@ -329,11 +338,12 @@
                 
                 if (error) throw error;
                 
-                corporatePrograms = data;
+                console.log('Programs loaded successfully:', data);
+                corporatePrograms = data || [];
                 displayPrograms();
             } catch (error) {
                 console.error('Error loading programs:', error);
-                displayPrograms([]);
+                displayPrograms();
             }
         }
         
@@ -342,18 +352,24 @@
             const container = document.getElementById('programsGrid');
             if (!container) return;
             
-            const currency = localStorage.getItem('currency') || 'USD';
-            const exchangeRate = parseFloat(localStorage.getItem('exchangeRate')) || 115;
+            console.log('Displaying programs. Count:', corporatePrograms.length);
             
             if (!corporatePrograms || corporatePrograms.length === 0) {
                 container.innerHTML = `
-                    <div style="text-align:center; grid-column:1/-1; padding:40px;">
-                        <i class="fas fa-calendar-alt" style="font-size:3rem; color:#ccc;"></i>
-                        <p>No wellness programs available at the moment. Check back soon!</p>
+                    <div class="no-programs">
+                        <i class="fas fa-calendar-alt"></i>
+                        <h3>No Wellness Programs Available</h3>
+                        <p>Check back soon for our corporate wellness programs!</p>
+                        <button class="btn btn-primary" onclick="document.getElementById('corporateInquiryForm').scrollIntoView({behavior: 'smooth'})">
+                            Request Custom Quote
+                        </button>
                     </div>
                 `;
                 return;
             }
+            
+            const currency = localStorage.getItem('currency') || 'USD';
+            const exchangeRate = parseFloat(localStorage.getItem('exchangeRate')) || 115;
             
             container.innerHTML = corporatePrograms.map(program => {
                 const priceUSD = program.price;
@@ -369,7 +385,7 @@
                         <div class="program-content">
                             <span class="program-type">${escapeHtml(program.program_type || 'Wellness Program')}</span>
                             <h3 class="program-title">${escapeHtml(program.title)}</h3>
-                            <p>${escapeHtml(program.description)}</p>
+                            <p>${escapeHtml(program.description || 'Contact us for more information about this program.')}</p>
                             ${program.features && program.features.length > 0 ? `
                             <ul class="program-features">
                                 ${program.features.map(f => `<li><i class="fas fa-check-circle"></i> ${escapeHtml(f)}</li>`).join('')}
@@ -438,15 +454,6 @@
             });
         }
         
-        // Update cart count
-        function updateCartCount() {
-            const cart = JSON.parse(localStorage.getItem('zakiyah_cart')) || [];
-            const count = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-            document.querySelectorAll('.cart-count').forEach(el => {
-                el.textContent = count;
-            });
-        }
-        
         // Load logo from settings
         async function loadLogoSettings() {
             if (!supabaseClient) return;
@@ -464,12 +471,22 @@
                     if (logoImg && logoText) {
                         logoImg.src = data.value;
                         logoImg.style.display = 'block';
-                        logoText.style.display = 'none';
+                        logoText.style.display = 'flex';
+                        logoText.style.flexDirection = 'column';
                     }
                 }
             } catch (error) {
                 console.log('Using default logo');
             }
+        }
+        
+        // Update cart count
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('zakiyah_cart')) || [];
+            const count = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            document.querySelectorAll('.cart-count').forEach(el => {
+                el.textContent = count;
+            });
         }
         
         // Escape HTML
@@ -505,7 +522,6 @@
             updateCartCount();
             setupFormSubmit();
             initSupabase();
-            loadLogoSettings();
         });
         
         // Make functions global
