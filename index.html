@@ -4,12 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zakiyah Arreys Healthcare - Natural Wellness Supplements Kenya</title>
-    <meta name="description" content="Premium wellness supplements for immune health, joint care, heart health and more.">
+    <meta name="description" content="Premium wellness supplements for immune health, joint care, heart health and more. Natural healthcare products delivered to your door. Shop now!">
+    <meta name="keywords" content="healthcare, wellness supplements, immune boosters, joint care, natural remedies, Kenya health">
+    <meta name="author" content="Zakiyah Arreys Healthcare">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://zakiyah-healthcare.vercel.app">
+    
+    <!-- Open Graph for Social Media -->
+    <meta property="og:title" content="Zakiyah Arreys Healthcare">
+    <meta property="og:description" content="Natural wellness products for better living">
+    <meta property="og:image" content="/images/logo.svg">
+    <meta property="og:url" content="https://zakiyah-healthcare.vercel.app">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Zakiyah Arreys Healthcare">
+    <meta name="twitter:description" content="Natural wellness products for better living">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <link rel="apple-touch-icon" href="favicon.ico">
+    
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+    <!-- Top Bar -->
     <div class="top-bar">
         <div class="container">
             <div class="contact-info">
@@ -17,16 +43,17 @@
                 <span><i class="fas fa-envelope"></i> zakiyaharreyshealthcare@gmail.com</span>
             </div>
             <div class="currency-selector">
-                <button class="currency-btn" data-currency="USD" id="btnUSD">USD $</button>
-                <button class="currency-btn" data-currency="KES" id="btnKES">KES KSh</button>
+                <button class="currency-btn" data-currency="USD">USD $</button>
+                <button class="currency-btn" data-currency="KES">KES KSh</button>
             </div>
         </div>
     </div>
 
+    <!-- Header -->
     <header>
         <div class="container">
             <div class="logo">
-                <img src="" alt="Zakiyah Arreys Healthcare" id="header-logo">
+                <img src="" alt="Zakiyah Arreys Healthcare" id="header-logo" style="max-height: 60px; display: none;">
                 <div class="logo-text">
                     <h1>Zakiyah Arreys Healthcare</h1>
                     <p class="tagline">Your Partner in Wellness</p>
@@ -45,38 +72,36 @@
                     <i class="fas fa-shopping-cart"></i>
                     <span class="cart-count">0</span>
                 </div>
-                <div class="mobile-menu"><i class="fas fa-bars"></i></div>
+                <div class="mobile-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
             </nav>
         </div>
     </header>
 
+    <!-- Hero Section -->
     <section class="hero">
         <div class="container">
             <div class="hero-content">
                 <h2>Welcome to Zakiyah Arreys Healthcare</h2>
-                <p>Your trusted partner in natural wellness and preventive health</p>
+                <p>A wellness-focused platform dedicated to supporting individuals on their journey toward better health and balanced living.</p>
                 <a href="products.html" class="btn btn-primary">Shop Now</a>
                 <a href="about.html" class="btn btn-secondary">Learn More</a>
             </div>
         </div>
     </section>
 
+    <!-- Categories Section -->
     <section class="categories">
         <div class="container">
             <h2 class="section-title">Our Product Categories</h2>
             <div class="category-grid" id="categoryGrid">
-                <div class="category-card" onclick="location.href='products.html?category=Immune Boosters'"><i class="fas fa-shield-virus"></i><h3>Immune Boosters</h3></div>
-                <div class="category-card" onclick="location.href='products.html?category=Bone and Joint Care'"><i class="fas fa-bone"></i><h3>Bone & Joint Care</h3></div>
-                <div class="category-card" onclick="location.href='products.html?category=Reproductive Health'"><i class="fas fa-venus-mars"></i><h3>Reproductive Health</h3></div>
-                <div class="category-card" onclick="location.href='products.html?category=Cardiovascular Health'"><i class="fas fa-heart-pulse"></i><h3>Heart Health</h3></div>
-                <div class="category-card" onclick="location.href='products.html?category=Digestive Health'"><i class="fas fa-stethoscope"></i><h3>Digestive Health</h3></div>
-                <div class="category-card" onclick="location.href='products.html?category=Personal Care'"><i class="fas fa-hand-sparkles"></i><h3>Personal Care</h3></div>
-                <div class="category-card" onclick="location.href='products.html?category=Better Life'"><i class="fas fa-face-smile"></i><h3>Better Life</h3></div>
-                <div class="category-card" onclick="location.href='products.html?category=Children\'s Nutrition'"><i class="fas fa-child"></i><h3>Children's Nutrition</h3></div>
+                <div class="loader"><i class="fas fa-spinner"></i> Loading categories...</div>
             </div>
         </div>
     </section>
 
+    <!-- Featured Products -->
     <section class="featured-products">
         <div class="container">
             <h2 class="section-title">Featured Supplements</h2>
@@ -86,22 +111,24 @@
         </div>
     </section>
 
+    <!-- About Preview -->
     <section class="about-preview">
         <div class="container">
             <div class="about-content">
                 <h2>About Zakiyah Arreys Healthcare</h2>
-                <p>Founded with the vision of empowering people to take an active role in their health through natural wellness solutions.</p>
+                <p>Founded with the vision of empowering people to take an active role in their health. We believe that good health begins with knowledge, proper nutrition, and access to trusted wellness solutions.</p>
                 <div class="focus-areas">
-                    <div class="focus-item"><i class="fas fa-check-circle"></i><span>Quality supplements</span></div>
-                    <div class="focus-item"><i class="fas fa-check-circle"></i><span>Expert guidance</span></div>
-                    <div class="focus-item"><i class="fas fa-check-circle"></i><span>Natural solutions</span></div>
-                    <div class="focus-item"><i class="fas fa-check-circle"></i><span>Preventive care</span></div>
+                    <div class="focus-item"><i class="fas fa-check-circle"></i><span>High-quality wellness supplements</span></div>
+                    <div class="focus-item"><i class="fas fa-check-circle"></i><span>Reliable health information</span></div>
+                    <div class="focus-item"><i class="fas fa-check-circle"></i><span>Preventive health promotion</span></div>
+                    <div class="focus-item"><i class="fas fa-check-circle"></i><span>Natural wellness options</span></div>
                 </div>
                 <a href="about.html" class="btn btn-secondary">Read More</a>
             </div>
         </div>
     </section>
 
+    <!-- Latest Blog Posts -->
     <section class="latest-blog">
         <div class="container">
             <h2 class="section-title">Latest Health Articles</h2>
@@ -111,9 +138,32 @@
         </div>
     </section>
 
+    <!-- Affiliate Partners Section -->
+    <section class="affiliate-section">
+        <div class="container">
+            <h2 class="section-title">Our Trusted Partners</h2>
+            <div class="affiliate-grid" id="affiliateLinks">
+                <div class="loader"><i class="fas fa-spinner"></i> Loading partners...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Safety Commitment -->
+    <section class="safety-commitment">
+        <div class="container">
+            <h2>Our Commitment to Safety</h2>
+            <p>At Zakiyah Arreys Healthcare, safety and responsibility are our priority. We encourage all customers to use supplements responsibly and consult qualified healthcare professionals before starting any new health product, especially if pregnant, nursing, taking medication, or managing a medical condition.</p>
+            <div class="disclaimer">
+                <strong>Health Information Disclaimer:</strong>
+                <p>Always seek advice from a qualified healthcare professional regarding any medical concerns or before beginning any supplement program.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
     <section class="newsletter">
         <div class="container">
-            <h3>Subscribe to Our Newsletter</h3>
+            <h3>Subscribe to Our Wellness Newsletter</h3>
             <p>Get health tips, product updates, and exclusive offers</p>
             <form class="newsletter-form" id="newsletterForm">
                 <input type="email" id="newsletterEmail" placeholder="Your email address" required>
@@ -122,6 +172,7 @@
         </div>
     </section>
 
+    <!-- WhatsApp Float -->
     <div class="whatsapp-float">
         <a href="https://wa.me/254746800330" target="_blank">
             <i class="fab fa-whatsapp"></i>
@@ -129,12 +180,13 @@
         </a>
     </div>
 
+    <!-- Footer -->
     <footer>
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-about">
                     <h4>Zakiyah Arreys Healthcare</h4>
-                    <p>Supporting healthier communities through responsible wellness.</p>
+                    <p>Supporting healthier communities through responsible wellness and accessible health solutions.</p>
                 </div>
                 <div class="footer-links">
                     <h4>Quick Links</h4>
@@ -167,22 +219,489 @@
         </div>
     </footer>
 
+    <!-- JavaScript Files -->
     <script src="js/supabase-config.js"></script>
     <script src="js/currency.js"></script>
     <script src="js/cart.js"></script>
     <script src="js/main.js"></script>
     
     <script>
-        // Additional initialization for currency buttons
-        document.addEventListener('DOMContentLoaded', function() {
-            // Ensure currency buttons work
-            setTimeout(function() {
-                if (window.currencySystem) {
-                    window.currencySystem.setupButtons();
-                    window.currencySystem.updateAllPrices();
+        // Supabase configuration
+        const SUPABASE_URL = 'https://qczrxqxwowfkltkbcyho.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFjenJ4cXh3b3dma2x0a2JjeWhvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzMjE1MDgsImV4cCI6MjA5MTg5NzUwOH0.VPDdz5bGuneuXSxAlhjMpFZbAzAkYeF9nYfgbopkZoE';
+        
+        let supabaseClient = null;
+        let allProducts = [];
+        let allBlogs = [];
+        let allCategories = [];
+        
+        // Initialize Supabase
+        function initSupabase() {
+            if (typeof supabase !== 'undefined' && supabase.createClient) {
+                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                console.log('Supabase initialized');
+                loadAllData();
+                return true;
+            }
+            setTimeout(initSupabase, 500);
+        }
+        
+        // Load all data
+        async function loadAllData() {
+            await loadCategories();
+            await loadProducts();
+            await loadBlogPosts();
+            await loadAffiliateLinks();
+            await loadLogoSettings();
+            await loadSiteSettings();
+        }
+        
+        // Load categories from database
+        async function loadCategories() {
+            if (!supabaseClient) return;
+            
+            try {
+                const { data, error } = await supabaseClient
+                    .from('categories')
+                    .select('*')
+                    .eq('active', true)
+                    .order('name');
+                
+                if (error) throw error;
+                
+                allCategories = data || [];
+                displayCategories();
+            } catch (error) {
+                console.error('Error loading categories:', error);
+                // Default categories if none in database
+                allCategories = [
+                    { name: 'Immune Boosters', icon: 'fa-shield-virus' },
+                    { name: 'Bone and Joint Care', icon: 'fa-bone' },
+                    { name: 'Reproductive Health', icon: 'fa-venus-mars' },
+                    { name: 'Cardiovascular Health', icon: 'fa-heart-pulse' },
+                    { name: 'Digestive Health', icon: 'fa-stethoscope' },
+                    { name: 'Personal Care', icon: 'fa-hand-sparkles' },
+                    { name: 'Better Life', icon: 'fa-face-smile' },
+                    { name: "Children's Nutrition", icon: 'fa-child' }
+                ];
+                displayCategories();
+            }
+        }
+        
+        function displayCategories() {
+            const container = document.getElementById('categoryGrid');
+            if (!container) return;
+            
+            if (allCategories.length === 0) {
+                container.innerHTML = '<p>No categories available</p>';
+                return;
+            }
+            
+            container.innerHTML = allCategories.map(cat => `
+                <div class="category-card" onclick="location.href='products.html?category=${encodeURIComponent(cat.name)}'">
+                    <i class="fas ${getCategoryIcon(cat.name)}"></i>
+                    <h3>${escapeHtml(cat.name)}</h3>
+                </div>
+            `).join('');
+        }
+        
+        function getCategoryIcon(categoryName) {
+            const icons = {
+                'Immune Boosters': 'fa-shield-virus',
+                'Bone and Joint Care': 'fa-bone',
+                'Reproductive Health': 'fa-venus-mars',
+                'Cardiovascular Health': 'fa-heart-pulse',
+                'Digestive Health': 'fa-stethoscope',
+                'Personal Care': 'fa-hand-sparkles',
+                'Better Life': 'fa-face-smile',
+                "Children's Nutrition": 'fa-child'
+            };
+            return icons[categoryName] || 'fa-tag';
+        }
+        
+        // Load products
+        async function loadProducts() {
+            if (!supabaseClient) return;
+            
+            try {
+                const { data, error } = await supabaseClient
+                    .from('products')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                if (error) throw error;
+                
+                allProducts = data || [];
+                displayFeaturedProducts();
+            } catch (error) {
+                console.error('Error loading products:', error);
+                allProducts = [];
+                displayFeaturedProducts();
+            }
+        }
+        
+        function displayFeaturedProducts() {
+            const container = document.getElementById('featuredProducts');
+            if (!container) return;
+            
+            const featured = allProducts.filter(p => p.featured).slice(0, 4);
+            
+            if (featured.length === 0) {
+                container.innerHTML = '<p style="text-align:center;">No featured products available.</p>';
+                return;
+            }
+            
+            const currency = localStorage.getItem('currency') || 'USD';
+            const exchangeRate = parseFloat(localStorage.getItem('exchangeRate')) || 115;
+            
+            container.innerHTML = featured.map(product => {
+                const priceUSD = parseFloat(product.price).toFixed(2);
+                const priceKES = Math.round(parseFloat(product.price) * exchangeRate);
+                const displayPrice = currency === 'USD' ? `$${priceUSD}` : `KSh ${priceKES.toLocaleString()}`;
+                
+                return `
+                    <div class="product-card">
+                        <img src="${product.image_url || 'https://images.unsplash.com/photo-1584017911766-451b3d0e8434?w=500'}" 
+                             class="product-image" 
+                             onerror="this.src='https://images.unsplash.com/photo-1584017911766-451b3d0e8434?w=500'">
+                        <div class="product-info">
+                            <h3 class="product-title">${escapeHtml(product.name)}</h3>
+                            <p class="product-description">${escapeHtml(product.description || 'High-quality wellness supplement')}</p>
+                            <div class="product-price">${displayPrice}</div>
+                            <button class="add-to-cart" onclick="addToCart(${product.id}, '${escapeHtml(product.name)}', ${product.price}, '${product.image_url}')">
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
+                            </button>
+                            <button class="whatsapp-inquiry" onclick="window.open('https://wa.me/254746800330?text=${encodeURIComponent('Hello, I\'m interested in ' + product.name)}', '_blank')">
+                                <i class="fab fa-whatsapp"></i> Inquire
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Load blog posts
+        async function loadBlogPosts() {
+            if (!supabaseClient) return;
+            
+            try {
+                const { data, error } = await supabaseClient
+                    .from('blog_posts')
+                    .select('*')
+                    .eq('published', true)
+                    .order('created_at', { ascending: false })
+                    .limit(3);
+                
+                if (error) throw error;
+                
+                allBlogs = data || [];
+                displayLatestPosts();
+            } catch (error) {
+                console.error('Error loading blog posts:', error);
+                allBlogs = [];
+                displayLatestPosts();
+            }
+        }
+        
+        function displayLatestPosts() {
+            const container = document.getElementById('latestPosts');
+            if (!container) return;
+            
+            if (allBlogs.length === 0) {
+                container.innerHTML = '<p style="text-align:center;">No blog posts yet. Check back soon!</p>';
+                return;
+            }
+            
+            container.innerHTML = allBlogs.map(post => {
+                const date = new Date(post.created_at).toLocaleDateString();
+                return `
+                    <div class="blog-card">
+                        <img src="${post.image_url || 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500'}" 
+                             class="blog-image" 
+                             onerror="this.src='https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500'">
+                        <div class="blog-content">
+                            <h3 class="blog-title">${escapeHtml(post.title)}</h3>
+                            <p class="blog-meta">
+                                <i class="far fa-calendar-alt"></i> ${date} 
+                                | by ${escapeHtml(post.author || 'Dr. Zakiyah Arrey')}
+                            </p>
+                            <p class="blog-excerpt">${escapeHtml(post.excerpt || (post.content ? post.content.substring(0, 100) + '...' : ''))}</p>
+                            <a href="blog-post.html?slug=${post.slug}" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Load affiliate links
+        async function loadAffiliateLinks() {
+            if (!supabaseClient) return;
+            
+            try {
+                const { data, error } = await supabaseClient
+                    .from('affiliate_links')
+                    .select('*')
+                    .eq('active', true);
+                
+                if (error) throw error;
+                
+                displayAffiliateLinks(data || []);
+            } catch (error) {
+                console.error('Error loading affiliate links:', error);
+                displayAffiliateLinks([]);
+            }
+        }
+        
+        function displayAffiliateLinks(links) {
+            const container = document.getElementById('affiliateLinks');
+            if (!container) return;
+            
+            if (links.length === 0) {
+                container.innerHTML = '<p style="text-align:center;">No affiliate partners yet.</p>';
+                return;
+            }
+            
+            container.innerHTML = links.map(link => `
+                <div class="affiliate-card">
+                    ${link.logo_url ? `<img src="${link.logo_url}" alt="${escapeHtml(link.name)}">` : '<i class="fas fa-handshake fa-3x"></i>'}
+                    <h3>${escapeHtml(link.name)}</h3>
+                    <p>${escapeHtml(link.description || 'Trusted wellness partner')}</p>
+                    <a href="${link.url}" target="_blank" class="btn btn-secondary" onclick="trackAffiliateClick(${link.id})">
+                        Visit Partner <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+            `).join('');
+        }
+        
+        // Load logo settings
+        async function loadLogoSettings() {
+            if (!supabaseClient) return;
+            
+            try {
+                const { data } = await supabaseClient
+                    .from('site_settings')
+                    .select('value')
+                    .eq('key', 'logo_url')
+                    .single();
+                
+                if (data && data.value) {
+                    const logoImg = document.getElementById('header-logo');
+                    const logoText = document.querySelector('.logo-text');
+                    if (logoImg && logoText) {
+                        logoImg.src = data.value;
+                        logoImg.style.display = 'block';
+                        logoText.style.display = 'none';
+                    }
                 }
-            }, 500);
+            } catch (error) {
+                console.log('Using default logo');
+            }
+        }
+        
+        // Load site settings for colors
+        async function loadSiteSettings() {
+            if (!supabaseClient) return;
+            
+            try {
+                const { data } = await supabaseClient
+                    .from('site_settings')
+                    .select('*');
+                
+                const settings = {};
+                data?.forEach(s => settings[s.key] = s.value);
+                
+                if (settings.primary_color) {
+                    document.documentElement.style.setProperty('--primary-color', settings.primary_color);
+                }
+                if (settings.secondary_color) {
+                    document.documentElement.style.setProperty('--secondary-color', settings.secondary_color);
+                }
+                if (settings.exchange_rate) {
+                    localStorage.setItem('exchangeRate', settings.exchange_rate);
+                }
+            } catch (error) {
+                console.log('Error loading site settings');
+            }
+        }
+        
+        // Add to cart function
+        function addToCart(id, name, price, image) {
+            const cart = JSON.parse(localStorage.getItem('zakiyah_cart')) || [];
+            const existing = cart.find(item => item.id === id);
+            
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({ id, name, price, image, quantity: 1 });
+            }
+            
+            localStorage.setItem('zakiyah_cart', JSON.stringify(cart));
+            updateCartCount();
+            showNotification(`${name} added to cart!`);
+        }
+        
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('zakiyah_cart')) || [];
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.querySelectorAll('.cart-count').forEach(el => {
+                el.textContent = count;
+            });
+        }
+        
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'toast-notification';
+            notification.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            notification.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#2e7d32;color:white;padding:12px 20px;border-radius:8px;z-index:10000;animation:slideIn 0.3s;';
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+        
+        async function trackAffiliateClick(linkId) {
+            if (!supabaseClient) return;
+            
+            try {
+                const { data: link } = await supabaseClient
+                    .from('affiliate_links')
+                    .select('clicks')
+                    .eq('id', linkId)
+                    .single();
+                
+                if (link) {
+                    await supabaseClient
+                        .from('affiliate_links')
+                        .update({ clicks: (link.clicks || 0) + 1 })
+                        .eq('id', linkId);
+                }
+            } catch (error) {
+                console.error('Error tracking affiliate click:', error);
+            }
+        }
+        
+        // Newsletter subscription
+        async function subscribeNewsletter(email) {
+            if (!supabaseClient) return false;
+            
+            try {
+                await supabaseClient
+                    .from('newsletter_subscribers')
+                    .insert([{ email }]);
+                return true;
+            } catch (error) {
+                console.error('Newsletter error:', error);
+                return false;
+            }
+        }
+        
+        // Escape HTML
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+        
+        // Event listeners
+        function setupEventListeners() {
+            // Mobile menu
+            const mobileMenu = document.querySelector('.mobile-menu');
+            const navMenu = document.querySelector('.nav-menu');
+            if (mobileMenu) {
+                mobileMenu.addEventListener('click', () => {
+                    navMenu.classList.toggle('active');
+                });
+            }
+            
+            // Newsletter form
+            const newsletterForm = document.getElementById('newsletterForm');
+            if (newsletterForm) {
+                newsletterForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const email = document.getElementById('newsletterEmail').value;
+                    if (email) {
+                        const success = await subscribeNewsletter(email);
+                        if (success) {
+                            showNotification('Successfully subscribed!');
+                            newsletterForm.reset();
+                        } else {
+                            showNotification('Subscription failed. Please try again.');
+                        }
+                    }
+                });
+            }
+            
+            // Currency change listener
+            window.addEventListener('currencyChanged', () => {
+                displayFeaturedProducts();
+            });
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCartCount();
+            setupEventListeners();
+            initSupabase();
         });
+        
+        // Make functions global
+        window.addToCart = addToCart;
+        window.trackAffiliateClick = trackAffiliateClick;
     </script>
+    
+    <style>
+        .affiliate-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .affiliate-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            border: 1px solid #eee;
+        }
+        .affiliate-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        .affiliate-card i {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        .affiliate-card h3 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+        .affiliate-card p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .affiliate-card .btn {
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .toast-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #2e7d32;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            z-index: 10000;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
 </body>
 </html>
