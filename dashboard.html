@@ -154,12 +154,38 @@
         let blogEditor = null;
         
         // Authentication
-        function checkAuth() {
-            if (localStorage.getItem('adminLoggedIn') !== 'true') {
-                window.location.href = 'admin.html';
-            }
-        }
-        checkAuth();
+     // Supabase Authentication Check for Dashboard
+async function checkAuth() {
+    if (!supabaseClient) {
+        setTimeout(checkAuth, 500);
+        return;
+    }
+    
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    
+    if (!session) {
+        window.location.href = 'admin.html';
+        return;
+    }
+    
+    // Verify admin role
+    const { data: profile } = await supabaseClient
+        .from('profiles')
+        .select('role')
+        .eq('id', session.user.id)
+        .single();
+    
+    if (!profile || profile.role !== 'admin') {
+        await supabaseClient.auth.signOut();
+        window.location.href = 'admin.html';
+        return;
+    }
+    
+    currentUser = session.user;
+}
+
+// Call this at the beginning of your dashboard initialization
+checkAuth();
         
         function logout() { localStorage.removeItem('adminLoggedIn'); window.location.href = 'admin.html'; }
         function switchToPanel(panel) { document.querySelector(`.menu-item[data-panel="${panel}"]`).click(); }
