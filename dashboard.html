@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Zakiyah Arreys Healthcare</title>
+    <title>Admin Dashboard</title>
     <meta name="robots" content="noindex, nofollow">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -42,15 +43,16 @@
         .delete-btn { background: #dc3545; color: white; }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
         .modal.active { display: flex; }
-        .modal-content { background: white; border-radius: 12px; width: 90%; max-width: 600px; padding: 25px; max-height: 85vh; overflow-y: auto; }
+        .modal-content { background: white; border-radius: 12px; width: 90%; max-width: 800px; padding: 25px; max-height: 85vh; overflow-y: auto; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #eee; }
         .close-modal { background: none; border: none; font-size: 1.5rem; cursor: pointer; }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; font-weight: 500; }
         .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; }
-        .image-preview { margin-top: 10px; max-width: 200px; max-height: 150px; display: none; border-radius: 8px; border: 1px solid #ddd; }
-        .categories-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
-        .category-item { background: #f5f5f5; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .image-preview { margin-top: 10px; max-width: 200px; max-height: 150px; display: none; border-radius: 8px; }
+        .categories-grid, .founders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; margin-top: 20px; }
+        .category-item, .founder-item { background: #f5f5f5; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .ck-editor__editable { min-height: 300px; }
         @media (max-width: 768px) { .sidebar { width: 70px; } .sidebar-header h2, .menu-item span { display: none; } .main-content { margin-left: 70px; } .stats-grid { grid-template-columns: 1fr 1fr; } }
     </style>
 </head>
@@ -61,12 +63,13 @@
         <div class="menu-item" data-panel="products"><i class="fas fa-box"></i><span>Products</span></div>
         <div class="menu-item" data-panel="blog"><i class="fas fa-newspaper"></i><span>Blog Posts</span></div>
         <div class="menu-item" data-panel="corporate"><i class="fas fa-building"></i><span>Corporate</span></div>
+        <div class="menu-item" data-panel="founders"><i class="fas fa-users"></i><span>Founders</span></div>
         <div class="menu-item" data-panel="affiliates"><i class="fas fa-link"></i><span>Affiliates</span></div>
         <div class="menu-item" data-panel="categories"><i class="fas fa-tags"></i><span>Categories</span></div>
         <div class="menu-item" data-panel="orders"><i class="fas fa-shopping-cart"></i><span>Orders</span></div>
         <div class="menu-item" data-panel="messages"><i class="fas fa-envelope"></i><span>Messages</span></div>
         <div class="menu-item" data-panel="subscribers"><i class="fas fa-users"></i><span>Subscribers</span></div>
-        <div class="menu-item" data-panel="payments"><i class="fas fa-credit-card"></i><span>Payment APIs</span></div>
+        <div class="menu-item" data-panel="payments"><i class="fas fa-credit-card"></i><span>Payments</span></div>
         <div class="menu-item" data-panel="settings"><i class="fas fa-cog"></i><span>Settings</span></div>
     </div>
     
@@ -88,28 +91,57 @@
                 <div class="stat-card" onclick="switchToPanel('blog')"><div><h3 id="totalBlogs">0</h3><p>Blogs</p></div><i class="fas fa-newspaper"></i></div>
             </div>
             <h3>Recent Orders</h3>
-            <table class="data-table" id="recentOrdersTable"><thead><tr><th>Order #</th><th>Customer</th><th>Amount</th><th>Status</th></tr></thead><tbody><tr><td colspan="4">Loading...</td></tr></tbody></table>
+            <table class="data-table" id="recentOrdersTable"><thead><tr><th>Order #</th><th>Customer</th><th>Amount</th><th>Status</th></tr></thead><tbody><tr><td colspan="4">Loading...</tr></tbody></table>
         </div>
         
-        <div id="productsPanel" class="content-panel"><div class="panel-header"><h2>Products</h2><button class="btn-add" onclick="showProductModal()">+ Add Product</button></div><table class="data-table" id="productsTable"><thead><tr><th>Image</th><th>Name</th><th>Price</th><th>Category</th><th>Featured</th><th>Actions</th></tr></thead><tbody><tr><td colspan="6">Loading...</td></tr></tbody></table></div>
+        <div id="productsPanel" class="content-panel"><div class="panel-header"><h2>Products</h2><button class="btn-add" onclick="showProductModal()">+ Add Product</button></div><table class="data-table" id="productsTable"><thead><tr><th>Image</th><th>Name</th><th>Price</th><th>Category</th><th>Featured</th><th>Actions</th></tr></thead><tbody><tr><td colspan="6">Loading...</tr></tbody></table></div>
         
-        <div id="blogPanel" class="content-panel"><div class="panel-header"><h2>Blog Posts</h2><button class="btn-add" onclick="showBlogModal()">+ Add Post</button></div><table class="data-table" id="blogTable"><thead><tr><th>Image</th><th>Title</th><th>Slug</th><th>Published</th><th>Actions</th></tr></thead><tbody><tr><td colspan="5">Loading...</td></tr></tbody></table></div>
+        <div id="blogPanel" class="content-panel"><div class="panel-header"><h2>Blog Posts</h2><button class="btn-add" onclick="showBlogModal()">+ Add Post</button></div><table class="data-table" id="blogTable"><thead><tr><th>Image</th><th>Title</th><th>Slug</th><th>Published</th><th>Actions</th></tr></thead><tbody><tr><td colspan="5">Loading...</tr></tbody></table></div>
         
-        <div id="corporatePanel" class="content-panel"><div class="panel-header"><h2>Corporate Programs</h2><button class="btn-add" onclick="showCorporateModal()">+ Add Program</button></div><table class="data-table" id="corporateTable"><thead><tr><th>Image</th><th>Title</th><th>Price</th><th>Active</th><th>Actions</th></tr></thead><tbody><tr><td colspan="5">Loading...</td></tr></tbody></table></div>
+        <div id="corporatePanel" class="content-panel"><div class="panel-header"><h2>Corporate Programs</h2><button class="btn-add" onclick="showCorporateModal()">+ Add Program</button></div><table class="data-table" id="corporateTable"><thead><tr><th>Image</th><th>Title</th><th>Price</th><th>Active</th><th>Actions</th></tr></thead><tbody><tr><td colspan="5">Loading...</tr></tbody></table></div>
         
-        <div id="affiliatesPanel" class="content-panel"><div class="panel-header"><h2>Affiliate Links</h2><button class="btn-add" onclick="showAffiliateModal()">+ Add Link</button></div><table class="data-table" id="affiliatesTable"><thead><tr><th>Name</th><th>URL</th><th>Clicks</th><th>Actions</th></tr></thead><tbody><tr><td colspan="4">Loading...</td></tr></tbody></table></div>
+        <div id="foundersPanel" class="content-panel"><div class="panel-header"><h2>Founders</h2><button class="btn-add" onclick="showFounderModal()">+ Add Founder</button></div><div id="foundersList" class="founders-grid"></div></div>
+        
+        <div id="affiliatesPanel" class="content-panel"><div class="panel-header"><h2>Affiliate Links</h2><button class="btn-add" onclick="showAffiliateModal()">+ Add Link</button></div><table class="data-table" id="affiliatesTable"><thead><tr><th>Name</th><th>URL</th><th>Clicks</th><th>Actions</th></tr></thead><tbody><tr><td colspan="4">Loading...</tr></tbody></table></div>
         
         <div id="categoriesPanel" class="content-panel"><div class="panel-header"><h2>Product Categories</h2><button class="btn-add" onclick="showCategoryModal()">+ Add Category</button></div><div id="categoriesList" class="categories-grid"></div></div>
         
-        <div id="ordersPanel" class="content-panel"><div class="panel-header"><h2>All Orders</h2></div><table class="data-table" id="ordersTable"><thead><tr><th>Order #</th><th>Customer</th><th>Amount</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead><tbody><tr><td colspan="6">Loading...</td></tr></tbody></table></div>
+        <div id="ordersPanel" class="content-panel"><div class="panel-header"><h2>All Orders</h2></div><table class="data-table" id="ordersTable"><thead><tr><th>Order #</th><th>Customer</th><th>Amount</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead><tbody><tr><td colspan="6">Loading...</tr></tbody></table></div>
         
-        <div id="messagesPanel" class="content-panel"><div class="panel-header"><h2>Contact Messages</h2></div><table class="data-table" id="messagesTable"><thead><tr><th>Name</th><th>Email</th><th>Subject</th><th>Message</th><th>Date</th><th>Actions</th></tr></thead><tbody><tr><td colspan="6">Loading...</td></tr></tbody></table></div>
+        <div id="messagesPanel" class="content-panel"><div class="panel-header"><h2>Contact Messages</h2></div><table class="data-table" id="messagesTable"><thead><tr><th>Name</th><th>Email</th><th>Subject</th><th>Message</th><th>Date</th><th>Actions</th></tr></thead><tbody><tr><td colspan="6">Loading...</tr></tbody></table></div>
         
-        <div id="subscribersPanel" class="content-panel"><div class="panel-header"><h2>Newsletter Subscribers</h2></div><table class="data-table" id="subscribersTable"><thead><tr><th>Email</th><th>Date</th><th>Actions</th></tr></thead><tbody><tr><td colspan="3">Loading...</td></tr></tbody></table></div>
+        <div id="subscribersPanel" class="content-panel"><div class="panel-header"><h2>Newsletter Subscribers</h2></div><table class="data-table" id="subscribersTable"><thead><tr><th>Email</th><th>Date</th><th>Actions</th></tr></thead><tbody><tr><td colspan="3">Loading...</tr></tbody></table></div>
         
-        <div id="paymentsPanel" class="content-panel"><div class="panel-header"><h2>Payment API Keys</h2></div><form id="paymentForm"><div class="form-group"><label>Flutterwave Public Key</label><input type="text" id="flutterwaveKey"></div><div class="form-group"><label>PayPal Client ID</label><input type="text" id="paypalClientId"></div><div class="form-group"><label>M-Pesa Shortcode</label><input type="text" id="mpesaShortcode"></div><div class="form-group"><label>M-Pesa Passkey</label><input type="text" id="mpesaPasskey"></div><button type="submit" class="btn-add">Save API Keys</button></form></div>
+        <div id="paymentsPanel" class="content-panel">
+            <div class="panel-header"><h2>Payment Settings (Paystack)</h2></div>
+            <form id="paymentForm">
+                <div class="form-group"><label>Paystack Public Key</label><input type="text" id="paystackPublicKey" placeholder="pk_live_xxxxxxxx"></div>
+                <div class="form-group"><label>Paystack Secret Key</label><input type="password" id="paystackSecretKey" placeholder="sk_live_xxxxxxxx"></div>
+                <div class="form-group"><label>Paystack Merchant Email</label><input type="email" id="paystackEmail" placeholder="merchant@example.com"></div>
+                <div class="form-group"><label>M-Pesa Shortcode (for STK Push)</label><input type="text" id="mpesaShortcode" placeholder="174379"></div>
+                <div class="form-group"><label>M-Pesa Consumer Key</label><input type="text" id="mpesaConsumerKey" placeholder=""></div>
+                <div class="form-group"><label>M-Pesa Consumer Secret</label><input type="password" id="mpesaConsumerSecret" placeholder=""></div>
+                <div class="form-group"><label>M-Pesa Passkey</label><input type="text" id="mpesaPasskey" placeholder=""></div>
+                <button type="submit" class="btn-add">Save Payment Settings</button>
+            </form>
+        </div>
         
-        <div id="settingsPanel" class="content-panel"><div class="panel-header"><h2>Site Settings</h2></div><form id="settingsForm"><div class="form-group"><label>Site Name</label><input type="text" id="siteName"></div><div class="form-group"><label>Contact Phone</label><input type="text" id="contactPhone"></div><div class="form-group"><label>Contact Email</label><input type="email" id="contactEmail"></div><div class="form-group"><label>Address</label><input type="text" id="address"></div><div class="form-group"><label>Exchange Rate</label><input type="number" id="exchangeRate" step="0.01"></div><div class="form-group"><label>WhatsApp Number</label><input type="text" id="whatsappNumber"></div><div class="form-group"><label>Logo Image</label><input type="file" id="logoFile" accept="image/*"></div><img id="logoPreview" style="max-width: 100px; display: none;"><button type="submit" class="btn-add">Save Settings</button></form></div>
+        <div id="settingsPanel" class="content-panel">
+            <div class="panel-header"><h2>Site Settings</h2></div>
+            <form id="settingsForm">
+                <div class="form-group"><label>Site Name</label><input type="text" id="siteName"></div>
+                <div class="form-group"><label>Contact Phone</label><input type="text" id="contactPhone"></div>
+                <div class="form-group"><label>Contact Email</label><input type="email" id="contactEmail"></div>
+                <div class="form-group"><label>Address</label><input type="text" id="address"></div>
+                <div class="form-group"><label>Exchange Rate (USD to KES)</label><input type="number" id="exchangeRate" step="0.01"></div>
+                <div class="form-group"><label>WhatsApp Number</label><input type="text" id="whatsappNumber"></div>
+                <div class="form-group"><label>Primary Color</label><input type="color" id="primaryColor"></div>
+                <div class="form-group"><label>Secondary Color</label><input type="color" id="secondaryColor"></div>
+                <div class="form-group"><label>Logo Image</label><input type="file" id="logoFile" accept="image/*"></div>
+                <img id="logoPreview" style="max-width: 100px; display: none; margin-top: 10px;">
+                <button type="submit" class="btn-add">Save Settings</button>
+            </form>
+        </div>
     </div>
     
     <div id="modal" class="modal"><div class="modal-content" id="modalContent"></div></div>
@@ -120,25 +152,24 @@
         
         let supabaseClient = null;
         let currentEditId = null;
-        let categoriesList = [];
+        let currentEditType = null;
+        let blogEditor = null;
+        let categories = [];
         
-        // Auth Check
         function checkAuth() {
-            if (localStorage.getItem('adminLoggedIn') !== 'true') {
-                window.location.href = 'admin.html';
-            }
+            if (localStorage.getItem('adminLoggedIn') !== 'true') window.location.href = 'admin.html';
         }
         checkAuth();
         
         function logout() { localStorage.removeItem('adminLoggedIn'); window.location.href = 'admin.html'; }
         function switchToPanel(panel) { document.querySelector(`.menu-item[data-panel="${panel}"]`).click(); }
-        function refreshAll() { loadDashboardStats(); loadProducts(); loadBlogs(); loadCorporate(); loadAffiliates(); loadOrders(); loadMessages(); loadSubscribers(); loadCategories(); showNotification('Data refreshed!'); }
+        function refreshAll() { loadDashboardStats(); loadProducts(); loadBlogs(); loadCorporate(); loadFounders(); loadAffiliates(); loadOrders(); loadMessages(); loadSubscribers(); loadCategories(); loadSettings(); showNotification('Data refreshed!'); }
         function showNotification(msg) { const n = document.createElement('div'); n.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#2e7d32;color:white;padding:12px 20px;border-radius:8px;z-index:10000;'; n.innerHTML = msg; document.body.appendChild(n); setTimeout(() => n.remove(), 3000); }
         
         function initSupabase() {
             if (typeof supabase !== 'undefined' && supabase.createClient) {
                 supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                loadDashboardStats(); loadProducts(); loadBlogs(); loadCorporate(); loadAffiliates(); loadOrders(); loadMessages(); loadSubscribers(); loadCategories(); loadSettings();
+                loadDashboardStats(); loadProducts(); loadBlogs(); loadCorporate(); loadFounders(); loadAffiliates(); loadOrders(); loadMessages(); loadSubscribers(); loadCategories(); loadSettings(); loadPaymentSettings();
                 return true;
             }
             setTimeout(initSupabase, 500);
@@ -167,37 +198,46 @@
             } else { tbody.innerHTML = '<tr><td colspan="6">No products</td></tr>'; }
         }
         
+        async function loadCategoriesForDropdown() {
+            const { data } = await supabaseClient.from('categories').select('name').eq('active', true);
+            categories = data || [];
+            return categories;
+        }
+        
         function showProductModal(product = null) {
             currentEditId = product?.id || null;
-            document.getElementById('modalContent').innerHTML = `
-                <div class="modal-header"><h3>${product ? 'Edit Product' : 'Add Product'}</h3><button class="close-modal" onclick="closeModal()">&times;</button></div>
-                <form id="modalForm"><div class="form-group"><label>Name</label><input type="text" id="name" value="${product?.name || ''}" required></div>
-                <div class="form-group"><label>Description</label><textarea id="desc">${product?.description || ''}</textarea></div>
-                <div class="form-group"><label>Price (USD)</label><input type="number" id="price" step="0.01" value="${product?.price || ''}" required></div>
-                <div class="form-group"><label>Category</label><input type="text" id="category" value="${product?.category || ''}"></div>
-                <div class="form-group"><label>Image (Upload from PC)</label><input type="file" id="imageFile" accept="image/*"></div>
-                <img id="preview" class="image-preview"><div class="form-group"><label><input type="checkbox" id="featured" ${product?.featured ? 'checked' : ''}> Featured</label></div>
-                <button type="submit" class="btn-add">Save</button></form>`;
-            document.getElementById('imageFile').addEventListener('change', function(e) { const reader = new FileReader(); reader.onload = (ev) => { document.getElementById('preview').src = ev.target.result; document.getElementById('preview').style.display = 'block'; }; if(e.target.files[0]) reader.readAsDataURL(e.target.files[0]); });
-            document.getElementById('modalForm').onsubmit = async (e) => {
-                e.preventDefault();
-                let imageUrl = product?.image_url || '';
-                const file = document.getElementById('imageFile').files[0];
-                if (file) { const reader = new FileReader(); reader.onload = async (ev) => { await saveProduct(ev.target.result); }; reader.readAsDataURL(file); }
-                else { await saveProduct(imageUrl); }
-            };
-            document.getElementById('modal').classList.add('active');
-        }
-        async function saveProduct(imageUrl) {
-            const data = { name: document.getElementById('name').value, description: document.getElementById('desc').value, price: parseFloat(document.getElementById('price').value), category: document.getElementById('category').value, image_url: imageUrl, featured: document.getElementById('featured').checked };
-            if (currentEditId) await supabaseClient.from('products').update(data).eq('id', currentEditId);
-            else await supabaseClient.from('products').insert([data]);
-            closeModal(); loadProducts(); loadDashboardStats(); showNotification('Product saved!');
+            loadCategoriesForDropdown().then(cats => {
+                const categoryOptions = cats.map(c => `<option value="${c.name}" ${product?.category === c.name ? 'selected' : ''}>${c.name}</option>`).join('');
+                document.getElementById('modalContent').innerHTML = `
+                    <div class="modal-header"><h3>${product ? 'Edit Product' : 'Add Product'}</h3><button class="close-modal" onclick="closeModal()">&times;</button></div>
+                    <form id="modalForm"><div class="form-group"><label>Name</label><input type="text" id="name" value="${product?.name || ''}" required></div>
+                    <div class="form-group"><label>Description</label><textarea id="desc">${product?.description || ''}</textarea></div>
+                    <div class="form-group"><label>Price (USD)</label><input type="number" id="price" step="0.01" value="${product?.price || ''}" required></div>
+                    <div class="form-group"><label>Category</label><select id="category">${categoryOptions}</select></div>
+                    <div class="form-group"><label>Image (Upload from PC)</label><input type="file" id="imageFile" accept="image/*"></div>
+                    <img id="preview" class="image-preview"><div class="form-group"><label><input type="checkbox" id="featured" ${product?.featured ? 'checked' : ''}> Featured</label></div>
+                    <button type="submit" class="btn-add">Save</button></form>`;
+                document.getElementById('imageFile').addEventListener('change', function(e) { const reader = new FileReader(); reader.onload = (ev) => { document.getElementById('preview').src = ev.target.result; document.getElementById('preview').style.display = 'block'; }; if(e.target.files[0]) reader.readAsDataURL(e.target.files[0]); });
+                document.getElementById('modalForm').onsubmit = async (e) => {
+                    e.preventDefault();
+                    let imageUrl = product?.image_url || '';
+                    const file = document.getElementById('imageFile').files[0];
+                    const saveProduct = async (img) => {
+                        const data = { name: document.getElementById('name').value, description: document.getElementById('desc').value, price: parseFloat(document.getElementById('price').value), category: document.getElementById('category').value, image_url: img, featured: document.getElementById('featured').checked };
+                        if (currentEditId) await supabaseClient.from('products').update(data).eq('id', currentEditId);
+                        else await supabaseClient.from('products').insert([data]);
+                        closeModal(); loadProducts(); loadDashboardStats(); showNotification('Product saved!');
+                    };
+                    if (file) { const reader = new FileReader(); reader.onload = (ev) => saveProduct(ev.target.result); reader.readAsDataURL(file); }
+                    else { saveProduct(imageUrl); }
+                };
+                document.getElementById('modal').classList.add('active');
+            });
         }
         window.editProduct = async (id) => { const { data } = await supabaseClient.from('products').select('*').eq('id', id).single(); showProductModal(data); };
         window.deleteProduct = async (id) => { if(confirm('Delete?')){ await supabaseClient.from('products').delete().eq('id', id); loadProducts(); loadDashboardStats(); showNotification('Product deleted'); } };
         
-        // BLOG POSTS
+        // BLOG POSTS with Rich Text Editor
         async function loadBlogs() {
             if (!supabaseClient) return;
             const { data } = await supabaseClient.from('blog_posts').select('*');
@@ -213,19 +253,30 @@
                 <div class="modal-header"><h3>${post ? 'Edit Post' : 'Add Blog Post'}</h3><button class="close-modal" onclick="closeModal()">&times;</button></div>
                 <form id="modalForm"><div class="form-group"><label>Title</label><input type="text" id="title" value="${post?.title || ''}" required></div>
                 <div class="form-group"><label>Slug</label><input type="text" id="slug" value="${post?.slug || ''}" required></div>
-                <div class="form-group"><label>Excerpt</label><textarea id="excerpt">${post?.excerpt || ''}</textarea></div>
-                <div class="form-group"><label>Content</label><textarea id="content" rows="6">${post?.content || ''}</textarea></div>
+                <div class="form-group"><label>Excerpt (Short description)</label><textarea id="excerpt">${post?.excerpt || ''}</textarea></div>
+                <div class="form-group"><label>Content (Rich Text Editor)</label><div id="editorContainer"></div><textarea id="content" style="display:none;">${post?.content || ''}</textarea></div>
                 <div class="form-group"><label>Author</label><input type="text" id="author" value="${post?.author || 'Dr. Zakiyah Arrey'}"></div>
-                <div class="form-group"><label>Image (Upload from PC)</label><input type="file" id="imageFile" accept="image/*"></div>
+                <div class="form-group"><label>Feature Image (Upload from PC)</label><input type="file" id="imageFile" accept="image/*"></div>
                 <img id="preview" class="image-preview"><div class="form-group"><label><input type="checkbox" id="published" ${post?.published ? 'checked' : ''}> Published</label></div>
                 <button type="submit" class="btn-add">Save</button></form>`;
+            
+            setTimeout(() => {
+                if (typeof ClassicEditor !== 'undefined') {
+                    ClassicEditor.create(document.querySelector('#editorContainer')).then(editor => {
+                        blogEditor = editor;
+                        const content = document.getElementById('content').value;
+                        if (content) editor.setData(content);
+                    }).catch(error => console.error(error));
+                }
+            }, 100);
+            
             document.getElementById('imageFile').addEventListener('change', function(e) { const reader = new FileReader(); reader.onload = (ev) => { document.getElementById('preview').src = ev.target.result; document.getElementById('preview').style.display = 'block'; }; if(e.target.files[0]) reader.readAsDataURL(e.target.files[0]); });
             document.getElementById('modalForm').onsubmit = async (e) => {
                 e.preventDefault();
                 let imageUrl = post?.image_url || '';
                 const file = document.getElementById('imageFile').files[0];
                 const saveBlog = async (img) => {
-                    const data = { title: document.getElementById('title').value, slug: document.getElementById('slug').value.toLowerCase().replace(/ /g, '-'), excerpt: document.getElementById('excerpt').value, content: document.getElementById('content').value, author: document.getElementById('author').value, image_url: img, published: document.getElementById('published').checked };
+                    const data = { title: document.getElementById('title').value, slug: document.getElementById('slug').value.toLowerCase().replace(/ /g, '-'), excerpt: document.getElementById('excerpt').value, content: blogEditor ? blogEditor.getData() : document.getElementById('content').value, author: document.getElementById('author').value, image_url: img, published: document.getElementById('published').checked };
                     if (currentEditId) await supabaseClient.from('blog_posts').update(data).eq('id', currentEditId);
                     else await supabaseClient.from('blog_posts').insert([data]);
                     closeModal(); loadBlogs(); loadDashboardStats(); showNotification('Blog saved!');
@@ -282,13 +333,58 @@
         window.editCorporate = async (id) => { const { data } = await supabaseClient.from('corporate_wellness').select('*').eq('id', id).single(); showCorporateModal(data); };
         window.deleteCorporate = async (id) => { if(confirm('Delete?')){ await supabaseClient.from('corporate_wellness').delete().eq('id', id); loadCorporate(); showNotification('Program deleted'); } };
         
+        // FOUNDERS
+        async function loadFounders() {
+            if (!supabaseClient) return;
+            const { data } = await supabaseClient.from('founders').select('*').order('display_order');
+            const container = document.getElementById('foundersList');
+            if (data?.length) {
+                container.innerHTML = data.map(f => `
+                    <div class="founder-item">
+                        <div><img src="${f.image_url || 'https://randomuser.me/api/portraits/lego/1.jpg'}" style="width:50px;height:50px;border-radius:50%;object-fit:cover;"><br><strong>${f.name}</strong><br><small>${f.title}</small></div>
+                        <div><button class="edit-btn" onclick="editFounder(${f.id})">Edit</button><button class="delete-btn" onclick="deleteFounder(${f.id})">Delete</button></div>
+                    </div>
+                `).join('');
+            } else { container.innerHTML = '<p>No founders added yet</p>'; }
+        }
+        
+        function showFounderModal(founder = null) {
+            currentEditId = founder?.id || null;
+            document.getElementById('modalContent').innerHTML = `
+                <div class="modal-header"><h3>${founder ? 'Edit Founder' : 'Add Founder'}</h3><button class="close-modal" onclick="closeModal()">&times;</button></div>
+                <form id="modalForm"><div class="form-group"><label>Name</label><input type="text" id="name" value="${founder?.name || ''}" required></div>
+                <div class="form-group"><label>Title</label><input type="text" id="title" value="${founder?.title || ''}"></div>
+                <div class="form-group"><label>Bio</label><textarea id="bio">${founder?.bio || ''}</textarea></div>
+                <div class="form-group"><label>Display Order</label><input type="number" id="displayOrder" value="${founder?.display_order || 0}"></div>
+                <div class="form-group"><label>Image (Upload from PC)</label><input type="file" id="imageFile" accept="image/*"></div>
+                <img id="preview" class="image-preview"><div class="form-group"><label><input type="checkbox" id="active" ${founder?.active !== false ? 'checked' : ''}> Active</label></div>
+                <button type="submit" class="btn-add">Save</button></form>`;
+            document.getElementById('imageFile').addEventListener('change', function(e) { const reader = new FileReader(); reader.onload = (ev) => { document.getElementById('preview').src = ev.target.result; document.getElementById('preview').style.display = 'block'; }; if(e.target.files[0]) reader.readAsDataURL(e.target.files[0]); });
+            document.getElementById('modalForm').onsubmit = async (e) => {
+                e.preventDefault();
+                let imageUrl = founder?.image_url || '';
+                const file = document.getElementById('imageFile').files[0];
+                const saveFounder = async (img) => {
+                    const data = { name: document.getElementById('name').value, title: document.getElementById('title').value, bio: document.getElementById('bio').value, display_order: parseInt(document.getElementById('displayOrder').value) || 0, image_url: img, active: document.getElementById('active').checked };
+                    if (currentEditId) await supabaseClient.from('founders').update(data).eq('id', currentEditId);
+                    else await supabaseClient.from('founders').insert([data]);
+                    closeModal(); loadFounders(); showNotification('Founder saved!');
+                };
+                if (file) { const reader = new FileReader(); reader.onload = (ev) => saveFounder(ev.target.result); reader.readAsDataURL(file); }
+                else { saveFounder(imageUrl); }
+            };
+            document.getElementById('modal').classList.add('active');
+        }
+        window.editFounder = async (id) => { const { data } = await supabaseClient.from('founders').select('*').eq('id', id).single(); showFounderModal(data); };
+        window.deleteFounder = async (id) => { if(confirm('Delete?')){ await supabaseClient.from('founders').delete().eq('id', id); loadFounders(); showNotification('Founder deleted'); } };
+        
         // AFFILIATES
         async function loadAffiliates() {
             if (!supabaseClient) return;
             const { data } = await supabaseClient.from('affiliate_links').select('*');
             const tbody = document.querySelector('#affiliatesTable tbody');
             if (data?.length) {
-                tbody.innerHTML = data.map(a => `<tr><td><a href="${a.url}" target="_blank">${a.name}</a></td><td>${a.url.substring(0,30)}...</td><td>${a.clicks||0}</td><td><button class="edit-btn" onclick="editAffiliate(${a.id})">Edit</button><button class="delete-btn" onclick="deleteAffiliate(${a.id})">Delete</button></td>`).join('');
+                tbody.innerHTML = data.map(a => `<tr><td><a href="${a.url}" target="_blank">${a.name}</a></td><td>${a.url.substring(0,30)}...</td><td>${a.clicks||0}</td><td><button class="edit-btn" onclick="editAffiliate(${a.id})">Edit</button><button class="delete-btn" onclick="deleteAffiliate(${a.id})">Delete</button></td></tr>`).join('');
             } else { tbody.innerHTML = '<tr><td colspan="4">No affiliates</td></tr>'; }
         }
         
@@ -311,48 +407,38 @@
         window.editAffiliate = async (id) => { const { data } = await supabaseClient.from('affiliate_links').select('*').eq('id', id).single(); showAffiliateModal(data); };
         window.deleteAffiliate = async (id) => { if(confirm('Delete?')){ await supabaseClient.from('affiliate_links').delete().eq('id', id); loadAffiliates(); showNotification('Affiliate deleted'); } };
         
-        // CATEGORIES - Saved to Supabase
+        // CATEGORIES
         async function loadCategories() {
             if (!supabaseClient) return;
-            const { data } = await supabaseClient.from('site_settings').select('value').eq('key', 'product_categories').single();
-            if(data?.value) categoriesList = JSON.parse(data.value);
-            else categoriesList = ['Immune Boosters', 'Bone and Joint Care', 'Reproductive Health', 'Cardiovascular Health', 'Digestive Health', 'Personal Care', 'Better Life', "Children's Nutrition", 'Premium Selected'];
+            const { data } = await supabaseClient.from('categories').select('*');
             const container = document.getElementById('categoriesList');
-            container.innerHTML = categoriesList.map(cat => `<div class="category-item"><span><i class="fas fa-tag"></i> ${cat}</span><button class="delete-btn" onclick="deleteCategory('${cat}')">Remove</button></div>`).join('');
+            if (data?.length) {
+                container.innerHTML = data.map(cat => `<div class="category-item"><span><i class="fas fa-tag"></i> ${cat.name}</span><button class="delete-btn" onclick="deleteCategory(${cat.id})">Remove</button></div>`).join('');
+            } else { container.innerHTML = '<p>No categories</p>'; }
         }
         
         function showCategoryModal() {
             document.getElementById('modalContent').innerHTML = `<div class="modal-header"><h3>Add Category</h3><button class="close-modal" onclick="closeModal()">&times;</button></div>
-                <form id="modalForm"><div class="form-group"><label>Category Name</label><input type="text" id="catName" required></div><button type="submit" class="btn-add">Add Category</button></form>`;
+                <form id="modalForm"><div class="form-group"><label>Category Name</label><input type="text" id="catName" required></div><div class="form-group"><label>Slug</label><input type="text" id="catSlug" placeholder="auto-generated"></div><button type="submit" class="btn-add">Add Category</button></form>`;
             document.getElementById('modalForm').onsubmit = async (e) => {
                 e.preventDefault();
-                const newCat = document.getElementById('catName').value;
-                if(newCat && !categoriesList.includes(newCat)) {
-                    categoriesList.push(newCat);
-                    await supabaseClient.from('site_settings').upsert({ key: 'product_categories', value: JSON.stringify(categoriesList) }, { onConflict: 'key' });
-                    loadCategories(); showNotification('Category added!');
-                }
-                closeModal();
+                const name = document.getElementById('catName').value;
+                const slug = document.getElementById('catSlug').value || name.toLowerCase().replace(/ /g, '-');
+                await supabaseClient.from('categories').insert([{ name, slug, active: true }]);
+                closeModal(); loadCategories(); showNotification('Category added!');
             };
             document.getElementById('modal').classList.add('active');
         }
-        window.deleteCategory = async (cat) => {
-            if(confirm(`Delete "${cat}"?`)) {
-                const idx = categoriesList.indexOf(cat);
-                if(idx > -1) categoriesList.splice(idx,1);
-                await supabaseClient.from('site_settings').upsert({ key: 'product_categories', value: JSON.stringify(categoriesList) }, { onConflict: 'key' });
-                loadCategories(); showNotification('Category deleted');
-            }
-        };
+        window.deleteCategory = async (id) => { if(confirm('Delete?')){ await supabaseClient.from('categories').delete().eq('id', id); loadCategories(); showNotification('Category deleted'); } };
         
         // ORDERS, MESSAGES, SUBSCRIBERS
-        async function loadOrders() { if(!supabaseClient) return; const {data} = await supabaseClient.from('orders').select('*'); const tbody = document.querySelector('#ordersTable tbody'); if(data?.length) tbody.innerHTML = data.map(o => `<tr><td>${o.order_number}</td><td>${o.customer_name}</td><td>$${o.total}</td><td>${o.payment_status}</td><td>${new Date(o.created_at).toLocaleDateString()}</td><td><button class="delete-btn" onclick="deleteOrder(${o.id})">Delete</button></td>`).join(); else tbody.innerHTML = '<tr><td colspan="6">No orders</td></tr>'; }
+        async function loadOrders() { if(!supabaseClient) return; const {data} = await supabaseClient.from('orders').select('*'); const tbody = document.querySelector('#ordersTable tbody'); if(data?.length) tbody.innerHTML = data.map(o => `<tr><td>${o.order_number}</td><td>${o.customer_name}</td><td>$${o.total}</td><td>${o.payment_status}</td><td>${new Date(o.created_at).toLocaleDateString()}</td><td><button class="delete-btn" onclick="deleteOrder(${o.id})">Delete</button></td></tr>`).join(); else tbody.innerHTML = '<tr><td colspan="6">No orders</td></tr>'; }
         window.deleteOrder = async (id) => { if(confirm('Delete?')){ await supabaseClient.from('orders').delete().eq('id', id); loadOrders(); loadDashboardStats(); showNotification('Order deleted'); } };
         
-        async function loadMessages() { if(!supabaseClient) return; const {data} = await supabaseClient.from('contact_messages').select('*'); const tbody = document.querySelector('#messagesTable tbody'); if(data?.length) tbody.innerHTML = data.map(m => `<tr><td>${m.name}</td><td>${m.email}</td><td>${m.subject||'-'}</td><td>${m.message.substring(0,50)}...</td><td>${new Date(m.created_at).toLocaleDateString()}</td><td><button class="delete-btn" onclick="deleteMessage(${m.id})">Delete</button></td>`).join(); else tbody.innerHTML = '<tr><td colspan="6">No messages</td></tr>'; }
+        async function loadMessages() { if(!supabaseClient) return; const {data} = await supabaseClient.from('contact_messages').select('*'); const tbody = document.querySelector('#messagesTable tbody'); if(data?.length) tbody.innerHTML = data.map(m => `<tr><td>${m.name}</td><td>${m.email}</td><td>${m.subject||'-'}</td><td>${m.message.substring(0,50)}...</td><td>${new Date(m.created_at).toLocaleDateString()}</td><td><button class="delete-btn" onclick="deleteMessage(${m.id})">Delete</button></td></tr>`).join(); else tbody.innerHTML = '<tr><td colspan="6">No messages</td></tr>'; }
         window.deleteMessage = async (id) => { if(confirm('Delete?')){ await supabaseClient.from('contact_messages').delete().eq('id', id); loadMessages(); showNotification('Message deleted'); } };
         
-        async function loadSubscribers() { if(!supabaseClient) return; const {data} = await supabaseClient.from('newsletter_subscribers').select('*'); const tbody = document.querySelector('#subscribersTable tbody'); if(data?.length) tbody.innerHTML = data.map(s => `<td><td>${s.email}</td><td>${new Date(s.subscribed_at).toLocaleDateString()}</td><td><button class="delete-btn" onclick="deleteSubscriber(${s.id})">Delete</button></td>`).join(); else tbody.innerHTML = '<tr><td colspan="3">No subscribers</td></tr>'; }
+        async function loadSubscribers() { if(!supabaseClient) return; const {data} = await supabaseClient.from('newsletter_subscribers').select('*'); const tbody = document.querySelector('#subscribersTable tbody'); if(data?.length) tbody.innerHTML = data.map(s => `<tr><td>${s.email}</td><td>${new Date(s.subscribed_at).toLocaleDateString()}</td><td><button class="delete-btn" onclick="deleteSubscriber(${s.id})">Delete</button></td></tr>`).join(); else tbody.innerHTML = '<tr><td colspan="3">No subscribers</td></tr>'; }
         window.deleteSubscriber = async (id) => { if(confirm('Delete?')){ await supabaseClient.from('newsletter_subscribers').delete().eq('id', id); loadSubscribers(); showNotification('Subscriber deleted'); } };
         
         // SETTINGS
@@ -366,30 +452,42 @@
             document.getElementById('address').value = settings.address || '';
             document.getElementById('exchangeRate').value = settings.exchange_rate || '115';
             document.getElementById('whatsappNumber').value = settings.whatsapp_number || '';
+            document.getElementById('primaryColor').value = settings.primary_color || '#2e7d32';
+            document.getElementById('secondaryColor').value = settings.secondary_color || '#ff8f00';
             if(settings.logo_url) { document.getElementById('logoPreview').src = settings.logo_url; document.getElementById('logoPreview').style.display = 'block'; }
-            document.getElementById('flutterwaveKey').value = settings.flutterwave_key || '';
-            document.getElementById('paypalClientId').value = settings.paypal_client_id || '';
-            document.getElementById('mpesaShortcode').value = settings.mpesa_shortcode || '';
-            document.getElementById('mpesaPasskey').value = settings.mpesa_passkey || '';
             
             document.getElementById('settingsForm').onsubmit = async (e) => {
                 e.preventDefault();
                 let logoUrl = settings.logo_url || '';
                 const file = document.getElementById('logoFile').files[0];
-                if(file) { const reader = new FileReader(); reader.onload = async (ev) => { await saveSettings(ev.target.result); }; reader.readAsDataURL(file); }
-                else { await saveSettings(logoUrl); }
-            };
-            document.getElementById('paymentForm').onsubmit = async (e) => {
-                e.preventDefault();
-                const updates = [{key:'flutterwave_key', value:document.getElementById('flutterwaveKey').value},{key:'paypal_client_id', value:document.getElementById('paypalClientId').value},{key:'mpesa_shortcode', value:document.getElementById('mpesaShortcode').value},{key:'mpesa_passkey', value:document.getElementById('mpesaPasskey').value}];
-                for(const u of updates) await supabaseClient.from('site_settings').upsert(u, {onConflict:'key'});
-                showNotification('Payment API keys saved!');
+                const saveSettings = async (logo) => {
+                    const updates = [{key:'site_name', value:document.getElementById('siteName').value},{key:'contact_phone', value:document.getElementById('contactPhone').value},{key:'contact_email', value:document.getElementById('contactEmail').value},{key:'address', value:document.getElementById('address').value},{key:'exchange_rate', value:document.getElementById('exchangeRate').value},{key:'whatsapp_number', value:document.getElementById('whatsappNumber').value},{key:'primary_color', value:document.getElementById('primaryColor').value},{key:'secondary_color', value:document.getElementById('secondaryColor').value},{key:'logo_url', value:logo}];
+                    for(const u of updates) await supabaseClient.from('site_settings').upsert(u, {onConflict:'key'});
+                    showNotification('Settings saved!');
+                };
+                if (file) { const reader = new FileReader(); reader.onload = (ev) => saveSettings(ev.target.result); reader.readAsDataURL(file); }
+                else { saveSettings(logoUrl); }
             };
         }
-        async function saveSettings(logoUrl) {
-            const updates = [{key:'site_name', value:document.getElementById('siteName').value},{key:'contact_phone', value:document.getElementById('contactPhone').value},{key:'contact_email', value:document.getElementById('contactEmail').value},{key:'address', value:document.getElementById('address').value},{key:'exchange_rate', value:document.getElementById('exchangeRate').value},{key:'whatsapp_number', value:document.getElementById('whatsappNumber').value},{key:'logo_url', value:logoUrl}];
-            for(const u of updates) await supabaseClient.from('site_settings').upsert(u, {onConflict:'key'});
-            showNotification('Settings saved!');
+        
+        async function loadPaymentSettings() {
+            if(!supabaseClient) return;
+            const {data} = await supabaseClient.from('site_settings').select('*');
+            const settings = {}; data?.forEach(s=>settings[s.key]=s.value);
+            document.getElementById('paystackPublicKey').value = settings.paystack_public_key || '';
+            document.getElementById('paystackSecretKey').value = settings.paystack_secret_key || '';
+            document.getElementById('paystackEmail').value = settings.paystack_email || '';
+            document.getElementById('mpesaShortcode').value = settings.mpesa_shortcode || '';
+            document.getElementById('mpesaConsumerKey').value = settings.mpesa_consumer_key || '';
+            document.getElementById('mpesaConsumerSecret').value = settings.mpesa_consumer_secret || '';
+            document.getElementById('mpesaPasskey').value = settings.mpesa_passkey || '';
+            
+            document.getElementById('paymentForm').onsubmit = async (e) => {
+                e.preventDefault();
+                const updates = [{key:'paystack_public_key', value:document.getElementById('paystackPublicKey').value},{key:'paystack_secret_key', value:document.getElementById('paystackSecretKey').value},{key:'paystack_email', value:document.getElementById('paystackEmail').value},{key:'mpesa_shortcode', value:document.getElementById('mpesaShortcode').value},{key:'mpesa_consumer_key', value:document.getElementById('mpesaConsumerKey').value},{key:'mpesa_consumer_secret', value:document.getElementById('mpesaConsumerSecret').value},{key:'mpesa_passkey', value:document.getElementById('mpesaPasskey').value}];
+                for(const u of updates) await supabaseClient.from('site_settings').upsert(u, {onConflict:'key'});
+                showNotification('Payment settings saved!');
+            };
         }
         
         function setupMenu() {
@@ -403,11 +501,11 @@
                 });
             });
         }
-        function closeModal() { document.getElementById('modal').classList.remove('active'); currentEditId=null; }
+        function closeModal() { document.getElementById('modal').classList.remove('active'); if(blogEditor) { blogEditor.destroy(); blogEditor=null; } currentEditId=null; }
         document.addEventListener('DOMContentLoaded', () => { setupMenu(); initSupabase(); });
         window.closeModal = closeModal; window.logout = logout; window.refreshAll = refreshAll; window.switchToPanel = switchToPanel;
         window.showProductModal = showProductModal; window.showBlogModal = showBlogModal; window.showCorporateModal = showCorporateModal;
-        window.showAffiliateModal = showAffiliateModal; window.showCategoryModal = showCategoryModal;
+        window.showFounderModal = showFounderModal; window.showAffiliateModal = showAffiliateModal; window.showCategoryModal = showCategoryModal;
     </script>
 </body>
 </html>
