@@ -25,7 +25,6 @@
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-    <link rel="apple-touch-icon" href="favicon.ico">
     
     <!-- Stylesheets -->
     <link rel="stylesheet" href="css/style.css">
@@ -56,7 +55,11 @@
                 <img src="" alt="Zakiyah Arreys Healthcare" id="header-logo" style="max-height: 60px; display: none;">
                 <div class="logo-text">
                     <h1>Zakiyah Arreys Healthcare</h1>
-                    <p class="tagline">Your Partner in Wellness</p>
+                    <p class="tagline">
+                        <i class="fas fa-star-of-life"></i>
+                        Your Partner in Wellness
+                        <i class="fas fa-star-of-life"></i>
+                    </p>
                 </div>
             </div>
             <nav>
@@ -223,7 +226,6 @@
     <script src="js/supabase-config.js"></script>
     <script src="js/currency.js"></script>
     <script src="js/cart.js"></script>
-    <script src="js/main.js"></script>
     
     <script>
         // Supabase configuration
@@ -273,19 +275,32 @@
                 displayCategories();
             } catch (error) {
                 console.error('Error loading categories:', error);
-                // Default categories if none in database
                 allCategories = [
-                    { name: 'Immune Boosters', icon: 'fa-shield-virus' },
-                    { name: 'Bone and Joint Care', icon: 'fa-bone' },
-                    { name: 'Reproductive Health', icon: 'fa-venus-mars' },
-                    { name: 'Cardiovascular Health', icon: 'fa-heart-pulse' },
-                    { name: 'Digestive Health', icon: 'fa-stethoscope' },
-                    { name: 'Personal Care', icon: 'fa-hand-sparkles' },
-                    { name: 'Better Life', icon: 'fa-face-smile' },
-                    { name: "Children's Nutrition", icon: 'fa-child' }
+                    { name: 'Immune Boosters' },
+                    { name: 'Bone and Joint Care' },
+                    { name: 'Reproductive Health' },
+                    { name: 'Cardiovascular Health' },
+                    { name: 'Digestive Health' },
+                    { name: 'Personal Care' },
+                    { name: 'Better Life' },
+                    { name: "Children's Nutrition" }
                 ];
                 displayCategories();
             }
+        }
+        
+        function getCategoryIcon(categoryName) {
+            const icons = {
+                'Immune Boosters': 'fa-shield-virus',
+                'Bone and Joint Care': 'fa-bone',
+                'Reproductive Health': 'fa-venus-mars',
+                'Cardiovascular Health': 'fa-heart-pulse',
+                'Digestive Health': 'fa-stethoscope',
+                'Personal Care': 'fa-hand-sparkles',
+                'Better Life': 'fa-face-smile',
+                "Children's Nutrition": 'fa-child'
+            };
+            return icons[categoryName] || 'fa-tag';
         }
         
         function displayCategories() {
@@ -305,20 +320,6 @@
             `).join('');
         }
         
-        function getCategoryIcon(categoryName) {
-            const icons = {
-                'Immune Boosters': 'fa-shield-virus',
-                'Bone and Joint Care': 'fa-bone',
-                'Reproductive Health': 'fa-venus-mars',
-                'Cardiovascular Health': 'fa-heart-pulse',
-                'Digestive Health': 'fa-stethoscope',
-                'Personal Care': 'fa-hand-sparkles',
-                'Better Life': 'fa-face-smile',
-                "Children's Nutrition": 'fa-child'
-            };
-            return icons[categoryName] || 'fa-tag';
-        }
-        
         // Load products
         async function loadProducts() {
             if (!supabaseClient) return;
@@ -335,7 +336,6 @@
                 displayFeaturedProducts();
             } catch (error) {
                 console.error('Error loading products:', error);
-                allProducts = [];
                 displayFeaturedProducts();
             }
         }
@@ -398,7 +398,6 @@
                 displayLatestPosts();
             } catch (error) {
                 console.error('Error loading blog posts:', error);
-                allBlogs = [];
                 displayLatestPosts();
             }
         }
@@ -463,7 +462,7 @@
             
             container.innerHTML = links.map(link => `
                 <div class="affiliate-card">
-                    ${link.logo_url ? `<img src="${link.logo_url}" alt="${escapeHtml(link.name)}">` : '<i class="fas fa-handshake fa-3x"></i>'}
+                    ${link.logo_url ? `<img src="${link.logo_url}" alt="${escapeHtml(link.name)}" style="max-width:80px;margin-bottom:15px;">` : '<i class="fas fa-handshake fa-3x"></i>'}
                     <h3>${escapeHtml(link.name)}</h3>
                     <p>${escapeHtml(link.description || 'Trusted wellness partner')}</p>
                     <a href="${link.url}" target="_blank" class="btn btn-secondary" onclick="trackAffiliateClick(${link.id})">
@@ -490,7 +489,8 @@
                     if (logoImg && logoText) {
                         logoImg.src = data.value;
                         logoImg.style.display = 'block';
-                        logoText.style.display = 'none';
+                        logoText.style.display = 'flex';
+                        logoText.style.flexDirection = 'column';
                     }
                 }
             } catch (error) {
@@ -498,7 +498,7 @@
             }
         }
         
-        // Load site settings for colors
+        // Load site settings
         async function loadSiteSettings() {
             if (!supabaseClient) return;
             
@@ -552,7 +552,6 @@
             const notification = document.createElement('div');
             notification.className = 'toast-notification';
             notification.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
-            notification.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#2e7d32;color:white;padding:12px 20px;border-radius:8px;z-index:10000;animation:slideIn 0.3s;';
             document.body.appendChild(notification);
             setTimeout(() => notification.remove(), 3000);
         }
@@ -606,7 +605,6 @@
         
         // Event listeners
         function setupEventListeners() {
-            // Mobile menu
             const mobileMenu = document.querySelector('.mobile-menu');
             const navMenu = document.querySelector('.nav-menu');
             if (mobileMenu) {
@@ -615,7 +613,6 @@
                 });
             }
             
-            // Newsletter form
             const newsletterForm = document.getElementById('newsletterForm');
             if (newsletterForm) {
                 newsletterForm.addEventListener('submit', async (e) => {
@@ -633,7 +630,6 @@
                 });
             }
             
-            // Currency change listener
             window.addEventListener('currencyChanged', () => {
                 displayFeaturedProducts();
             });
@@ -650,58 +646,5 @@
         window.addToCart = addToCart;
         window.trackAffiliateClick = trackAffiliateClick;
     </script>
-    
-    <style>
-        .affiliate-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
-        }
-        .affiliate-card {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-            border: 1px solid #eee;
-        }
-        .affiliate-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        }
-        .affiliate-card i {
-            color: #2e7d32;
-            margin-bottom: 15px;
-        }
-        .affiliate-card h3 {
-            color: #2e7d32;
-            margin-bottom: 10px;
-        }
-        .affiliate-card p {
-            color: #666;
-            margin-bottom: 15px;
-        }
-        .affiliate-card .btn {
-            display: inline-block;
-            margin-top: 10px;
-        }
-        .toast-notification {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #2e7d32;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            z-index: 10000;
-            animation: slideIn 0.3s ease;
-        }
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-    </style>
 </body>
 </html>
