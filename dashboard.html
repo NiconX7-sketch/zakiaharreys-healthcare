@@ -78,6 +78,15 @@
         .founder-info { display: flex; align-items: center; gap: 15px; }
         .founder-avatar { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid #2e7d32; }
         
+        /* Payment Settings Sections */
+        .payment-section { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+        .payment-section h3 { color: #2e7d32; margin-bottom: 15px; font-size: 1.2rem; }
+        .payment-section h3 i { margin-right: 10px; }
+        .info-box { background: #f0fdf4; padding: 15px; border-radius: 8px; margin-top: 20px; }
+        .info-box h4 { color: #166534; margin-bottom: 10px; }
+        .info-box p { color: #166534; font-size: 14px; margin-bottom: 5px; }
+        small { color: #666; display: block; margin-top: 5px; font-size: 11px; }
+        
         /* CKEditor */
         .ck-editor__editable { min-height: 300px; }
         
@@ -148,7 +157,115 @@
         
         <div id="subscribersPanel" class="content-panel"><div class="panel-header"><h2>Newsletter Subscribers</h2></div><div style="overflow-x:auto;"><table class="data-table" id="subscribersTable"><thead><tr><th>Email</th><th>Date</th><th>Actions</th></tr></thead><tbody><tr><td colspan="3">Loading...</td></tr></tbody></table></div></div>
         
-        <div id="paymentsPanel" class="content-panel"><div class="panel-header"><h2>Payment Settings</h2></div><form id="paymentForm"><div class="form-group"><label>Paystack Public Key</label><input type="text" id="paystackPublicKey" placeholder="pk_live_xxxxxxxx"></div><div class="form-group"><label>Paystack Secret Key</label><input type="password" id="paystackSecretKey" placeholder="sk_live_xxxxxxxx"></div><div class="form-group"><label>Paystack Merchant Email</label><input type="email" id="paystackEmail" placeholder="merchant@example.com"></div><div class="form-group"><label>M-Pesa Shortcode</label><input type="text" id="mpesaShortcode" placeholder="174379"></div><button type="submit" class="btn-add">Save Payment Settings</button></form></div>
+        <!-- COMPLETE PAYMENTS PANEL with all gateways -->
+        <div id="paymentsPanel" class="content-panel">
+            <div class="panel-header"><h2>Payment Gateway Settings</h2></div>
+            
+            <!-- Paystack Settings -->
+            <div class="payment-section">
+                <h3><i class="fas fa-credit-card"></i> Paystack (Card Payments)</h3>
+                <form id="paystackForm">
+                    <div class="form-group">
+                        <label>Paystack Public Key</label>
+                        <input type="text" id="paystackPublicKey" placeholder="pk_live_xxxxxxxxxxxxxxxx">
+                        <small>Get from: Paystack Dashboard → Settings → API Keys</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Paystack Secret Key</label>
+                        <input type="password" id="paystackSecretKey" placeholder="sk_live_xxxxxxxxxxxxxxxx">
+                        <small>Keep this secret! Never share publicly.</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Paystack Merchant Email</label>
+                        <input type="email" id="paystackEmail" placeholder="merchant@example.com">
+                    </div>
+                    <button type="submit" class="btn-add">Save Paystack Settings</button>
+                </form>
+            </div>
+            
+            <!-- M-Pesa Settings -->
+            <div class="payment-section">
+                <h3><i class="fas fa-mobile-alt"></i> M-Pesa (STK Push)</h3>
+                <form id="mpesaForm">
+                    <div class="form-group">
+                        <label>M-Pesa Shortcode (Till Number)</label>
+                        <input type="text" id="mpesaShortcode" placeholder="174379">
+                        <small>Your PayBill/Till Number from Safaricom</small>
+                    </div>
+                    <div class="form-group">
+                        <label>M-Pesa Consumer Key</label>
+                        <input type="text" id="mpesaConsumerKey" placeholder="xxxxxxxxxxxxxxxx">
+                        <small>Get from: Safaricom Developer Portal</small>
+                    </div>
+                    <div class="form-group">
+                        <label>M-Pesa Consumer Secret</label>
+                        <input type="password" id="mpesaConsumerSecret" placeholder="xxxxxxxxxxxxxxxx">
+                    </div>
+                    <div class="form-group">
+                        <label>M-Pesa Passkey</label>
+                        <input type="text" id="mpesaPasskey" placeholder="bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919">
+                        <small>Get from Safaricom Developer Portal</small>
+                    </div>
+                    <div class="form-group">
+                        <label>M-Pesa Callback URL</label>
+                        <input type="text" id="mpesaCallback" placeholder="https://yourdomain.com/api/mpesa/callback">
+                        <small>Your domain URL for payment confirmation</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Environment</label>
+                        <select id="mpesaEnvironment">
+                            <option value="sandbox">Sandbox (Testing)</option>
+                            <option value="production">Production (Live)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-add">Save M-Pesa Settings</button>
+                </form>
+            </div>
+            
+            <!-- PayPal Settings -->
+            <div class="payment-section">
+                <h3><i class="fab fa-paypal"></i> PayPal</h3>
+                <form id="paypalForm">
+                    <div class="form-group">
+                        <label>PayPal Client ID</label>
+                        <input type="text" id="paypalClientId" placeholder="AUXxxxxxxxxxxxxxxxxxxxxx">
+                        <small>Get from: PayPal Developer Dashboard → Apps & Credentials</small>
+                    </div>
+                    <div class="form-group">
+                        <label>PayPal Secret Key</label>
+                        <input type="password" id="paypalSecretKey" placeholder="xxxxxxxxxxxxxxxxxxxxx">
+                    </div>
+                    <div class="form-group">
+                        <label>PayPal Merchant Email</label>
+                        <input type="email" id="paypalEmail" placeholder="merchant@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Environment</label>
+                        <select id="paypalEnvironment">
+                            <option value="sandbox">Sandbox (Testing)</option>
+                            <option value="production">Production (Live)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Currency</label>
+                        <select id="paypalCurrency">
+                            <option value="USD">USD - US Dollar</option>
+                            <option value="KES">KES - Kenyan Shilling</option>
+                            <option value="EUR">EUR - Euro</option>
+                            <option value="GBP">GBP - British Pound</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-add">Save PayPal Settings</button>
+                </form>
+            </div>
+            
+            <div class="info-box">
+                <h4><i class="fas fa-info-circle"></i> Payment Methods Information</h4>
+                <p><strong>Paystack:</strong> Accepts credit/debit cards, bank transfers, and mobile money from multiple African countries.</p>
+                <p><strong>M-Pesa:</strong> Direct STK Push to customer phones. Requires Safaricom developer account.</p>
+                <p><strong>PayPal:</strong> International payments via PayPal accounts and credit cards.</p>
+            </div>
+        </div>
         
         <div id="settingsPanel" class="content-panel"><div class="panel-header"><h2>Site Settings</h2></div><form id="settingsForm"><div class="form-group"><label>Site Name</label><input type="text" id="siteName"></div><div class="form-group"><label>Contact Phone</label><input type="text" id="contactPhone"></div><div class="form-group"><label>Contact Email</label><input type="email" id="contactEmail"></div><div class="form-group"><label>Address</label><input type="text" id="address"></div><div class="form-group"><label>Exchange Rate (USD to KES)</label><input type="number" id="exchangeRate" step="0.01" value="115"></div><div class="form-group"><label>WhatsApp Number</label><input type="text" id="whatsappNumber"></div><div class="form-group"><label>Primary Color</label><input type="color" id="primaryColor"></div><div class="form-group"><label>Secondary Color</label><input type="color" id="secondaryColor"></div><div class="form-group"><label>Logo Image</label><input type="file" id="logoFile" accept="image/*"></div><img id="logoPreview" style="max-width: 100px; margin-top: 10px; display: none;"><button type="submit" class="btn-add" style="margin-top: 15px;">Save Settings</button></form></div>
     </div>
@@ -283,8 +400,8 @@
             const { data } = await supabaseClient.from('blog_posts').select('*');
             const tbody = document.querySelector('#blogTable tbody');
             if (data?.length) {
-                tbody.innerHTML = data.map(b => `<tr><td><img src="${b.image_url || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2250%22 height=%2250%22%3E%3Crect width=%2250%22 height=%2250%22 fill=%22%23ddd%22/%3E%3C/svg%3E'}" style="width:50px;height:50px;object-fit:cover;border-radius:8px;"></td><td>${b.title}</td><td>${b.slug}</td><td>${b.published ? 'Published' : 'Draft'}</td><td><button class="edit-btn" onclick="editBlog(${b.id})"><i class="fas fa-edit"></i></button> <button class="delete-btn" onclick="deleteBlog(${b.id})"><i class="fas fa-trash"></i></button></td></tr>`).join('');
-            } else { tbody.innerHTML = '<td><td colspan="5">No blog posts</td></td>'; }
+                tbody.innerHTML = data.map(b => `<tr><td><img src="${b.image_url || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2250%22 height=%2250%22%3E%3Crect width=%2250%22 height=%2250%22 fill=%22%23ddd%22/%3E%3C/svg%3E'}" style="width:50px;height:50px;object-fit:cover;border-radius:8px;"></td><td>${b.title}</td><td>${b.slug}</td></td><td>${b.published ? 'Published' : 'Draft'}</td><td><button class="edit-btn" onclick="editBlog(${b.id})"><i class="fas fa-edit"></i></button> <button class="delete-btn" onclick="deleteBlog(${b.id})"><i class="fas fa-trash"></i></button></td></tr>`).join('');
+            } else { tbody.innerHTML = '<td><td colspan="5">No blog posts</td></tr>'; }
         }
         
         function showBlogModal(post = null) {
@@ -427,8 +544,8 @@
             const { data } = await supabaseClient.from('affiliate_links').select('*');
             const tbody = document.querySelector('#affiliatesTable tbody');
             if (data?.length) {
-                tbody.innerHTML = data.map(a => `<tr><td><a href="${a.url}" target="_blank">${a.name}</a></td><td>${a.url.substring(0,40)}...</td><td>${a.clicks||0}</td><td><button class="edit-btn" onclick="editAffiliate(${a.id})"><i class="fas fa-edit"></i></button> <button class="delete-btn" onclick="deleteAffiliate(${a.id})"><i class="fas fa-trash"></i></button></td>`).join('');
-            } else { tbody.innerHTML = '<td><td colspan="4">No affiliates</td></tr>'; }
+                tbody.innerHTML = data.map(a => `<tr>}<td><a href="${a.url}" target="_blank">${a.name}</a></td><td>${a.url.substring(0,40)}...</td><td>${a.clicks||0}</td><td><button class="edit-btn" onclick="editAffiliate(${a.id})"><i class="fas fa-edit"></i></button> <button class="delete-btn" onclick="deleteAffiliate(${a.id})"><i class="fas fa-trash"></i></button></td></tr>`).join('');
+            } else { tbody.innerHTML = '<tr><td colspan="4">No affiliates</td></tr>'; }
         }
         
         function showAffiliateModal(link = null) {
@@ -478,16 +595,85 @@
         window.deleteCategory = async (id) => { if(confirm('Delete this category?')){ await supabaseClient.from('categories').delete().eq('id', id); loadCategories(); showNotification('Category deleted'); } };
         
         // ORDERS
-        async function loadOrders() { if(!supabaseClient) return; const {data} = await supabaseClient.from('orders').select('*'); const tbody = document.querySelector('#ordersTable tbody'); if(data?.length) tbody.innerHTML = data.map(o => `<tr><td>${o.order_number}</td><td>${o.customer_name}</td><td>$${o.total}</td><td>${o.payment_status}</td><td>${new Date(o.created_at).toLocaleDateString()}</td><td><button class="delete-btn" onclick="deleteOrder(${o.id})">Delete</button></td>`).join(); else tbody.innerHTML = '<tr><td colspan="6">No orders</td></tr>'; }
+        async function loadOrders() { if(!supabaseClient) return; const {data} = await supabaseClient.from('orders').select('*'); const tbody = document.querySelector('#ordersTable tbody'); if(data?.length) tbody.innerHTML = data.map(o => `<tr><td>${o.order_number}</td><td>${o.customer_name}</td><td>$${o.total}</td><td>${o.payment_status}</td><td>${new Date(o.created_at).toLocaleDateString()}</td><td><button class="delete-btn" onclick="deleteOrder(${o.id})">Delete</button></td></tr>`).join(); else tbody.innerHTML = '<tr><td colspan="6">No orders</td></tr>'; }
         window.deleteOrder = async (id) => { if(confirm('Delete this order?')){ await supabaseClient.from('orders').delete().eq('id', id); loadOrders(); loadDashboardStats(); showNotification('Order deleted'); } };
         
         // MESSAGES
-        async function loadMessages() { if(!supabaseClient) return; const {data} = await supabaseClient.from('contact_messages').select('*'); const tbody = document.querySelector('#messagesTable tbody'); if(data?.length) tbody.innerHTML = data.map(m => `<tr><td>${m.name}</td><td>${m.email}</td><td>${m.subject||'-'}</td><td>${m.message.substring(0,50)}...</td><td>${new Date(m.created_at).toLocaleDateString()}</td><td><button class="delete-btn" onclick="deleteMessage(${m.id})">Delete</button></td>`).join(); else tbody.innerHTML = '<tr><td colspan="6">No messages</td></tr>'; }
+        async function loadMessages() { if(!supabaseClient) return; const {data} = await supabaseClient.from('contact_messages').select('*'); const tbody = document.querySelector('#messagesTable tbody'); if(data?.length) tbody.innerHTML = data.map(m => `<tr><td>${m.name}</td><td>${m.email}</td><td>${m.subject||'-'}</td><td>${m.message.substring(0,50)}...</td><td>${new Date(m.created_at).toLocaleDateString()}</td><td><button class="delete-btn" onclick="deleteMessage(${m.id})">Delete</button></td></tr>`).join(); else tbody.innerHTML = '<td><td colspan="6">No messages</td></tr>'; }
         window.deleteMessage = async (id) => { if(confirm('Delete this message?')){ await supabaseClient.from('contact_messages').delete().eq('id', id); loadMessages(); showNotification('Message deleted'); } };
         
         // SUBSCRIBERS
-        async function loadSubscribers() { if(!supabaseClient) return; const {data} = await supabaseClient.from('newsletter_subscribers').select('*'); const tbody = document.querySelector('#subscribersTable tbody'); if(data?.length) tbody.innerHTML = data.map(s => `<tr><td>${s.email}</td><td>${new Date(s.subscribed_at).toLocaleDateString()}</td><td><button class="delete-btn" onclick="deleteSubscriber(${s.id})">Delete</button></td>`).join(); else tbody.innerHTML = '<tr><td colspan="3">No subscribers</td></tr>'; }
+        async function loadSubscribers() { if(!supabaseClient) return; const {data} = await supabaseClient.from('newsletter_subscribers').select('*'); const tbody = document.querySelector('#subscribersTable tbody'); if(data?.length) tbody.innerHTML = data.map(s => `<td><td>${s.email}</td><td>${new Date(s.subscribed_at).toLocaleDateString()}</td><td><button class="delete-btn" onclick="deleteSubscriber(${s.id})">Delete</button></td></tr>`).join(); else tbody.innerHTML = '<tr><td colspan="3">No subscribers</td></tr>'; }
         window.deleteSubscriber = async (id) => { if(confirm('Delete this subscriber?')){ await supabaseClient.from('newsletter_subscribers').delete().eq('id', id); loadSubscribers(); showNotification('Subscriber deleted'); } };
+        
+        // LOAD PAYMENT SETTINGS
+        async function loadPaymentSettings() {
+            if(!supabaseClient) return;
+            const {data} = await supabaseClient.from('site_settings').select('*');
+            const settings = {}; 
+            data?.forEach(s => settings[s.key] = s.value);
+            
+            // Paystack
+            document.getElementById('paystackPublicKey').value = settings.paystack_public_key || '';
+            document.getElementById('paystackSecretKey').value = settings.paystack_secret_key || '';
+            document.getElementById('paystackEmail').value = settings.paystack_email || '';
+            
+            // M-Pesa
+            document.getElementById('mpesaShortcode').value = settings.mpesa_shortcode || '';
+            document.getElementById('mpesaConsumerKey').value = settings.mpesa_consumer_key || '';
+            document.getElementById('mpesaConsumerSecret').value = settings.mpesa_consumer_secret || '';
+            document.getElementById('mpesaPasskey').value = settings.mpesa_passkey || '';
+            document.getElementById('mpesaCallback').value = settings.mpesa_callback || '';
+            document.getElementById('mpesaEnvironment').value = settings.mpesa_environment || 'sandbox';
+            
+            // PayPal
+            document.getElementById('paypalClientId').value = settings.paypal_client_id || '';
+            document.getElementById('paypalSecretKey').value = settings.paypal_secret_key || '';
+            document.getElementById('paypalEmail').value = settings.paypal_email || '';
+            document.getElementById('paypalEnvironment').value = settings.paypal_environment || 'sandbox';
+            document.getElementById('paypalCurrency').value = settings.paypal_currency || 'USD';
+            
+            // Paystack Form Submit
+            document.getElementById('paystackForm').onsubmit = async (e) => {
+                e.preventDefault();
+                const updates = [
+                    {key: 'paystack_public_key', value: document.getElementById('paystackPublicKey').value},
+                    {key: 'paystack_secret_key', value: document.getElementById('paystackSecretKey').value},
+                    {key: 'paystack_email', value: document.getElementById('paystackEmail').value}
+                ];
+                for(const u of updates) await supabaseClient.from('site_settings').upsert(u, {onConflict:'key'});
+                showNotification('Paystack settings saved!');
+            };
+            
+            // M-Pesa Form Submit
+            document.getElementById('mpesaForm').onsubmit = async (e) => {
+                e.preventDefault();
+                const updates = [
+                    {key: 'mpesa_shortcode', value: document.getElementById('mpesaShortcode').value},
+                    {key: 'mpesa_consumer_key', value: document.getElementById('mpesaConsumerKey').value},
+                    {key: 'mpesa_consumer_secret', value: document.getElementById('mpesaConsumerSecret').value},
+                    {key: 'mpesa_passkey', value: document.getElementById('mpesaPasskey').value},
+                    {key: 'mpesa_callback', value: document.getElementById('mpesaCallback').value},
+                    {key: 'mpesa_environment', value: document.getElementById('mpesaEnvironment').value}
+                ];
+                for(const u of updates) await supabaseClient.from('site_settings').upsert(u, {onConflict:'key'});
+                showNotification('M-Pesa settings saved!');
+            };
+            
+            // PayPal Form Submit
+            document.getElementById('paypalForm').onsubmit = async (e) => {
+                e.preventDefault();
+                const updates = [
+                    {key: 'paypal_client_id', value: document.getElementById('paypalClientId').value},
+                    {key: 'paypal_secret_key', value: document.getElementById('paypalSecretKey').value},
+                    {key: 'paypal_email', value: document.getElementById('paypalEmail').value},
+                    {key: 'paypal_environment', value: document.getElementById('paypalEnvironment').value},
+                    {key: 'paypal_currency', value: document.getElementById('paypalCurrency').value}
+                ];
+                for(const u of updates) await supabaseClient.from('site_settings').upsert(u, {onConflict:'key'});
+                showNotification('PayPal settings saved!');
+            };
+        }
         
         // SETTINGS
         async function loadSettings() {
@@ -515,23 +701,6 @@
                 };
                 if (file) { const reader = new FileReader(); reader.onload = (ev) => saveSettings(ev.target.result); reader.readAsDataURL(file); }
                 else { saveSettings(logoUrl); }
-            };
-        }
-        
-        async function loadPaymentSettings() {
-            if(!supabaseClient) return;
-            const {data} = await supabaseClient.from('site_settings').select('*');
-            const settings = {}; data?.forEach(s=>settings[s.key]=s.value);
-            document.getElementById('paystackPublicKey').value = settings.paystack_public_key || '';
-            document.getElementById('paystackSecretKey').value = settings.paystack_secret_key || '';
-            document.getElementById('paystackEmail').value = settings.paystack_email || '';
-            document.getElementById('mpesaShortcode').value = settings.mpesa_shortcode || '';
-            
-            document.getElementById('paymentForm').onsubmit = async (e) => {
-                e.preventDefault();
-                const updates = [{key:'paystack_public_key', value:document.getElementById('paystackPublicKey').value},{key:'paystack_secret_key', value:document.getElementById('paystackSecretKey').value},{key:'paystack_email', value:document.getElementById('paystackEmail').value},{key:'mpesa_shortcode', value:document.getElementById('mpesaShortcode').value}];
-                for(const u of updates) await supabaseClient.from('site_settings').upsert(u, {onConflict:'key'});
-                showNotification('Payment settings saved!');
             };
         }
         
