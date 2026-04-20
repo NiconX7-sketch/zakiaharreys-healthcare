@@ -258,15 +258,6 @@ nav {
     transform: translateY(-2px);
 }
 
-.btn-danger {
-    background: var(--danger);
-    color: white;
-}
-
-.btn-danger:hover {
-    background: #c82333;
-}
-
 /* Hero Section */
 .hero {
     background: linear-gradient(rgba(46, 125, 50, 0.9), rgba(46, 125, 50, 0.8)), url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=1350');
@@ -608,17 +599,22 @@ section {
     color: var(--primary-dark);
 }
 
-/* Affiliate Grid */
+/* Affiliate Section */
+.affiliate-section {
+    padding: 80px 0;
+    background: var(--background-light);
+}
+
 .affiliate-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 30px;
     margin-top: 40px;
 }
 
 .affiliate-card {
     background: white;
-    padding: 25px;
+    padding: 30px;
     border-radius: 12px;
     text-align: center;
     box-shadow: var(--shadow);
@@ -632,6 +628,7 @@ section {
 }
 
 .affiliate-card i {
+    font-size: 3rem;
     color: var(--primary-color);
     margin-bottom: 15px;
 }
@@ -639,11 +636,19 @@ section {
 .affiliate-card h3 {
     color: var(--primary-color);
     margin-bottom: 10px;
+    font-size: 1.2rem;
 }
 
 .affiliate-card p {
     color: var(--text-light);
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+}
+
+.affiliate-card .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 0.9rem;
 }
 
 /* Safety Commitment */
