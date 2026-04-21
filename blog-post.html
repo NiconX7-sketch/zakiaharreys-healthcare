@@ -4,62 +4,156 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog Post - Zakiyah Arreys Healthcare</title>
+    <meta name="description" content="Read our latest health articles and wellness tips">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        .post-header { background: var(--primary-color); color: white; padding: 60px 0; text-align: center; }
-        .post-header h1 { font-size: 2.5rem; margin-bottom: 15px; }
-        .post-meta { font-size: 0.9rem; opacity: 0.9; }
-        .post-content { padding: 60px 0; }
-        .post-container { max-width: 800px; margin: 0 auto; }
-        .post-image { width: 100%; border-radius: 12px; margin-bottom: 30px; }
+        .post-header {
+            background: linear-gradient(rgba(46, 125, 50, 0.9), rgba(46, 125, 50, 0.8)), url('https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1350');
+            background-size: cover;
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        .post-header h1 { font-size: 2.5rem; margin-bottom: 15px; max-width: 800px; margin-left: auto; margin-right: auto; }
+        .post-meta { font-size: 0.9rem; opacity: 0.9; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .post-content { padding: 60px 0; background: white; }
+        .post-container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+        .post-image { width: 100%; border-radius: 12px; margin-bottom: 30px; box-shadow: var(--shadow); }
         .post-body { line-height: 1.8; color: var(--text-dark); }
-        .post-body h2 { color: var(--primary-color); margin: 30px 0 15px; }
+        .post-body h1, .post-body h2, .post-body h3 { color: var(--primary-color); margin: 30px 0 15px; }
+        .post-body h1 { font-size: 2rem; }
+        .post-body h2 { font-size: 1.5rem; }
+        .post-body h3 { font-size: 1.2rem; }
         .post-body p { margin-bottom: 20px; }
         .post-body ul, .post-body ol { margin: 20px 0 20px 30px; }
-        .back-link { display: inline-block; margin-top: 40px; color: var(--primary-color); text-decoration: none; }
-        @media (max-width: 768px) { .post-header h1 { font-size: 1.8rem; } .post-container { padding: 0 20px; } }
+        .post-body li { margin-bottom: 8px; }
+        .post-body a { color: var(--primary-color); text-decoration: none; }
+        .post-body a:hover { text-decoration: underline; }
+        .post-body img { max-width: 100%; border-radius: 8px; margin: 20px 0; }
+        .post-body blockquote { border-left: 4px solid var(--primary-color); padding-left: 20px; margin: 20px 0; font-style: italic; color: var(--text-light); }
+        .post-body table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        .post-body th, .post-body td { border: 1px solid var(--border); padding: 10px; text-align: left; }
+        .post-body th { background: var(--background-light); }
+        .back-link { display: inline-block; margin-top: 40px; color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .back-link:hover { text-decoration: underline; }
+        .share-buttons { display: flex; gap: 15px; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); }
+        .share-btn { padding: 8px 15px; border-radius: 8px; text-decoration: none; color: white; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; }
+        .share-fb { background: #3b5998; }
+        .share-tw { background: #1da1f2; }
+        .share-wa { background: #25d366; }
+        .loader { text-align: center; padding: 60px; }
+        .loader i { font-size: 2rem; color: var(--primary-color); animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @media (max-width: 768px) { .post-header h1 { font-size: 1.8rem; } .post-meta { flex-direction: column; align-items: center; gap: 10px; } }
     </style>
 </head>
 <body>
-    <div class="top-bar"><div class="container"><div class="contact-info"><span><i class="fas fa-phone"></i> <span class="contact-phone">+254746800330</span> / 254722151351</span><span><i class="fas fa-envelope"></i> <span class="contact-email">zakiyaharreyshealthcare@gmail.com</span></span></div><div class="currency-selector"><button class="currency-btn" data-currency="USD">USD $</button><button class="currency-btn" data-currency="KES">KES KSh</button></div></div></div>
+    <div class="top-bar">
+        <div class="container">
+            <div class="contact-info">
+                <span><i class="fas fa-phone"></i> +254746800330 / 254722151351</span>
+                <span><i class="fas fa-envelope"></i> zakiyaharreyshealthcare@gmail.com</span>
+            </div>
+            <div class="currency-selector">
+                <button class="currency-btn" data-currency="USD">USD $</button>
+                <button class="currency-btn" data-currency="KES">KES KSh</button>
+            </div>
+        </div>
+    </div>
 
-    <header><div class="container"><div class="logo"><img src="" alt="Zakiyah Arreys Healthcare" id="header-logo" style="max-height: 60px; display: none;"><div class="logo-text"><h1>Zakiyah Arreys Healthcare</h1><p class="tagline">Your Partner in Wellness</p></div></div><nav><ul class="nav-menu"><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="products.html">Products</a></li><li><a href="blog.html" class="active">Blog</a></li><li><a href="corporate-wellness.html">Corporate Wellness</a></li><li><a href="contact.html">Contact</a></li></ul><div class="cart-icon" onclick="window.location.href='cart.html'"><i class="fas fa-shopping-cart"></i><span class="cart-count">0</span></div><div class="mobile-menu"><i class="fas fa-bars"></i></div></nav></div></header>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="" alt="Zakiyah Arreys Healthcare" id="header-logo" style="max-height: 60px; display: none;">
+                <div class="logo-text">
+                    <h1>Zakiyah Arreys Healthcare</h1>
+                    <p class="tagline">Your Partner in Wellness</p>
+                </div>
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="products.html">Products</a></li>
+                    <li><a href="blog.html" class="active">Blog</a></li>
+                    <li><a href="corporate-wellness.html">Corporate Wellness</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <div class="cart-icon" onclick="location.href='cart.html'"><i class="fas fa-shopping-cart"></i><span class="cart-count">0</span></div>
+                <div class="mobile-menu"><i class="fas fa-bars"></i></div>
+            </nav>
+        </div>
+    </header>
 
-    <section class="post-header"><div class="container"><h1 id="postTitle">Loading...</h1><div class="post-meta" id="postMeta"></div></div></section>
+    <section class="post-header" id="postHeader" style="display: none;">
+        <div class="container">
+            <h1 id="postTitle"></h1>
+            <div class="post-meta" id="postMeta"></div>
+        </div>
+    </section>
 
-    <section class="post-content"><div class="post-container"><img id="postImage" class="post-image" src="" alt=""><div id="postBody" class="post-body"><div class="loader"><i class="fas fa-spinner"></i> Loading article...</div></div><a href="blog.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Blog</a></div></section>
+    <section class="post-content">
+        <div class="post-container">
+            <div id="loadingState" class="loader"><i class="fas fa-spinner"></i> Loading article...</div>
+            <div id="postContent" style="display: none;">
+                <img id="postImage" class="post-image" src="" alt="">
+                <div id="postBody" class="post-body"></div>
+                <div class="share-buttons">
+                    <a href="#" id="shareFb" class="share-btn share-fb" target="_blank"><i class="fab fa-facebook-f"></i> Share</a>
+                    <a href="#" id="shareTw" class="share-btn share-tw" target="_blank"><i class="fab fa-twitter"></i> Tweet</a>
+                    <a href="#" id="shareWa" class="share-btn share-wa" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                </div>
+                <a href="blog.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+            </div>
+        </div>
+    </section>
 
     <div class="whatsapp-float"><a href="https://wa.me/254746800330" target="_blank"><i class="fab fa-whatsapp"></i><span>Chat with us</span></a></div>
 
-    <footer><div class="container"><div class="footer-grid"><div class="footer-about"><h4>Zakiyah Arreys Healthcare</h4><p>Supporting healthier communities.</p></div><div class="footer-links"><h4>Quick Links</h4><ul><li><a href="about.html">About Us</a></li><li><a href="products.html">Products</a></li><li><a href="contact.html">Contact</a></li></ul></div><div class="footer-contact"><h4>Contact Us</h4><p><i class="fas fa-phone"></i> +254746800330</p><p><i class="fas fa-envelope"></i> zakiyaharreyshealthcare@gmail.com</p></div></div><div class="footer-bottom"><p>&copy; 2026 Zakiyah Arreys Healthcare. All rights reserved.</p></div></div></footer>
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-about"><h4>Zakiyah Arreys Healthcare</h4><p>Supporting healthier communities through responsible wellness.</p></div>
+                <div class="footer-links"><h4>Quick Links</h4><ul><li><a href="about.html">About Us</a></li><li><a href="products.html">Products</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+                <div class="footer-contact"><h4>Contact Us</h4><p><i class="fas fa-phone"></i> +254746800330 / 254722151351</p><p><i class="fas fa-envelope"></i> zakiyaharreyshealthcare@gmail.com</p></div>
+            </div>
+            <div class="footer-bottom"><p>&copy; 2026 Zakiyah Arreys Healthcare. All rights reserved.</p></div>
+        </div>
+    </footer>
 
     <script src="js/supabase-config.js"></script>
     <script src="js/currency.js"></script>
     <script src="js/cart.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', async function() {
-            await loadBlogPost();
-            updateCartCount();
-            
-            const mobileMenu = document.querySelector('.mobile-menu');
-            const navMenu = document.querySelector('.nav-menu');
-            if (mobileMenu) mobileMenu.addEventListener('click', () => navMenu.classList.toggle('active'));
-        });
+        const SUPABASE_URL = 'https://qczrxqxwowfkltkbcyho.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFjenJ4cXh3b3dma2x0a2JjeWhvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzMjE1MDgsImV4cCI6MjA5MTg5NzUwOH0.VPDdz5bGuneuXSxAlhjMpFZbAzAkYeF9nYfgbopkZoE';
+        
+        let supabaseClient = null;
+        
+        function initSupabase() {
+            if (typeof supabase !== 'undefined' && supabase.createClient) {
+                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                loadBlogPost();
+                loadLogoSettings();
+                return true;
+            }
+            setTimeout(initSupabase, 500);
+        }
         
         async function loadBlogPost() {
             const urlParams = new URLSearchParams(window.location.search);
             const slug = urlParams.get('slug');
             
             if (!slug) {
-                document.getElementById('postBody').innerHTML = '<p>Post not found.</p>';
+                showError('No blog post specified');
                 return;
             }
             
             try {
-                const { data: post, error } = await supabase
+                const { data: post, error } = await supabaseClient
                     .from('blog_posts')
                     .select('*')
                     .eq('slug', slug)
@@ -68,26 +162,98 @@
                 if (error) throw error;
                 
                 if (post) {
-                    document.getElementById('postTitle').textContent = post.title;
-                    document.getElementById('postMeta').innerHTML = `<i class="far fa-calendar-alt"></i> ${new Date(post.created_at).toLocaleDateString()} | by ${escapeHtml(post.author || 'Dr. Zakiyah Arrey')} | <i class="far fa-eye"></i> ${post.views || 0} views`;
-                    document.getElementById('postImage').src = post.image_url || 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800';
-                    document.getElementById('postBody').innerHTML = post.content || '<p>Content coming soon...</p>';
-                    
-                    document.title = `${post.title} - Zakiyah Arreys Healthcare`;
-                    
-                    await supabase.from('blog_posts').update({ views: (post.views || 0) + 1 }).eq('id', post.id);
+                    displayPost(post);
+                    // Update view count
+                    await supabaseClient
+                        .from('blog_posts')
+                        .update({ views: (post.views || 0) + 1 })
+                        .eq('id', post.id);
                 } else {
-                    document.getElementById('postBody').innerHTML = '<p>Post not found.</p>';
+                    showError('Post not found');
                 }
             } catch (error) {
                 console.error('Error loading post:', error);
-                document.getElementById('postBody').innerHTML = '<p>Unable to load article. Please try again later.</p>';
+                showError('Unable to load article');
             }
+        }
+        
+        function displayPost(post) {
+            // Hide loader, show content
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('postContent').style.display = 'block';
+            document.getElementById('postHeader').style.display = 'block';
+            
+            // Set title and meta
+            document.getElementById('postTitle').textContent = post.title;
+            document.title = `${post.title} - Zakiyah Arreys Healthcare`;
+            
+            const date = new Date(post.created_at).toLocaleDateString('en-US', {
+                year: 'numeric', month: 'long', day: 'numeric'
+            });
+            
+            document.getElementById('postMeta').innerHTML = `
+                <span><i class="far fa-calendar-alt"></i> ${date}</span>
+                <span><i class="far fa-user"></i> ${escapeHtml(post.author || 'Dr. Zakiyah Arrey')}</span>
+                <span><i class="far fa-eye"></i> ${(post.views || 0) + 1} views</span>
+            `;
+            
+            // Set image
+            const postImage = document.getElementById('postImage');
+            if (post.image_url) {
+                postImage.src = post.image_url;
+                postImage.style.display = 'block';
+            } else {
+                postImage.style.display = 'none';
+            }
+            
+            // CRITICAL: Set HTML content directly (not escaped!)
+            const postBody = document.getElementById('postBody');
+            postBody.innerHTML = post.content || '<p>Content coming soon...</p>';
+            
+            // Setup share buttons
+            const currentUrl = encodeURIComponent(window.location.href);
+            const shareText = encodeURIComponent(`Check out this article: ${post.title}`);
+            
+            document.getElementById('shareFb').href = `https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`;
+            document.getElementById('shareTw').href = `https://twitter.com/intent/tweet?text=${shareText}&url=${currentUrl}`;
+            document.getElementById('shareWa').href = `https://wa.me/?text=${shareText}%20${currentUrl}`;
+        }
+        
+        function showError(message) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('postContent').style.display = 'block';
+            document.getElementById('postBody').innerHTML = `
+                <div style="text-align: center; padding: 60px;">
+                    <i class="fas fa-exclamation-circle" style="font-size: 3rem; color: #dc3545; margin-bottom: 20px;"></i>
+                    <h3>${message}</h3>
+                    <p>Sorry, we couldn't find the article you're looking for.</p>
+                    <a href="blog.html" class="btn btn-primary" style="margin-top: 20px;">Back to Blog</a>
+                </div>
+            `;
+        }
+        
+        async function loadLogoSettings() {
+            if (!supabaseClient) return;
+            try {
+                const { data } = await supabaseClient
+                    .from('site_settings')
+                    .select('value')
+                    .eq('key', 'logo_url')
+                    .single();
+                
+                if (data && data.value) {
+                    const logoImg = document.getElementById('header-logo');
+                    const logoText = document.querySelector('.logo-text');
+                    logoImg.src = data.value;
+                    logoImg.style.display = 'block';
+                    logoText.style.display = 'none';
+                }
+            } catch(e) { console.log('Logo error:', e); }
         }
         
         function updateCartCount() {
             const cart = JSON.parse(localStorage.getItem('zakiyah_cart')) || [];
-            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const count = cart.reduce((s, i) => s + i.quantity, 0);
             document.querySelectorAll('.cart-count').forEach(el => el.textContent = count);
         }
         
@@ -100,6 +266,16 @@
                 return m;
             });
         }
+        
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu')?.addEventListener('click', () => {
+            document.querySelector('.nav-menu')?.classList.toggle('active');
+        });
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCartCount();
+            initSupabase();
+        });
     </script>
 </body>
 </html>
