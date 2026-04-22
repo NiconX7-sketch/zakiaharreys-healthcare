@@ -10,69 +10,97 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        .corporate-hero {
-            background: linear-gradient(rgba(46, 125, 50, 0.85), rgba(46, 125, 50, 0.8)), url('https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1350');
-            background-size: cover;
-            color: white;
-            padding: 100px 0;
-            text-align: center;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        
+        .top-bar { background: #2e7d32; color: white; padding: 10px 0; font-size: 0.9rem; }
+        .top-bar .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .contact-info { display: flex; gap: 20px; flex-wrap: wrap; }
+        .contact-info span { display: flex; align-items: center; gap: 5px; }
+        .currency-selector { display: flex; gap: 10px; }
+        .currency-btn { background: transparent; border: 1px solid white; color: white; padding: 5px 15px; cursor: pointer; border-radius: 20px; }
+        .currency-btn.active { background: white; color: #2e7d32; }
+        
+        header { background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+        header .container { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; }
+        .logo { display: flex; align-items: center; gap: 10px; }
+        .logo img { max-height: 60px; }
+        .logo h1 { color: #2e7d32; font-size: 1.5rem; }
+        .tagline { font-size: 0.85rem; color: #ff8f00; font-style: italic; }
+        
+        nav { display: flex; align-items: center; gap: 30px; }
+        .nav-menu { display: flex; list-style: none; gap: 25px; }
+        .nav-menu a { text-decoration: none; color: #333; font-weight: 500; }
+        .nav-menu a:hover, .nav-menu a.active { color: #2e7d32; }
+        .cart-icon { position: relative; cursor: pointer; }
+        .cart-count { position: absolute; top: -8px; right: -8px; background: #ff8f00; color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.7rem; }
+        .mobile-menu { display: none; font-size: 1.5rem; cursor: pointer; }
+        
+        .btn { display: inline-block; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: 600; cursor: pointer; border: none; }
+        .btn-primary { background: #2e7d32; color: white; }
+        .btn-primary:hover { background: #1b5e20; }
+        .btn-secondary { background: transparent; color: #2e7d32; border: 2px solid #2e7d32; }
+        
+        .section-title { text-align: center; margin-bottom: 50px; color: #2e7d32; font-size: 2rem; position: relative; }
+        .section-title::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 60px; height: 3px; background: #2e7d32; }
+        
+        .corporate-hero { background: linear-gradient(rgba(46,125,50,0.85), rgba(46,125,50,0.8)), url('https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1350'); background-size: cover; color: white; padding: 100px 0; text-align: center; }
         .corporate-hero h1 { font-size: 2.5rem; margin-bottom: 15px; }
-        .corporate-hero p { font-size: 1.2rem; max-width: 800px; margin: 0 auto; }
         
         .intro-section { padding: 60px 0; background: white; }
         .intro-text { max-width: 900px; margin: 0 auto; text-align: center; }
-        .intro-text h2 { color: var(--primary-color); margin-bottom: 20px; }
-        .intro-text p { color: var(--text-light); line-height: 1.8; margin-bottom: 20px; }
+        .intro-text h2 { color: #2e7d32; margin-bottom: 20px; }
         
-        .services-section { padding: 60px 0; background: var(--background-light); }
+        .services-section { padding: 60px 0; background: #f9f9f9; }
         .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; margin-top: 40px; }
-        .service-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); transition: all 0.3s; }
-        .service-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
-        .service-image { width: 100%; height: 220px; object-fit: cover; }
+        .service-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .service-image { width: 100%; height: 200px; object-fit: cover; }
         .service-content { padding: 25px; }
         .service-icon { width: 60px; height: 60px; background: rgba(46,125,50,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; }
-        .service-icon i { font-size: 1.8rem; color: var(--primary-color); }
-        .service-title { color: var(--primary-color); margin-bottom: 10px; font-size: 1.3rem; }
-        .service-description { color: var(--text-light); line-height: 1.6; }
+        .service-icon i { font-size: 1.8rem; color: #2e7d32; }
+        .service-title { color: #2e7d32; margin-bottom: 10px; }
         
         .programs-section { padding: 60px 0; background: white; }
         .programs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; margin-top: 40px; }
-        .program-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); transition: all 0.3s; border: 1px solid var(--border); }
-        .program-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); border-color: var(--primary-color); }
+        .program-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: transform 0.3s; border: 1px solid #eee; }
+        .program-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
         .program-image { width: 100%; height: 220px; object-fit: cover; }
         .program-content { padding: 25px; }
-        .program-type { display: inline-block; padding: 5px 12px; background: #e8f5e9; color: var(--primary-color); border-radius: 20px; font-size: 0.8rem; margin-bottom: 15px; }
-        .program-title { color: var(--primary-color); margin-bottom: 10px; font-size: 1.3rem; }
-        .program-description { color: var(--text-light); line-height: 1.6; margin-bottom: 15px; }
+        .program-type { display: inline-block; padding: 5px 12px; background: #e8f5e9; color: #2e7d32; border-radius: 20px; font-size: 0.8rem; margin-bottom: 15px; }
+        .program-title { color: #2e7d32; margin-bottom: 10px; font-size: 1.3rem; }
         .program-features { list-style: none; margin: 20px 0; }
         .program-features li { padding: 8px 0; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #f0f0f0; }
-        .program-features li:last-child { border-bottom: none; }
-        .program-features i { color: var(--primary-color); width: 20px; }
-        .program-price { font-size: 1.5rem; color: var(--primary-color); font-weight: bold; margin: 15px 0; }
-        .btn-primary { background: var(--primary-color); color: white; padding: 12px 30px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; width: 100%; }
-        .btn-primary:hover { background: var(--primary-dark); }
+        .program-features i { color: #2e7d32; width: 20px; }
+        .program-price { font-size: 1.5rem; color: #2e7d32; font-weight: bold; margin: 15px 0; }
         
         .disclaimer-box { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px; border-radius: 8px; margin: 40px auto; max-width: 900px; }
-        .disclaimer-box strong { color: #b45309; display: block; margin-bottom: 10px; }
-        
-        .contact-form-section { background: var(--primary-color); padding: 60px 0; color: white; }
-        .corporate-form-container { max-width: 600px; margin: 0 auto; background: white; padding: 40px; border-radius: 12px; color: var(--text-dark); }
-        .corporate-form-container h2 { color: var(--primary-color); margin-bottom: 25px; text-align: center; }
+        .contact-form-section { background: #2e7d32; padding: 60px 0; }
+        .corporate-form-container { max-width: 600px; margin: 0 auto; background: white; padding: 40px; border-radius: 12px; }
+        .corporate-form-container h2 { color: #2e7d32; margin-bottom: 25px; text-align: center; }
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; }
         
-        .loader { text-align: center; padding: 40px; grid-column: 1/-1; }
-        .loader i { font-size: 2rem; color: var(--primary-color); animation: spin 1s linear infinite; }
+        .whatsapp-float { position: fixed; bottom: 30px; right: 30px; z-index: 999; }
+        .whatsapp-float a { display: flex; align-items: center; background: #25d366; color: white; padding: 12px 24px; border-radius: 50px; gap: 10px; text-decoration: none; }
+        
+        footer { background: #1b5e20; color: white; padding: 60px 0 20px; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px; }
+        .footer-bottom { text-align: center; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+        
+        .loader { text-align: center; padding: 60px; grid-column: 1/-1; }
+        .loader i { font-size: 2rem; color: #2e7d32; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        
         .no-programs { text-align: center; padding: 60px; grid-column: 1/-1; }
-        .no-programs i { font-size: 3rem; color: #ccc; margin-bottom: 15px; }
         
         @media (max-width: 768px) {
+            .nav-menu { display: none; }
+            .mobile-menu { display: block; }
             .corporate-hero h1 { font-size: 1.8rem; }
             .services-grid, .programs-grid { grid-template-columns: 1fr; }
+            .whatsapp-float a { padding: 15px; border-radius: 50%; }
+            .whatsapp-float span { display: none; }
         }
     </style>
 </head>
@@ -126,7 +154,6 @@
             <div class="intro-text">
                 <h2>Corporate & Employee Wellness Services</h2>
                 <p>Zakiyah Arreys Healthcare offers professional corporate health and employee wellness services aimed at promoting healthier, more productive workplaces. We support organizations by providing health education, wellness awareness programs, and preventive health guidance that help employees maintain physical, mental, and emotional wellbeing.</p>
-                <p>Our services focus on encouraging healthy lifestyle practices, stress management awareness, balanced nutrition education, and workplace wellness initiatives that empower employees to make informed health decisions.</p>
             </div>
         </div>
     </section>
@@ -136,43 +163,43 @@
             <h2 class="section-title">Our Corporate Wellness Services</h2>
             <div class="services-grid">
                 <div class="service-card">
-                    <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=500" alt="Reflexology" class="service-image">
+                    <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=500" alt="Reflexology" class="service-image" loading="lazy">
                     <div class="service-content">
                         <div class="service-icon"><i class="fas fa-hand-holding-heart"></i></div>
                         <h3 class="service-title">Reflexology Wellness Sessions</h3>
-                        <p class="service-description">Workplace reflexology sessions promoting relaxation and general wellbeing. Helps employees manage workplace stress and physical tension.</p>
+                        <p>Workplace reflexology sessions promoting relaxation and general wellbeing. Helps employees manage workplace stress and physical tension.</p>
                     </div>
                 </div>
                 <div class="service-card">
-                    <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=500" alt="Mental Health" class="service-image">
+                    <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=500" alt="Mental Health" class="service-image" loading="lazy">
                     <div class="service-content">
                         <div class="service-icon"><i class="fas fa-brain"></i></div>
                         <h3 class="service-title">Mental Health & Wellbeing Awareness</h3>
-                        <p class="service-description">Mental health awareness programs helping employees understand emotional wellbeing, stress management, and healthy coping strategies.</p>
+                        <p>Mental health awareness programs helping employees understand emotional wellbeing, stress management, and healthy coping strategies.</p>
                     </div>
                 </div>
                 <div class="service-card">
-                    <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500" alt="Pain Management" class="service-image">
+                    <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500" alt="Pain Management" class="service-image" loading="lazy">
                     <div class="service-content">
                         <div class="service-icon"><i class="fas fa-spine"></i></div>
                         <h3 class="service-title">Pain Management & Workplace Comfort</h3>
-                        <p class="service-description">Education on workplace discomforts such as back pain, muscle tension, and posture-related strain.</p>
+                        <p>Education on workplace discomforts such as back pain, muscle tension, and posture-related strain.</p>
                     </div>
                 </div>
                 <div class="service-card">
-                    <img src="https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=500" alt="Fatigue Management" class="service-image">
+                    <img src="https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=500" alt="Fatigue Management" class="service-image" loading="lazy">
                     <div class="service-content">
                         <div class="service-icon"><i class="fas fa-charging-station"></i></div>
                         <h3 class="service-title">Fatigue Management & Energy Wellness</h3>
-                        <p class="service-description">Guidance on healthy routines, stress reduction, rest, and lifestyle habits for maintaining energy and balance.</p>
+                        <p>Guidance on healthy routines, stress reduction, rest, and lifestyle habits for maintaining energy and balance.</p>
                     </div>
                 </div>
                 <div class="service-card">
-                    <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500" alt="Stress Management" class="service-image">
+                    <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500" alt="Stress Management" class="service-image" loading="lazy">
                     <div class="service-content">
                         <div class="service-icon"><i class="fas fa-leaf"></i></div>
                         <h3 class="service-title">Stress Management & Lifestyle Wellness</h3>
-                        <p class="service-description">Practical strategies for managing daily stress, maintaining work-life balance, and supporting overall wellbeing.</p>
+                        <p>Practical strategies for managing daily stress, maintaining work-life balance, and supporting overall wellbeing.</p>
                     </div>
                 </div>
             </div>
@@ -183,7 +210,7 @@
     <section class="programs-section">
         <div class="container">
             <h2 class="section-title">Available Wellness Programs</h2>
-            <div class="programs-grid" id="programsGrid">
+            <div id="programsGrid" class="programs-grid">
                 <div class="loader"><i class="fas fa-spinner"></i> Loading programs...</div>
             </div>
         </div>
@@ -208,7 +235,7 @@
                     <div class="form-group"><label>Number of Employees</label><select id="employeeCount"><option>1-50</option><option>51-200</option><option>201-500</option><option>500+</option></select></div>
                     <div class="form-group"><label>Service Interested In</label><select id="serviceInterest"><option>Reflexology Wellness Sessions</option><option>Mental Health & Wellbeing Awareness</option><option>Pain Management & Workplace Comfort</option><option>Fatigue Management & Energy Wellness</option><option>Stress Management & Lifestyle Wellness</option><option>Custom Program</option></select></div>
                     <div class="form-group"><label>Additional Information</label><textarea id="message" rows="4" placeholder="Tell us about your corporate wellness needs..."></textarea></div>
-                    <button type="submit" class="btn-primary">Request Quote</button>
+                    <button type="submit" class="btn btn-primary">Request Quote</button>
                 </form>
             </div>
         </div>
@@ -231,6 +258,7 @@
     <script src="js/currency.js"></script>
     <script src="js/cart.js"></script>
     <script>
+        // Supabase configuration
         const SUPABASE_URL = 'https://qczrxqxwowfkltkbcyho.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFjenJ4cXh3b3dma2x0a2JjeWhvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzMjE1MDgsImV4cCI6MjA5MTg5NzUwOH0.VPDdz5bGuneuXSxAlhjMpFZbAzAkYeF9nYfgbopkZoE';
         
@@ -239,6 +267,7 @@
         function initSupabase() {
             if (typeof supabase !== 'undefined' && supabase.createClient) {
                 supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                console.log('Supabase initialized');
                 loadCorporatePrograms();
                 loadLogoSettings();
                 return true;
@@ -247,9 +276,14 @@
         }
         
         async function loadCorporatePrograms() {
-            if (!supabaseClient) return;
+            if (!supabaseClient) {
+                console.log('Waiting for Supabase...');
+                setTimeout(loadCorporatePrograms, 500);
+                return;
+            }
             
             try {
+                console.log('Loading corporate programs...');
                 const { data, error } = await supabaseClient
                     .from('corporate_wellness')
                     .select('*')
@@ -258,6 +292,7 @@
                 
                 if (error) throw error;
                 
+                console.log('Programs loaded:', data?.length || 0);
                 displayPrograms(data || []);
             } catch (error) {
                 console.error('Error loading programs:', error);
@@ -272,10 +307,10 @@
             if (!programs || programs.length === 0) {
                 container.innerHTML = `
                     <div class="no-programs">
-                        <i class="fas fa-calendar-alt"></i>
+                        <i class="fas fa-calendar-alt" style="font-size: 3rem; color: #ccc; margin-bottom: 15px; display: block;"></i>
                         <h3>No Wellness Programs Available</h3>
                         <p>Check back soon for our corporate wellness programs!</p>
-                        <button class="btn btn-primary" onclick="document.getElementById('corporateInquiryForm').scrollIntoView({behavior: 'smooth'})">
+                        <button class="btn btn-primary" onclick="document.getElementById('corporateInquiryForm').scrollIntoView({behavior: 'smooth'})" style="margin-top: 20px;">
                             Request Custom Quote
                         </button>
                     </div>
@@ -287,27 +322,38 @@
             const exchangeRate = parseFloat(localStorage.getItem('exchangeRate')) || 115;
             
             container.innerHTML = programs.map(program => {
-                const priceUSD = program.price;
+                const priceUSD = program.price || 0;
                 const priceKES = Math.round(priceUSD * exchangeRate);
                 const displayPrice = currency === 'USD' ? `$${priceUSD.toFixed(2)}` : `KSh ${priceKES.toLocaleString()}`;
+                
+                // Parse features if it's a string or array
+                let features = program.features;
+                if (typeof features === 'string') {
+                    try {
+                        features = JSON.parse(features);
+                    } catch(e) {
+                        features = features.split(',').map(f => f.trim());
+                    }
+                }
                 
                 return `
                     <div class="program-card">
                         <img src="${program.image_url || 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=500'}" 
                              alt="${escapeHtml(program.title)}" 
                              class="program-image"
+                             loading="lazy"
                              onerror="this.src='https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=500'">
                         <div class="program-content">
                             <span class="program-type">${escapeHtml(program.program_type || 'Wellness Program')}</span>
                             <h3 class="program-title">${escapeHtml(program.title)}</h3>
-                            <p class="program-description">${escapeHtml(program.description || 'Contact us for more information about this program.')}</p>
-                            ${program.features && program.features.length > 0 ? `
+                            <p>${escapeHtml(program.description || 'Contact us for more information about this program.')}</p>
+                            ${features && features.length > 0 ? `
                             <ul class="program-features">
-                                ${program.features.map(f => `<li><i class="fas fa-check-circle"></i> ${escapeHtml(f)}</li>`).join('')}
+                                ${features.map(f => `<li><i class="fas fa-check-circle"></i> ${escapeHtml(f)}</li>`).join('')}
                             </ul>
                             ` : ''}
                             <div class="program-price">${displayPrice}</div>
-                            <button class="btn-primary" onclick="inquireProgram('${escapeHtml(program.title)}')">
+                            <button class="btn btn-primary" onclick="inquireProgram('${escapeHtml(program.title)}')" style="width: 100%;">
                                 <i class="fas fa-building"></i> Inquire Now
                             </button>
                         </div>
@@ -380,14 +426,14 @@
                     const logoText = document.querySelector('.logo-text');
                     logoImg.src = data.value;
                     logoImg.style.display = 'block';
-                    logoText.style.display = 'none';
+                    if (logoText) logoText.style.display = 'none';
                 }
             } catch(e) { console.log('Logo error:', e); }
         }
         
         function updateCartCount() {
             const cart = JSON.parse(localStorage.getItem('zakiyah_cart')) || [];
-            const count = cart.reduce((s, i) => s + i.quantity, 0);
+            const count = cart.reduce((s, i) => s + (i.quantity || 1), 0);
             document.querySelectorAll('.cart-count').forEach(el => el.textContent = count);
         }
         
@@ -406,6 +452,7 @@
             document.querySelector('.nav-menu')?.classList.toggle('active');
         });
         
+        // Refresh when currency changes
         window.addEventListener('currencyChanged', () => loadCorporatePrograms());
         
         document.addEventListener('DOMContentLoaded', () => {
