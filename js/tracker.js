@@ -1,13 +1,16 @@
 // ============================================
-// VISITOR TRACKING SYSTEM - COMPLETE
+// VISITOR TRACKING SYSTEM
 // ============================================
 
 const VisitorTracker = {
     visitorId: null,
+    tracked: false,
     
     init: function() {
+        if (this.tracked) return;
         this.getOrCreateVisitorId();
         this.trackPageView();
+        this.tracked = true;
     },
     
     getOrCreateVisitorId: function() {
@@ -51,7 +54,7 @@ const VisitorTracker = {
         
         const deviceInfo = this.getDeviceInfo();
         
-        // Track/update visitor
+        // Track visitor
         window.supabase.from('visitors').upsert({
             visitor_id: this.visitorId,
             user_agent: navigator.userAgent,
@@ -59,7 +62,7 @@ const VisitorTracker = {
             browser: deviceInfo.browser,
             os: deviceInfo.os,
             last_visit: new Date().toISOString()
-        }, { onConflict: 'visitor_id' }).then(() => {});
+        }, { onConflict: 'visitor_id' }).catch(err => console.log('Visitor track error:', err));
         
         // Track page view
         window.supabase.from('page_views').insert([{
@@ -68,7 +71,7 @@ const VisitorTracker = {
             page_title: document.title,
             referrer: document.referrer || 'direct',
             viewed_at: new Date().toISOString()
-        }]).then(() => {});
+        }]).catch(err => console.log('Page view error:', err));
     }
 };
 
