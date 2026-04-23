@@ -3,58 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us - Zakiyah Arreys Healthcare</title>
-    <meta name="description" content="Learn about Zakiyah Arreys Healthcare - our mission, vision, and commitment to natural wellness in Kenya.">
+    <title>Zakiyah Arreys Healthcare - Natural Wellness Supplements Kenya</title>
+    <meta name="description" content="Premium wellness supplements for immune health, joint care, heart health and more.">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        .about-hero { background: linear-gradient(rgba(46,125,50,0.9), rgba(46,125,50,0.8)), url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1350'); background-size: cover; color: white; padding: 100px 0; text-align: center; }
-        .about-hero h1 { font-size: 2.5rem; margin-bottom: 15px; }
-        .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; padding: 80px 0; }
-        .story-content h2 { color: #2e7d32; font-size: 2rem; margin-bottom: 20px; }
-        .story-image img { width: 100%; border-radius: 12px; }
-        .mv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; background: #f9f9f9; padding: 80px 0; }
-        .mv-card { background: white; padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .mv-card i { font-size: 3rem; color: #2e7d32; margin-bottom: 15px; }
-        .focus-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 20px; max-width: 800px; margin: 0 auto; padding: 60px 0; }
-        .focus-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: #f9f9f9; border-radius: 8px; }
-        .focus-item i { color: #2e7d32; font-size: 1.2rem; }
-        .values-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap: 30px; padding: 60px 0; background: #f9f9f9; }
-        .value-card { background: white; padding: 30px; border-radius: 12px; text-align: center; }
-        .value-card i { font-size: 2rem; color: #2e7d32; margin-bottom: 15px; }
-        .team-section { background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%); padding: 80px 0; color: white; text-align: center; }
-        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 40px; }
-        .team-card { background: rgba(255,255,255,0.1); padding: 30px; border-radius: 12px; backdrop-filter: blur(10px); transition: transform 0.3s; }
-        .team-card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.15); }
-        .team-card img { width: 150px; height: 150px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 3px solid white; }
-        .team-card h3 { margin-bottom: 5px; font-size: 1.3rem; }
-        .team-card p { opacity: 0.9; margin-bottom: 10px; }
-        .team-card .bio { font-size: 0.85rem; opacity: 0.8; line-height: 1.5; }
-        .cta-section { padding: 60px 0; background: #f9f9f9; text-align: center; }
-        .cta-buttons { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 30px; }
-        .loader { text-align: center; padding: 40px; }
-        .loader i { font-size: 2rem; color: white; animation: spin 1s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        @media (max-width:768px){ .story-grid, .mv-grid { grid-template-columns:1fr; } .focus-grid { grid-template-columns:1fr; } .team-grid { grid-template-columns:1fr; } .about-hero h1 { font-size:1.8rem; } }
-    </style>
 </head>
 <body>
     <div class="top-bar">
         <div class="container">
-            <div class="contact-info"><span><i class="fas fa-phone"></i> +254746800330 / 254722151351</span><span><i class="fas fa-envelope"></i> zakiyaharreyshealthcare@gmail.com</span></div>
-            <div class="currency-selector"><button class="currency-btn" data-currency="USD">USD $</button><button class="currency-btn" data-currency="KES">KES KSh</button></div>
+            <div class="contact-info">
+                <span><i class="fas fa-phone"></i> +254746800330 / 254722151351</span>
+                <span><i class="fas fa-envelope"></i> zakiyaharreyshealthcare@gmail.com</span>
+            </div>
+            <div class="currency-selector">
+                <button class="currency-btn" data-currency="USD">USD $</button>
+                <button class="currency-btn" data-currency="KES">KES KSh</button>
+            </div>
         </div>
     </div>
 
     <header>
         <div class="container">
-            <div class="logo"><img src="" alt="Logo" id="header-logo" style="max-height:60px;display:none;"><div class="logo-text"><h1>Zakiyah Arreys Healthcare</h1><p class="tagline">Your Partner in Wellness</p></div></div>
+            <div class="logo">
+                <img src="" alt="Zakiyah Arreys Healthcare" id="header-logo" style="max-height: 60px; display: none;">
+                <div class="logo-text">
+                    <h1>Zakiyah Arreys Healthcare</h1>
+                    <p class="tagline"><i class="fas fa-star-of-life"></i> Your Partner in Wellness <i class="fas fa-star-of-life"></i></p>
+                </div>
+            </div>
             <nav>
                 <ul class="nav-menu">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="about.html" class="active">About</a></li>
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="about.html">About</a></li>
                     <li><a href="products.html">Products</a></li>
                     <li><a href="blog.html">Blog</a></li>
                     <li><a href="corporate-wellness.html">Corporate Wellness</a></li>
@@ -66,28 +48,71 @@
         </div>
     </header>
 
-    <section class="about-hero"><div class="container"><h1>About Zakiyah Arreys Healthcare</h1><p>Empowering individuals on their journey toward better health</p></div></section>
-
-    <div class="container"><div class="story-grid"><div class="story-content"><h2>Our Story</h2><p>Zakiyah Arreys Healthcare was founded with the vision of empowering people to take an active role in their health. We believe that good health begins with knowledge, proper nutrition, and access to trusted wellness solutions.</p><p>Today, we serve customers across Kenya and beyond, providing carefully selected wellness products and evidence-based health information.</p></div><div class="story-image"><img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600" loading="lazy"></div></div></div>
-
-    <div class="mv-grid"><div class="mv-card"><i class="fas fa-bullseye"></i><h2>Our Mission</h2><p>To support healthier communities by promoting responsible wellness and accessible health solutions.</p></div><div class="mv-card"><i class="fas fa-eye"></i><h2>Our Vision</h2><p>To become a trusted wellness partner promoting responsible health practices for individuals and communities across Africa.</p></div></div>
-
-    <div class="container"><div class="focus-grid"><div class="focus-item"><i class="fas fa-check-circle"></i><span>High-quality wellness supplements</span></div><div class="focus-item"><i class="fas fa-check-circle"></i><span>Reliable health information</span></div><div class="focus-item"><i class="fas fa-check-circle"></i><span>Preventive health promotion</span></div><div class="focus-item"><i class="fas fa-check-circle"></i><span>Natural wellness options</span></div></div></div>
-
-    <div class="values-grid"><div class="value-card"><i class="fas fa-heart"></i><h3>Integrity</h3><p>Honesty and transparency in everything we do.</p></div><div class="value-card"><i class="fas fa-shield-alt"></i><h3>Quality</h3><p>Carefully selected products with clear information.</p></div><div class="value-card"><i class="fas fa-hand-holding-heart"></i><h3>Compassion</h3><p>Genuine care for our customers' wellbeing.</p></div><div class="value-card"><i class="fas fa-lightbulb"></i><h3>Education</h3><p>Empowering through knowledge.</p></div></div>
-
-    <!-- Team Section - Loads founders from database -->
-    <section class="team-section">
+    <section class="hero">
         <div class="container">
-            <h2>Meet Our Team</h2>
-            <p>Passionate about helping others achieve optimal health through natural wellness solutions</p>
-            <div class="team-grid" id="foundersContainer">
-                <div class="loader"><i class="fas fa-spinner"></i> Loading team members...</div>
+            <div class="hero-content">
+                <h2>Welcome to Zakiyah Arreys Healthcare</h2>
+                <p>Your trusted partner in natural wellness and preventive health</p>
+                <a href="products.html" class="btn btn-primary">Shop Now</a>
+                <a href="about.html" class="btn btn-secondary">Learn More</a>
             </div>
         </div>
     </section>
 
-    <section class="cta-section"><div class="container"><h2>Ready to Start Your Wellness Journey?</h2><p>Explore our products or contact us for personalized wellness advice</p><div class="cta-buttons"><a href="products.html" class="btn btn-primary">Shop Now</a><a href="contact.html" class="btn btn-secondary">Contact Us</a></div></div></section>
+    <section class="categories">
+        <div class="container">
+            <h2 class="section-title">Our Product Categories</h2>
+            <div class="category-grid" id="categoryGrid"><div class="loader"><i class="fas fa-spinner"></i> Loading...</div></div>
+        </div>
+    </section>
+
+    <section class="featured-products">
+        <div class="container">
+            <h2 class="section-title">Featured Supplements</h2>
+            <div class="products-grid" id="featuredProducts"><div class="loader"><i class="fas fa-spinner"></i> Loading products...</div></div>
+        </div>
+    </section>
+
+    <section class="about-preview">
+        <div class="container">
+            <div class="about-content">
+                <h2>About Zakiyah Arreys Healthcare</h2>
+                <p>Founded with the vision of empowering people to take an active role in their health through natural wellness solutions.</p>
+                <div class="focus-areas">
+                    <div class="focus-item"><i class="fas fa-check-circle"></i><span>Quality supplements</span></div>
+                    <div class="focus-item"><i class="fas fa-check-circle"></i><span>Expert guidance</span></div>
+                    <div class="focus-item"><i class="fas fa-check-circle"></i><span>Natural solutions</span></div>
+                    <div class="focus-item"><i class="fas fa-check-circle"></i><span>Preventive care</span></div>
+                </div>
+                <a href="about.html" class="btn btn-secondary">Read More</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="latest-blog">
+        <div class="container">
+            <h2 class="section-title">Latest Health Articles</h2>
+            <div class="blog-grid" id="latestPosts"><div class="loader"><i class="fas fa-spinner"></i> Loading articles...</div></div>
+        </div>
+    </section>
+
+    <section class="safety-commitment">
+        <div class="container">
+            <h2>Our Commitment to Safety</h2>
+            <p>At Zakiyah Arreys Healthcare, safety and responsibility are our priority.</p>
+            <div class="disclaimer"><strong>Disclaimer:</strong><p>Always seek advice from a qualified healthcare professional.</p></div>
+        </div>
+    </section>
+
+    <section class="newsletter">
+        <div class="container">
+            <h3>Subscribe to Our Newsletter</h3>
+            <form class="newsletter-form" id="newsletterForm">
+                <input type="email" id="newsletterEmail" placeholder="Your email address" required>
+                <button type="submit" class="btn btn-primary">Subscribe</button>
+            </form>
+        </div>
+    </section>
 
     <div class="whatsapp-float"><a href="https://wa.me/254746800330" target="_blank"><i class="fab fa-whatsapp"></i><span>Chat with us</span></a></div>
 
@@ -105,116 +130,7 @@
     <script src="js/supabase-config.js"></script>
     <script src="js/currency.js"></script>
     <script src="js/cart.js"></script>
+    <script src="js/main.js"></script>
     <script src="js/tracker.js"></script>
-    <script>
-        // Function to load founders from database
-        async function loadFounders() {
-            if (!window.supabase) {
-                console.log('Waiting for Supabase...');
-                setTimeout(loadFounders, 500);
-                return;
-            }
-            
-            try {
-                console.log('Loading founders from database...');
-                const { data, error } = await window.supabase
-                    .from('founders')
-                    .select('*')
-                    .eq('active', true)
-                    .order('display_order', { ascending: true });
-                
-                if (error) throw error;
-                
-                console.log('Founders loaded:', data);
-                displayFounders(data || []);
-            } catch (error) {
-                console.error('Error loading founders:', error);
-                displayDefaultFounders();
-            }
-        }
-        
-        function displayFounders(founders) {
-            const container = document.getElementById('foundersContainer');
-            if (!container) return;
-            
-            if (!founders || founders.length === 0) {
-                displayDefaultFounders();
-                return;
-            }
-            
-            container.innerHTML = founders.map(founder => `
-                <div class="team-card">
-                    <img src="${founder.image_url || 'https://randomuser.me/api/portraits/lego/1.jpg'}" 
-                         alt="${escapeHtml(founder.name)}"
-                         onerror="this.src='https://randomuser.me/api/portraits/lego/1.jpg'">
-                    <h3>${escapeHtml(founder.name)}</h3>
-                    <p>${escapeHtml(founder.title || 'Team Member')}</p>
-                    <p class="bio">${escapeHtml(founder.bio || '')}</p>
-                </div>
-            `).join('');
-        }
-        
-        function displayDefaultFounders() {
-            const container = document.getElementById('foundersContainer');
-            if (!container) return;
-            
-            container.innerHTML = `
-                <div class="team-card">
-                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Dr. Zakiyah Arrey">
-                    <h3>Dr. Zakiyah Arrey</h3>
-                    <p>Founder & Wellness Expert</p>
-                    <p class="bio">Dedicated to promoting natural wellness and preventive health practices across Africa.</p>
-                </div>
-                <div class="team-card">
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Dr. James Kariuki">
-                    <h3>Dr. James Kariuki</h3>
-                    <p>Nutrition Specialist</p>
-                    <p class="bio">Expert in clinical nutrition and workplace wellness programs with over 15 years experience.</p>
-                </div>
-                <div class="team-card">
-                    <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Catherine Kariuki">
-                    <h3>Catherine Kariuki</h3>
-                    <p>Customer Wellness Advisor</p>
-                    <p class="bio">Dedicated to helping customers find the right wellness solutions for their unique needs.</p>
-                </div>
-            `;
-        }
-        
-        async function loadLogoSettings() {
-            if (!window.supabase) return;
-            try {
-                const { data } = await window.supabase.from('site_settings').select('value').eq('key', 'logo_url').single();
-                if (data && data.value) {
-                    document.getElementById('header-logo').src = data.value;
-                    document.getElementById('header-logo').style.display = 'block';
-                    document.querySelector('.logo-text').style.display = 'none';
-                }
-            } catch(e) { console.log('Logo error:', e); }
-        }
-        
-        function updateCartCount() {
-            const cart = JSON.parse(localStorage.getItem('zakiyah_cart')) || [];
-            const count = cart.reduce((s,i) => s + i.quantity, 0);
-            document.querySelectorAll('.cart-count').forEach(el => el.textContent = count);
-        }
-        
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/[&<>]/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;' }[m]));
-        }
-        
-        // Mobile menu toggle
-        document.querySelector('.mobile-menu')?.addEventListener('click', () => {
-            document.querySelector('.nav-menu')?.classList.toggle('active');
-        });
-        
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            updateCartCount();
-            loadFounders();
-            loadLogoSettings();
-            if (typeof cartSystem !== 'undefined') cartSystem.load();
-        });
-    </script>
 </body>
 </html>
