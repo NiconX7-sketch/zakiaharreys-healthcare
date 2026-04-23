@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wellness Program - Zakiyah Arreys Healthcare</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        .program-header { background: linear-gradient(rgba(46,125,50,0.9), rgba(46,125,50,0.8)), url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1350'); background-size: cover; color: white; padding: 80px 0; text-align: center; }
+        .program-header h1 { font-size: 2.5rem; max-width: 800px; margin: 0 auto; }
+        .program-content-page { padding: 60px 0; background: white; }
+        .program-container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+        .program-image-large { width: 100%; border-radius: 12px; margin-bottom: 30px; }
+        .program-description { font-size: 1.1rem; line-height: 1.8; margin-bottom: 30px; }
+        .program-features-list { list-style: none; margin: 30px 0; }
+        .program-features-list li { padding: 12px 0; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #eee; }
+        .program-features-list i { color: #2e7d32; font-size: 1.2rem; width: 25px; }
+        .program-price-large { font-size: 2rem; color: #2e7d32; font-weight: bold; margin: 30px 0; }
+        .inquiry-btn { background: #2e7d32; color: white; padding: 15px 40px; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer; margin-top: 20px; }
+        .inquiry-btn:hover { background: #1b5e20; }
+        .back-link { display: inline-block; margin-top: 40px; color: #2e7d32; text-decoration: none; }
+        @media (max-width: 768px) { .program-header h1 { font-size: 1.8rem; } }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="container">
+            <div class="contact-info"><span><i class="fas fa-phone"></i> +254746800330 / 254722151351</span><span><i class="fas fa-envelope"></i> zakiyaharreyshealthcare@gmail.com</span></div>
+            <div class="currency-selector"><button class="currency-btn" data-currency="USD">USD $</button><button class="currency-btn" data-currency="KES">KES KSh</button></div>
+        </div>
+    </div>
+
+    <header>
+        <div class="container">
+            <div class="logo"><img src="" alt="Logo" id="header-logo"><div class="logo-text"><h1>Zakiyah Arreys Healthcare</h1><p class="tagline">Your Partner in Wellness</p></div></div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="products.html">Products</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="corporate-wellness.html">Corporate Wellness</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <div class="cart-icon" onclick="location.href='cart.html'"><i class="fas fa-shopping-cart"></i><span class="cart-count">0</span></div>
+                <div class="mobile-menu"><i class="fas fa-bars"></i></div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="program-header" id="programHeader" style="display: none;">
+        <div class="container"><h1 id="programTitle"></h1></div>
+    </section>
+
+    <section class="program-content-page">
+        <div class="program-container">
+            <div id="loadingState" class="loader"><i class="fas fa-spinner"></i> Loading program details...</div>
+            <div id="programContent" style="display: none;">
+                <img id="programImage" class="program-image-large" src="" alt="">
+                <div id="programDescription" class="program-description"></div>
+                <ul id="programFeatures" class="program-features-list"></ul>
+                <div id="programPrice" class="program-price-large"></div>
+                <button class="inquiry-btn" id="inquiryBtn">Request Quote <i class="fas fa-paper-plane"></i></button>
+                <a href="corporate-wellness.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Programs</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="whatsapp-float"><a href="https://wa.me/254746800330" target="_blank"><i class="fab fa-whatsapp"></i><span>Chat with us</span></a></div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-about"><h4>Zakiyah Arreys Healthcare</h4><p>Supporting healthier communities.</p></div>
+                <div class="footer-links"><h4>Quick Links</h4><ul><li><a href="about.html">About Us</a></li><li><a href="products.html">Products</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+                <div class="footer-contact"><h4>Contact Us</h4><p><i class="fas fa-phone"></i> +254746800330 / 254722151351</p><p><i class="fas fa-envelope"></i> zakiyaharreyshealthcare@gmail.com</p></div>
+            </div>
+            <div class="footer-bottom"><p>&copy; 2026 Zakiyah Arreys Healthcare. All rights reserved.</p></div>
+        </div>
+    </footer>
+
+    <script src="js/supabase-config.js"></script>
+    <script src="js/currency.js"></script>
+    <script src="js/cart.js"></script>
+    <script>
+        let programData = null;
+        
+        function loadProgram() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+            
+            if (!id) { showError('No program specified'); return; }
+            
+            if (!window.supabase) { setTimeout(() => loadProgram(), 500); return; }
+            
+            window.supabase.from('corporate_wellness').select('*').eq('id', id).single()
+                .then(({ data, error }) => {
+                    if (error || !data) { showError('Program not found'); return; }
+                    programData = data;
+                    displayProgram();
+                    loadLogoSettings();
+                })
+                .catch(() => showError('Error loading program'));
+        }
+        
+        function displayProgram() {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('programContent').style.display = 'block';
+            document.getElementById('programHeader').style.display = 'block';
+            
+            document.getElementById('programTitle').textContent = programData.title;
+            document.title = programData.title + ' - Zakiyah Arreys Healthcare';
+            
+            document.getElementById('programImage').src = programData.image_url || 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800';
+            document.getElementById('programDescription').innerHTML = programData.description || 'Contact us for more information about this program.';
+            
+            if (programData.features && programData.features.length) {
+                document.getElementById('programFeatures').innerHTML = programData.features.map(f => `<li><i class="fas fa-check-circle"></i> ${escapeHtml(f)}</li>`).join('');
+            } else {
+                document.getElementById('programFeatures').style.display = 'none';
+            }
+            
+            const currency = localStorage.getItem('currency') || 'USD';
+            const rate = parseFloat(localStorage.getItem('exchangeRate')) || 115;
+            const price = currency === 'USD' ? `$${programData.price.toFixed(2)}` : `KSh ${Math.round(programData.price * rate).toLocaleString()}`;
+            document.getElementById('programPrice').innerHTML = price;
+            
+            document.getElementById('inquiryBtn').onclick = () => {
+                const phone = '254746800330';
+                const message = `Hello, I'm interested in your corporate wellness program: ${programData.title}. Please provide more information for my company.`;
+                window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+            };
+        }
+        
+        function showError(message) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('programContent').style.display = 'block';
+            document.getElementById('programContent').innerHTML = `<div style="text-align:center;padding:60px;"><i class="fas fa-exclamation-circle" style="font-size:3rem;color:#dc3545;"></i><h3>${message}</h3><a href="corporate-wellness.html" class="btn btn-primary" style="margin-top:20px;">Back to Programs</a></div>`;
+        }
+        
+        function loadLogoSettings() {
+            if (!window.supabase) return;
+            window.supabase.from('site_settings').select('value').eq('key', 'logo_url').single()
+                .then(({ data }) => {
+                    if (data?.value) {
+                        document.getElementById('header-logo').src = data.value;
+                        document.getElementById('header-logo').style.display = 'block';
+                        document.querySelector('.logo-text').style.display = 'none';
+                    }
+                }).catch(() => {});
+        }
+        
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('zakiyah_cart')) || [];
+            const count = cart.reduce((s,i) => s + i.quantity, 0);
+            document.querySelectorAll('.cart-count').forEach(el => el.textContent = count);
+        }
+        
+        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;' }[m])); }
+        
+        document.querySelector('.mobile-menu')?.addEventListener('click', () => document.querySelector('.nav-menu')?.classList.toggle('active'));
+        window.addEventListener('currencyChanged', () => { if (programData) displayProgram(); });
+        
+        document.addEventListener('DOMContentLoaded', () => { updateCartCount(); loadProgram(); });
+    </script>
+</body>
+</html>
