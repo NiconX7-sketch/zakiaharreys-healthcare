@@ -13,7 +13,7 @@
         .program-content-page { padding: 60px 0; background: white; }
         .program-container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
         .program-image-large { width: 100%; border-radius: 12px; margin-bottom: 30px; }
-        .program-description { font-size: 1.1rem; line-height: 1.8; margin-bottom: 30px; }
+        .program-description-full { font-size: 1.1rem; line-height: 1.8; margin-bottom: 30px; }
         .program-features-list { list-style: none; margin: 30px 0; }
         .program-features-list li { padding: 12px 0; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #eee; }
         .program-features-list i { color: #2e7d32; font-size: 1.2rem; width: 25px; }
@@ -41,7 +41,7 @@
                     <li><a href="about.html">About</a></li>
                     <li><a href="products.html">Products</a></li>
                     <li><a href="blog.html">Blog</a></li>
-                    <li><a href="corporate-wellness.html">Corporate Wellness</a></li>
+                    <li><a href="corporate-wellness.html" class="active">Corporate Wellness</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
                 <div class="cart-icon" onclick="location.href='cart.html'"><i class="fas fa-shopping-cart"></i><span class="cart-count">0</span></div>
@@ -59,7 +59,7 @@
             <div id="loadingState" class="loader"><i class="fas fa-spinner"></i> Loading program details...</div>
             <div id="programContent" style="display: none;">
                 <img id="programImage" class="program-image-large" src="" alt="">
-                <div id="programDescription" class="program-description"></div>
+                <div id="programDescription" class="program-description-full"></div>
                 <ul id="programFeatures" class="program-features-list"></ul>
                 <div id="programPrice" class="program-price-large"></div>
                 <button class="inquiry-btn" id="inquiryBtn">Request Quote <i class="fas fa-paper-plane"></i></button>
@@ -84,6 +84,7 @@
     <script src="js/supabase-config.js"></script>
     <script src="js/currency.js"></script>
     <script src="js/cart.js"></script>
+    <script src="js/tracker.js"></script>
     <script>
         let programData = null;
         
@@ -163,8 +164,7 @@
         document.querySelector('.mobile-menu')?.addEventListener('click', () => document.querySelector('.nav-menu')?.classList.toggle('active'));
         window.addEventListener('currencyChanged', () => { if (programData) displayProgram(); });
         
-        document.addEventListener('DOMContentLoaded', () => { updateCartCount(); loadProgram(); });
+        document.addEventListener('DOMContentLoaded', () => { updateCartCount(); loadProgram(); if (typeof cartSystem !== 'undefined') cartSystem.load(); });
     </script>
-    <script src="js/tracker.js"></script>
 </body>
 </html>
