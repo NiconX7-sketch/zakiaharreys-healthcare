@@ -57,10 +57,7 @@
     </header>
 
     <section class="post-header" id="postHeader" style="display: none;">
-        <div class="container">
-            <h1 id="postTitle"></h1>
-            <div class="post-meta" id="postMeta"></div>
-        </div>
+        <div class="container"><h1 id="postTitle"></h1><div class="post-meta" id="postMeta"></div></div>
     </section>
 
     <section class="post-content-page">
@@ -95,6 +92,7 @@
     <script src="js/supabase-config.js"></script>
     <script src="js/currency.js"></script>
     <script src="js/cart.js"></script>
+    <script src="js/tracker.js"></script>
     <script>
         let postData = null;
         
@@ -112,8 +110,6 @@
                     postData = data;
                     displayPost();
                     loadLogoSettings();
-                    
-                    // Update view count
                     window.supabase.from('blog_posts').update({ views: (data.views || 0) + 1 }).eq('id', data.id).then(() => {});
                 })
                 .catch(() => showError('Error loading post'));
@@ -140,7 +136,7 @@
                 document.getElementById('postImage').style.display = 'none';
             }
             
-            // CRITICAL: Use innerHTML to render HTML content (not textContent)
+            // Use innerHTML to render HTML content
             document.getElementById('postBody').innerHTML = postData.content || '<p>Content coming soon...</p>';
             
             const currentUrl = encodeURIComponent(window.location.href);
@@ -178,8 +174,7 @@
         
         document.querySelector('.mobile-menu')?.addEventListener('click', () => document.querySelector('.nav-menu')?.classList.toggle('active'));
         
-        document.addEventListener('DOMContentLoaded', () => { updateCartCount(); loadPost(); });
+        document.addEventListener('DOMContentLoaded', () => { updateCartCount(); loadPost(); if (typeof cartSystem !== 'undefined') cartSystem.load(); });
     </script>
-    <script src="js/tracker.js"></script>
 </body>
 </html>
