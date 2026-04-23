@@ -115,4 +115,70 @@
                     
                     // Update view count
                     window.supabase.from('blog_posts').update({ views: (data.views || 0) + 1 }).eq('id', data.id).then(() => {});
-               
+                })
+                .catch(() => showError('Error loading post'));
+        }
+        
+        function displayPost() {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('postContent').style.display = 'block';
+            document.getElementById('postHeader').style.display = 'block';
+            
+            document.getElementById('postTitle').textContent = postData.title;
+            document.title = postData.title + ' - Zakiyah Arreys Healthcare';
+            
+            const date = new Date(postData.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('postMeta').innerHTML = `
+                <span><i class="far fa-calendar-alt"></i> ${date}</span>
+                <span><i class="far fa-user"></i> ${escapeHtml(postData.author || 'Dr. Zakiyah Arrey')}</span>
+                <span><i class="far fa-eye"></i> ${(postData.views || 0) + 1} views</span>
+            `;
+            
+            if (postData.image_url) {
+                document.getElementById('postImage').src = postData.image_url;
+            } else {
+                document.getElementById('postImage').style.display = 'none';
+            }
+            
+            // CRITICAL: Use innerHTML to render HTML content (not textContent)
+            document.getElementById('postBody').innerHTML = postData.content || '<p>Content coming soon...</p>';
+            
+            const currentUrl = encodeURIComponent(window.location.href);
+            const shareText = encodeURIComponent('Check out this article: ' + postData.title);
+            document.getElementById('shareFb').href = `https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`;
+            document.getElementById('shareTw').href = `https://twitter.com/intent/tweet?text=${shareText}&url=${currentUrl}`;
+            document.getElementById('shareWa').href = `https://wa.me/?text=${shareText}%20${currentUrl}`;
+        }
+        
+        function showError(message) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('postContent').style.display = 'block';
+            document.getElementById('postBody').innerHTML = `<div style="text-align:center;padding:60px;"><i class="fas fa-exclamation-circle" style="font-size:3rem;color:#dc3545;"></i><h3>${message}</h3><a href="blog.html" class="btn btn-primary" style="margin-top:20px;">Back to Blog</a></div>`;
+        }
+        
+        function loadLogoSettings() {
+            if (!window.supabase) return;
+            window.supabase.from('site_settings').select('value').eq('key', 'logo_url').single()
+                .then(({ data }) => {
+                    if (data?.value) {
+                        document.getElementById('header-logo').src = data.value;
+                        document.getElementById('header-logo').style.display = 'block';
+                        document.querySelector('.logo-text').style.display = 'none';
+                    }
+                }).catch(() => {});
+        }
+        
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('zakiyah_cart')) || [];
+            const count = cart.reduce((s,i) => s + i.quantity, 0);
+            document.querySelectorAll('.cart-count').forEach(el => el.textContent = count);
+        }
+        
+        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;' }[m])); }
+        
+        document.querySelector('.mobile-menu')?.addEventListener('click', () => document.querySelector('.nav-menu')?.classList.toggle('active'));
+        
+        document.addEventListener('DOMContentLoaded', () => { updateCartCount(); loadPost(); });
+    </script>
+</body>
+</html>
