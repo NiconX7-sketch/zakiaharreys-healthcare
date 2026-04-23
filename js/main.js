@@ -1,72 +1,56 @@
 // ============================================
-// MAIN JAVASCRIPT - COMPLETE WORKING VERSION
+// MAIN JAVASCRIPT - NO DUPLICATE VARIABLES
 // ============================================
 
-const SUPABASE_URL = 'https://qczrxqxwowfkltkbcyho.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFjenJ4cXh3b3dma2x0a2JjeWhvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzMjE1MDgsImV4cCI6MjA5MTg5NzUwOH0.VPDdz5bGuneuXSxAlhjMpFZbAzAkYeF9nYfgbopkZoE';
-
-let supabaseClient = null;
 let allProducts = [];
 let allBlogs = [];
 
-// Initialize Supabase
-function initSupabase() {
-    if (typeof supabase !== 'undefined' && supabase.createClient) {
-        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        console.log('Supabase initialized');
-        loadAllData();
-        return true;
-    }
-    setTimeout(initSupabase, 500);
-}
-
-// Load all data
-async function loadAllData() {
-    if (!supabaseClient) {
-        console.log('Waiting for Supabase...');
+function loadAllData() {
+    if (!window.supabase) {
         setTimeout(loadAllData, 500);
         return;
     }
     
-    try {
-        console.log('Loading products...');
-        const { data: products, error: productsError } = await supabaseClient
-            .from('products')
-            .select('*')
-            .order('created_at', { ascending: false });
+    console.log('Loading data...');
+    
+    Promise.all([
+        window.supabase.from('products').select('*').order('created_at', { ascending: false }),
+        window.supabase.from('blog_posts').select('*').eq('published', true).order('created_at', { ascending: false })
+    ]).then(([productsRes, blogsRes]) => {
+        if (productsRes.data) allProducts = productsRes.data;
+        if (blogsRes.data) allBlogs = blogsRes.data;
         
-        if (productsError) throw productsError;
+        console.log('Loaded', allProducts.length, 'products and', allBlogs.length, 'blogs');
         
-        console.log('Loading blog posts...');
-        const { data: blogs, error: blogsError } = await supabaseClient
-            .from('blog_posts')
-            .select('*')
-            .eq('published', true)
-            .order('created_at', { ascending: false });
-        
-        if (blogsError) throw blogsError;
-        
-        allProducts = products || [];
-        allBlogs = blogs || [];
-        
-        console.log(`Loaded ${allProducts.length} products and ${allBlogs.length} blog posts`);
-        
-        // Display data
+        displayCategories();
         displayFeaturedProducts();
         displayLatestPosts();
         loadLogoSettings();
-        
-    } catch (error) {
-        console.error('Error loading data:', error);
-        // Show error message on page
-        const container = document.getElementById('featuredProducts');
-        if (container) {
-            container.innerHTML = '<p style="text-align:center;color:#dc3545;">Error loading products. Please check your database connection.</p>';
-        }
-    }
+    }).catch(err => {
+        console.error('Error:', err);
+        document.getElementById('featuredProducts').innerHTML = '<p style="text-align:center;color:#dc3545;">Error loading data. Please refresh.</p>';
+    });
 }
 
-// Display featured products
+function displayCategories() {
+    const container = document.getElementById('categoryGrid');
+    if (!container) return;
+    
+    const categories = ['Immune Boosters', 'Bone and Joint Care', 'Reproductive Health', 'Cardiovascular Health', 'Digestive Health', 'Personal Care', 'Better Life', "Children's Nutrition"];
+    const icons = {
+        'Immune Boosters': 'fa-shield-virus', 'Bone and Joint Care': 'fa-bone', 'Reproductive Health': 'fa-venus-mars',
+        'Cardiovascular Health': 'fa-heart-pulse', 'Digestive Health': 'fa-stethoscope', 'Personal Care': 'fa-hand-sparkles',
+        'Better Life': 'fa-face-smile', "Children's Nutrition": 'fa-child'
+    };
+    
+    container.innerHTML = categories.map(cat => `
+        <div class="category-card" onclick="location.href='products.html?category=${encodeURIComponent(cat)}'">
+            <i class="fas ${icons[cat] || 'fa-tag'}"></i>
+            <h3>${cat}</h3>
+        </div>
+    `).join('');
+}
+
 function displayFeaturedProducts() {
     const container = document.getElementById('featuredProducts');
     if (!container) return;
@@ -74,44 +58,32 @@ function displayFeaturedProducts() {
     const featured = allProducts.filter(p => p.featured).slice(0, 4);
     
     if (featured.length === 0) {
-        container.innerHTML = '<p style="text-align:center;">No featured products available. Add products in admin panel.</p>';
+        container.innerHTML = '<p style="text-align:center;">No featured products yet.</p>';
         return;
     }
     
     const currency = localStorage.getItem('currency') || 'USD';
     const rate = parseFloat(localStorage.getItem('exchangeRate')) || 115;
     
-    container.innerHTML = featured.map(product => {
-        const price = currency === 'USD' ? `$${product.price.toFixed(2)}` : `KSh ${Math.round(product.price * rate).toLocaleString()}`;
-        
+    container.innerHTML = featured.map(p => {
+        const price = currency === 'USD' ? `$${p.price.toFixed(2)}` : `KSh ${Math.round(p.price * rate).toLocaleString()}`;
         return `
             <div class="product-card">
-                <img src="${product.image_url || 'https://images.unsplash.com/photo-1584017911766-451b3d0e8434?w=500'}" 
-                     class="product-image" 
-                     loading="lazy"
-                     onerror="this.src='https://images.unsplash.com/photo-1584017911766-451b3d0e8434?w=500'">
+                <img src="${p.image_url || 'https://images.unsplash.com/photo-1584017911766-451b3d0e8434?w=500'}" class="product-image" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1584017911766-451b3d0e8434?w=500'">
                 <div class="product-info">
-                    <h3 class="product-title">${escapeHtml(product.name)}</h3>
-                    <p class="product-description">${escapeHtml(product.description || 'High-quality wellness supplement')}</p>
+                    <h3 class="product-title">${escapeHtml(p.name)}</h3>
+                    <p class="product-description">${escapeHtml(p.description || 'High-quality supplement')}</p>
                     <div class="product-price">${price}</div>
-                    <button class="add-to-cart" onclick="cartSystem.addItem(${product.id}, '${escapeHtml(product.name)}', ${product.price}, '${product.image_url}')">
-                        <i class="fas fa-shopping-cart"></i> Add to Cart
-                    </button>
-                    <button class="whatsapp-inquiry" onclick="window.open('https://wa.me/254746800330?text=${encodeURIComponent('Hello, I\'m interested in ' + product.name)}', '_blank')">
-                        <i class="fab fa-whatsapp"></i> Inquire
-                    </button>
+                    <button class="add-to-cart" onclick="cartSystem.addItem(${p.id}, '${escapeHtml(p.name)}', ${p.price}, '${p.image_url}')">Add to Cart</button>
+                    <button class="whatsapp-inquiry" onclick="window.open('https://wa.me/254746800330?text=${encodeURIComponent('Hello, interested in ' + p.name)}', '_blank')"><i class="fab fa-whatsapp"></i> Inquire</button>
                 </div>
             </div>
         `;
     }).join('');
     
-    // Update currency display if needed
-    if (window.currencySystem) {
-        setTimeout(() => window.currencySystem.updateAllPrices(), 100);
-    }
+    if (window.currencySystem) setTimeout(() => window.currencySystem.updateAllPrices(), 100);
 }
 
-// Display latest blog posts
 function displayLatestPosts() {
     const container = document.getElementById('latestPosts');
     if (!container) return;
@@ -119,7 +91,7 @@ function displayLatestPosts() {
     const recent = allBlogs.slice(0, 3);
     
     if (recent.length === 0) {
-        container.innerHTML = '<p style="text-align:center;">No blog posts yet. Check back soon!</p>';
+        container.innerHTML = '<p style="text-align:center;">No blog posts yet.</p>';
         return;
     }
     
@@ -127,114 +99,61 @@ function displayLatestPosts() {
         const date = new Date(post.created_at).toLocaleDateString();
         return `
             <div class="blog-card">
-                <img src="${post.image_url || 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500'}" 
-                     class="blog-image" 
-                     loading="lazy"
-                     onerror="this.src='https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500'">
+                <img src="${post.image_url || 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500'}" class="blog-image" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500'">
                 <div class="blog-content">
                     <h3 class="blog-title">${escapeHtml(post.title)}</h3>
-                    <p class="blog-meta">
-                        <i class="far fa-calendar-alt"></i> ${date} 
-                        | by ${escapeHtml(post.author || 'Dr. Zakiyah Arrey')}
-                    </p>
-                    <p class="blog-excerpt">${escapeHtml(post.excerpt || (post.content ? post.content.substring(0, 100) + '...' : ''))}</p>
-                    <a href="blog-post.html?slug=${post.slug}" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    <p class="blog-meta"><i class="far fa-calendar-alt"></i> ${date} | by ${escapeHtml(post.author || 'Dr. Zakiyah Arrey')}</p>
+                    <p>${escapeHtml(post.excerpt || (post.content ? post.content.substring(0, 100) + '...' : ''))}</p>
+                    <a href="blog-post.html?slug=${post.slug}" class="read-more">Read More</a>
                 </div>
             </div>
         `;
     }).join('');
 }
 
-// Load logo settings
 async function loadLogoSettings() {
-    if (!supabaseClient) return;
-    
+    if (!window.supabase) return;
     try {
-        const { data } = await supabaseClient
-            .from('site_settings')
-            .select('value')
-            .eq('key', 'logo_url')
-            .single();
-        
+        const { data } = await window.supabase.from('site_settings').select('value').eq('key', 'logo_url').single();
         if (data && data.value) {
-            const logoImg = document.getElementById('header-logo');
-            const logoText = document.querySelector('.logo-text');
-            if (logoImg && logoText) {
-                logoImg.src = data.value;
-                logoImg.style.display = 'block';
-                logoText.style.display = 'none';
-            }
+            document.getElementById('header-logo').src = data.value;
+            document.getElementById('header-logo').style.display = 'block';
+            document.querySelector('.logo-text').style.display = 'none';
         }
-    } catch (error) {
-        console.log('Using default logo');
-    }
+    } catch(e) {}
 }
 
-// Newsletter subscription
 async function subscribeNewsletter(email) {
-    if (!supabaseClient) return false;
-    
+    if (!window.supabase) return false;
     try {
-        await supabaseClient.from('newsletter_subscribers').insert([{ email }]);
+        await window.supabase.from('newsletter_subscribers').insert([{ email }]);
         return true;
-    } catch (error) {
-        console.error('Newsletter error:', error);
-        return false;
-    }
+    } catch(e) { return false; }
 }
 
-// Escape HTML
 function escapeHtml(str) {
     if (!str) return '';
-    return str
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
+    return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m]));
 }
 
-// Setup event listeners
-function setupEventListeners() {
-    // Mobile menu
-    const mobileMenu = document.querySelector('.mobile-menu');
-    const navMenu = document.querySelector('.nav-menu');
-    if (mobileMenu) {
-        mobileMenu.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-        });
-    }
-    
-    // Newsletter form
-    const newsletterForm = document.getElementById('newsletterForm');
-    if (newsletterForm) {
-        newsletterForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('newsletterEmail').value;
-            if (email) {
-                const success = await subscribeNewsletter(email);
-                if (success) {
-                    alert('Successfully subscribed!');
-                    newsletterForm.reset();
-                } else {
-                    alert('Subscription failed. Please try again.');
-                }
-            }
-        });
-    }
-    
-    // Currency change listener
-    window.addEventListener('currencyChanged', () => {
-        displayFeaturedProducts();
-    });
-}
-
-// Initialize
-document.addEventListener('DOMContentLoaded', () => {
-    setupEventListeners();
-    initSupabase();
-    cartSystem.load();
+document.querySelector('.mobile-menu')?.addEventListener('click', () => {
+    document.querySelector('.nav-menu')?.classList.toggle('active');
 });
 
-// Make functions global
-window.addToCart = (id, name, price, image) => cartSystem.addItem(id, name, price, image);
+document.getElementById('newsletterForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('newsletterEmail').value;
+    if (email && await subscribeNewsletter(email)) {
+        alert('Subscribed!');
+        e.target.reset();
+    }
+});
+
+window.addEventListener('currencyChanged', () => displayFeaturedProducts());
+
+document.addEventListener('DOMContentLoaded', () => {
+    cartSystem.load();
+    loadAllData();
+});
+
+window.addToCart = cartSystem.addItem;
