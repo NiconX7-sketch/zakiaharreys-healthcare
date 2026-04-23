@@ -25,13 +25,13 @@
         .value-card { background: white; padding: 30px; border-radius: 12px; text-align: center; }
         .value-card i { font-size: 2rem; color: #2e7d32; margin-bottom: 15px; }
         .team-section { background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%); padding: 80px 0; color: white; text-align: center; }
-        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 40px; }
-        .team-card { background: rgba(255,255,255,0.1); padding: 30px; border-radius: 12px; backdrop-filter: blur(10px); transition: transform 0.3s; }
-        .team-card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.15); }
-        .team-card img { width: 150px; height: 150px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 3px solid white; }
-        .team-card h3 { margin-bottom: 5px; font-size: 1.3rem; }
-        .team-card p { opacity: 0.9; margin-bottom: 10px; }
-        .team-card .bio { font-size: 0.85rem; opacity: 0.8; line-height: 1.5; }
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 40px; }
+        .team-card { background: rgba(255,255,255,0.12); padding: 30px 20px; border-radius: 16px; backdrop-filter: blur(10px); transition: transform 0.3s; }
+        .team-card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.2); }
+        .team-card img { width: 140px; height: 140px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 3px solid #ffd700; }
+        .team-card h3 { margin-bottom: 5px; font-size: 1.3rem; color: #ffd700; }
+        .team-card p { opacity: 0.9; margin-bottom: 8px; font-size: 0.95rem; }
+        .team-card .bio { font-size: 0.85rem; opacity: 0.8; line-height: 1.5; margin-top: 10px; }
         .cta-section { padding: 60px 0; background: #f9f9f9; text-align: center; }
         .cta-buttons { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 30px; }
         .loader { text-align: center; padding: 40px; }
@@ -146,10 +146,11 @@
                 <div class="team-card">
                     <img src="${founder.image_url || 'https://randomuser.me/api/portraits/lego/1.jpg'}" 
                          alt="${escapeHtml(founder.name)}"
+                         style="width:140px;height:140px;border-radius:50%;object-fit:cover;margin-bottom:15px;border:3px solid #ffd700;"
                          onerror="this.src='https://randomuser.me/api/portraits/lego/1.jpg'">
-                    <h3>${escapeHtml(founder.name)}</h3>
-                    <p>${escapeHtml(founder.title || 'Team Member')}</p>
-                    <p class="bio">${escapeHtml(founder.bio || '')}</p>
+                    <h3 style="color:#ffd700;margin-bottom:5px;">${escapeHtml(founder.name)}</h3>
+                    <p style="font-size:0.95rem;opacity:0.9;">${escapeHtml(founder.title || 'Team Member')}</p>
+                    <p class="bio" style="font-size:0.85rem;opacity:0.8;line-height:1.5;margin-top:10px;">${escapeHtml(founder.bio || '')}</p>
                 </div>
             `).join('');
         }
@@ -160,20 +161,20 @@
             
             container.innerHTML = `
                 <div class="team-card">
-                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Dr. Zakiyah Arrey">
-                    <h3>Dr. Zakiyah Arrey</h3>
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Dr. Zakiyah Arrey" style="width:140px;height:140px;border-radius:50%;object-fit:cover;margin-bottom:15px;border:3px solid #ffd700;">
+                    <h3 style="color:#ffd700;">Dr. Zakiyah Arrey</h3>
                     <p>Founder & Wellness Expert</p>
                     <p class="bio">Dedicated to promoting natural wellness and preventive health practices across Africa.</p>
                 </div>
                 <div class="team-card">
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Dr. James Kariuki">
-                    <h3>Dr. James Kariuki</h3>
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Dr. James Kariuki" style="width:140px;height:140px;border-radius:50%;object-fit:cover;margin-bottom:15px;border:3px solid #ffd700;">
+                    <h3 style="color:#ffd700;">Dr. James Kariuki</h3>
                     <p>Nutrition Specialist</p>
                     <p class="bio">Expert in clinical nutrition and workplace wellness programs with over 15 years experience.</p>
                 </div>
                 <div class="team-card">
-                    <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Catherine Kariuki">
-                    <h3>Catherine Kariuki</h3>
+                    <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Catherine Kariuki" style="width:140px;height:140px;border-radius:50%;object-fit:cover;margin-bottom:15px;border:3px solid #ffd700;">
+                    <h3 style="color:#ffd700;">Catherine Kariuki</h3>
                     <p>Customer Wellness Advisor</p>
                     <p class="bio">Dedicated to helping customers find the right wellness solutions for their unique needs.</p>
                 </div>
