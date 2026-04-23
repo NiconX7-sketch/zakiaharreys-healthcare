@@ -26,10 +26,17 @@
         .value-card i { font-size: 2rem; color: #2e7d32; margin-bottom: 15px; }
         .team-section { background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%); padding: 80px 0; color: white; text-align: center; }
         .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 40px; }
-        .team-card { background: rgba(255,255,255,0.1); padding: 30px; border-radius: 12px; backdrop-filter: blur(10px); }
+        .team-card { background: rgba(255,255,255,0.1); padding: 30px; border-radius: 12px; backdrop-filter: blur(10px); transition: transform 0.3s; }
+        .team-card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.15); }
         .team-card img { width: 150px; height: 150px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 3px solid white; }
+        .team-card h3 { margin-bottom: 5px; font-size: 1.3rem; }
+        .team-card p { opacity: 0.9; margin-bottom: 10px; }
+        .team-card .bio { font-size: 0.85rem; opacity: 0.8; line-height: 1.5; }
         .cta-section { padding: 60px 0; background: #f9f9f9; text-align: center; }
         .cta-buttons { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 30px; }
+        .loader { text-align: center; padding: 40px; }
+        .loader i { font-size: 2rem; color: white; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
         @media (max-width:768px){ .story-grid, .mv-grid { grid-template-columns:1fr; } .focus-grid { grid-template-columns:1fr; } .team-grid { grid-template-columns:1fr; } .about-hero h1 { font-size:1.8rem; } }
     </style>
 </head>
@@ -45,7 +52,14 @@
         <div class="container">
             <div class="logo"><img src="" alt="Logo" id="header-logo" style="max-height:60px;display:none;"><div class="logo-text"><h1>Zakiyah Arreys Healthcare</h1><p class="tagline">Your Partner in Wellness</p></div></div>
             <nav>
-                <ul class="nav-menu"><li><a href="index.html">Home</a></li><li><a href="about.html" class="active">About</a></li><li><a href="products.html">Products</a></li><li><a href="blog.html">Blog</a></li><li><a href="corporate-wellness.html">Corporate Wellness</a></li><li><a href="contact.html">Contact</a></li></ul>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html" class="active">About</a></li>
+                    <li><a href="products.html">Products</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="corporate-wellness.html">Corporate Wellness</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
                 <div class="cart-icon" onclick="location.href='cart.html'"><i class="fas fa-shopping-cart"></i><span class="cart-count">0</span></div>
                 <div class="mobile-menu"><i class="fas fa-bars"></i></div>
             </nav>
@@ -62,7 +76,16 @@
 
     <div class="values-grid"><div class="value-card"><i class="fas fa-heart"></i><h3>Integrity</h3><p>Honesty and transparency in everything we do.</p></div><div class="value-card"><i class="fas fa-shield-alt"></i><h3>Quality</h3><p>Carefully selected products with clear information.</p></div><div class="value-card"><i class="fas fa-hand-holding-heart"></i><h3>Compassion</h3><p>Genuine care for our customers' wellbeing.</p></div><div class="value-card"><i class="fas fa-lightbulb"></i><h3>Education</h3><p>Empowering through knowledge.</p></div></div>
 
-    <section class="team-section"><div class="container"><h2>Meet Our Team</h2><p>Passionate about helping others achieve optimal health through natural wellness solutions</p><div class="team-grid" id="foundersContainer"><div class="loader"><i class="fas fa-spinner"></i> Loading team...</div></div></div></section>
+    <!-- Team Section - Loads founders from database -->
+    <section class="team-section">
+        <div class="container">
+            <h2>Meet Our Team</h2>
+            <p>Passionate about helping others achieve optimal health through natural wellness solutions</p>
+            <div class="team-grid" id="foundersContainer">
+                <div class="loader"><i class="fas fa-spinner"></i> Loading team members...</div>
+            </div>
+        </div>
+    </section>
 
     <section class="cta-section"><div class="container"><h2>Ready to Start Your Wellness Journey?</h2><p>Explore our products or contact us for personalized wellness advice</p><div class="cta-buttons"><a href="products.html" class="btn btn-primary">Shop Now</a><a href="contact.html" class="btn btn-secondary">Contact Us</a></div></div></section>
 
@@ -82,43 +105,91 @@
     <script src="js/supabase-config.js"></script>
     <script src="js/currency.js"></script>
     <script src="js/cart.js"></script>
+    <script src="js/tracker.js"></script>
     <script>
-        const SUPABASE_URL = 'https://qczrxqxwowfkltkbcyho.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFjenJ4cXh3b3dma2x0a2JjeWhvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzMjE1MDgsImV4cCI6MjA5MTg5NzUwOH0.VPDdz5bGuneuXSxAlhjMpFZbAzAkYeF9nYfgbopkZoE';
-        
-        let supabaseClient = null;
-        
-        function initSupabase() {
-            if (typeof supabase !== 'undefined' && supabase.createClient) {
-                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                loadFounders();
-                loadLogoSettings();
-                return true;
-            }
-            setTimeout(initSupabase, 500);
-        }
-        
+        // Function to load founders from database
         async function loadFounders() {
-            if (!supabaseClient) return;
-            const { data } = await supabaseClient.from('founders').select('*').eq('active', true).order('display_order', { ascending: true });
-            displayFounders(data || []);
+            if (!window.supabase) {
+                console.log('Waiting for Supabase...');
+                setTimeout(loadFounders, 500);
+                return;
+            }
+            
+            try {
+                console.log('Loading founders from database...');
+                const { data, error } = await window.supabase
+                    .from('founders')
+                    .select('*')
+                    .eq('active', true)
+                    .order('display_order', { ascending: true });
+                
+                if (error) throw error;
+                
+                console.log('Founders loaded:', data);
+                displayFounders(data || []);
+            } catch (error) {
+                console.error('Error loading founders:', error);
+                displayDefaultFounders();
+            }
         }
         
         function displayFounders(founders) {
             const container = document.getElementById('foundersContainer');
-            if (!founders.length) {
-                container.innerHTML = `<div class="team-card"><img src="https://randomuser.me/api/portraits/women/44.jpg"><h3>Dr. Zakiyah Arrey</h3><p>Founder & Wellness Expert</p></div><div class="team-card"><img src="https://randomuser.me/api/portraits/men/32.jpg"><h3>Dr. James Kariuki</h3><p>Nutrition Specialist</p></div><div class="team-card"><img src="https://randomuser.me/api/portraits/women/68.jpg"><h3>Catherine Kariuki</h3><p>Customer Wellness Advisor</p></div>`;
+            if (!container) return;
+            
+            if (!founders || founders.length === 0) {
+                displayDefaultFounders();
                 return;
             }
-            container.innerHTML = founders.map(f => `<div class="team-card"><img src="${f.image_url || 'https://randomuser.me/api/portraits/lego/1.jpg'}" alt="${f.name}" loading="lazy"><h3>${escapeHtml(f.name)}</h3><p>${escapeHtml(f.title || 'Team Member')}</p><p class="bio">${escapeHtml(f.bio || '')}</p></div>`).join('');
+            
+            container.innerHTML = founders.map(founder => `
+                <div class="team-card">
+                    <img src="${founder.image_url || 'https://randomuser.me/api/portraits/lego/1.jpg'}" 
+                         alt="${escapeHtml(founder.name)}"
+                         onerror="this.src='https://randomuser.me/api/portraits/lego/1.jpg'">
+                    <h3>${escapeHtml(founder.name)}</h3>
+                    <p>${escapeHtml(founder.title || 'Team Member')}</p>
+                    <p class="bio">${escapeHtml(founder.bio || '')}</p>
+                </div>
+            `).join('');
+        }
+        
+        function displayDefaultFounders() {
+            const container = document.getElementById('foundersContainer');
+            if (!container) return;
+            
+            container.innerHTML = `
+                <div class="team-card">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Dr. Zakiyah Arrey">
+                    <h3>Dr. Zakiyah Arrey</h3>
+                    <p>Founder & Wellness Expert</p>
+                    <p class="bio">Dedicated to promoting natural wellness and preventive health practices across Africa.</p>
+                </div>
+                <div class="team-card">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Dr. James Kariuki">
+                    <h3>Dr. James Kariuki</h3>
+                    <p>Nutrition Specialist</p>
+                    <p class="bio">Expert in clinical nutrition and workplace wellness programs with over 15 years experience.</p>
+                </div>
+                <div class="team-card">
+                    <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Catherine Kariuki">
+                    <h3>Catherine Kariuki</h3>
+                    <p>Customer Wellness Advisor</p>
+                    <p class="bio">Dedicated to helping customers find the right wellness solutions for their unique needs.</p>
+                </div>
+            `;
         }
         
         async function loadLogoSettings() {
-            if (!supabaseClient) return;
+            if (!window.supabase) return;
             try {
-                const { data } = await supabaseClient.from('site_settings').select('value').eq('key', 'logo_url').single();
-                if (data?.value) { document.getElementById('header-logo').src = data.value; document.getElementById('header-logo').style.display = 'block'; document.querySelector('.logo-text').style.display = 'none'; }
-            } catch(e) {}
+                const { data } = await window.supabase.from('site_settings').select('value').eq('key', 'logo_url').single();
+                if (data && data.value) {
+                    document.getElementById('header-logo').src = data.value;
+                    document.getElementById('header-logo').style.display = 'block';
+                    document.querySelector('.logo-text').style.display = 'none';
+                }
+            } catch(e) { console.log('Logo error:', e); }
         }
         
         function updateCartCount() {
@@ -127,11 +198,23 @@
             document.querySelectorAll('.cart-count').forEach(el => el.textContent = count);
         }
         
-        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;' }[m])); }
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;' }[m]));
+        }
         
-        document.querySelector('.mobile-menu')?.addEventListener('click', () => document.querySelector('.nav-menu')?.classList.toggle('active'));
-        document.addEventListener('DOMContentLoaded', () => { updateCartCount(); initSupabase(); });
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu')?.addEventListener('click', () => {
+            document.querySelector('.nav-menu')?.classList.toggle('active');
+        });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCartCount();
+            loadFounders();
+            loadLogoSettings();
+            if (typeof cartSystem !== 'undefined') cartSystem.load();
+        });
     </script>
-    <script src="js/tracker.js"></script>
 </body>
 </html>
