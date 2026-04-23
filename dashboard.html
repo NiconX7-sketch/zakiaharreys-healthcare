@@ -7,12 +7,11 @@
     <meta name="robots" content="noindex, nofollow">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', sans-serif; background: #f5f5f5; }
-        
-        /* Sidebar */
         .sidebar { width: 280px; background: #1a3b1a; color: white; position: fixed; height: 100vh; overflow-y: auto; z-index: 100; }
         .sidebar-header { padding: 20px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .sidebar-header i { font-size: 2rem; }
@@ -20,91 +19,53 @@
         .menu-item { padding: 15px 20px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.3s; color: rgba(255,255,255,0.8); }
         .menu-item:hover, .menu-item.active { background: rgba(255,255,255,0.1); color: white; }
         .menu-item i { width: 20px; }
-        
-        /* Main Content */
         .main-content { margin-left: 280px; padding: 20px; min-height: 100vh; }
         .top-bar { background: white; padding: 15px 25px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 10px; }
         .top-bar-left { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
         .page-title { font-size: 1.5rem; color: #333; }
         .view-site-btn, .refresh-btn, .logout-btn { padding: 8px 20px; border-radius: 8px; cursor: pointer; border: none; font-weight: 500; }
         .view-site-btn { background: #2e7d32; color: white; text-decoration: none; display: inline-block; }
-        .view-site-btn:hover { background: #1b5e20; }
         .refresh-btn { background: #ff8f00; color: white; }
-        .refresh-btn:hover { background: #e67e22; }
         .logout-btn { background: #dc3545; color: white; }
-        .logout-btn:hover { background: #c82333; }
-        
-        /* Stats Cards */
         .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
         .stat-card { background: white; padding: 20px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: transform 0.2s; }
         .stat-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         .stat-card h3 { font-size: 1.8rem; color: #2e7d32; }
-        .stat-card p { color: #666; margin-top: 5px; }
         .stat-card i { font-size: 2rem; color: #2e7d32; opacity: 0.5; }
-        
-        /* Content Panels */
         .content-panel { background: white; border-radius: 12px; padding: 25px; display: none; }
         .content-panel.active { display: block; }
         .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid #eee; }
-        .btn-add { background: #2e7d32; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; transition: all 0.3s; }
-        .btn-add:hover { background: #1b5e20; transform: translateY(-2px); }
-        
-        /* Tables */
+        .btn-add { background: #2e7d32; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
         .data-table { width: 100%; border-collapse: collapse; }
         .data-table th, .data-table td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
-        .data-table th { background: #f5f5f5; font-weight: 600; }
-        .edit-btn, .delete-btn { padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer; margin: 0 3px; transition: all 0.2s; }
+        .data-table th { background: #f5f5f5; }
+        .edit-btn, .delete-btn { padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer; margin: 0 3px; }
         .edit-btn { background: #ffc107; color: #333; }
-        .edit-btn:hover { background: #e0a800; }
         .delete-btn { background: #dc3545; color: white; }
-        .delete-btn:hover { background: #c82333; }
-        
-        /* Modal */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
         .modal.active { display: flex; }
         .modal-content { background: white; border-radius: 12px; width: 90%; max-width: 700px; padding: 25px; max-height: 85vh; overflow-y: auto; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #eee; }
-        .close-modal { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #999; }
-        .close-modal:hover { color: #333; }
+        .close-modal { background: none; border: none; font-size: 1.5rem; cursor: pointer; }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; font-weight: 500; }
-        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; }
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: #2e7d32; }
-        .image-preview { margin-top: 10px; max-width: 150px; max-height: 150px; display: none; border-radius: 8px; border: 1px solid #ddd; }
-        
-        /* Founders & Categories Grid */
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; }
+        .image-preview { margin-top: 10px; max-width: 150px; max-height: 150px; display: none; border-radius: 8px; }
         .founders-grid, .categories-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 20px; }
         .founder-card, .category-card-admin { background: #f5f5f5; padding: 20px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; }
         .founder-info { display: flex; align-items: center; gap: 15px; }
         .founder-avatar { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid #2e7d32; }
-        
-        /* Payment Settings Sections */
         .payment-section { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
-        .payment-section h3 { color: #2e7d32; margin-bottom: 15px; font-size: 1.2rem; }
-        .payment-section h3 i { margin-right: 10px; }
-        .info-box { background: #f0fdf4; padding: 15px; border-radius: 8px; margin-top: 20px; }
-        .info-box h4 { color: #166534; margin-bottom: 10px; }
-        .info-box p { color: #166534; font-size: 14px; margin-bottom: 5px; }
-        small { color: #666; display: block; margin-top: 5px; font-size: 11px; }
-        
-        /* CKEditor */
+        .payment-section h3 { color: #2e7d32; margin-bottom: 15px; }
         .ck-editor__editable { min-height: 300px; }
-        
-        /* Responsive */
-        @media (max-width: 768px) { 
-            .sidebar { width: 70px; } 
-            .sidebar-header h2, .menu-item span { display: none; } 
-            .main-content { margin-left: 70px; } 
-            .stats-grid { grid-template-columns: 1fr 1fr; }
-            .data-table { font-size: 12px; }
-            .data-table th, .data-table td { padding: 8px; }
-        }
+        @media (max-width: 768px) { .sidebar { width: 70px; } .sidebar-header h2, .menu-item span { display: none; } .main-content { margin-left: 70px; } .stats-grid { grid-template-columns: 1fr 1fr; } }
     </style>
 </head>
 <body>
     <div class="sidebar">
         <div class="sidebar-header"><i class="fas fa-leaf"></i><h2>Admin Panel</h2></div>
         <div class="menu-item active" data-panel="dashboard"><i class="fas fa-chart-line"></i><span>Dashboard</span></div>
+        <div class="menu-item" data-panel="visitors"><i class="fas fa-chart-line"></i><span>Visitors</span></div>
         <div class="menu-item" data-panel="products"><i class="fas fa-box"></i><span>Products</span></div>
         <div class="menu-item" data-panel="blog"><i class="fas fa-newspaper"></i><span>Blog Posts</span></div>
         <div class="menu-item" data-panel="corporate"><i class="fas fa-building"></i><span>Corporate</span></div>
@@ -128,6 +89,7 @@
             <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
         </div>
         
+        <!-- Dashboard Panel -->
         <div id="dashboardPanel" class="content-panel active">
             <div class="stats-grid">
                 <div class="stat-card" onclick="switchToPanel('orders')"><div><h3 id="totalRevenue">$0</h3><p>Revenue</p></div><i class="fas fa-dollar-sign"></i></div>
@@ -139,199 +101,112 @@
             <table class="data-table" id="recentOrdersTable"><thead><tr><th>Order #</th><th>Customer</th><th>Amount</th><th>Status</th></tr></thead><tbody><tr><td colspan="4">Loading...</td></tr></tbody></table>
         </div>
         
-        <div id="productsPanel" class="content-panel"><div class="panel-header"><h2>Products</h2><button class="btn-add" onclick="showProductModal()">+ Add Product</button></div><div style="overflow-x:auto;"><table class="data-table" id="productsTable"><thead><tr><th>Image</th><th>Name</th><th>Price</th><th>Category</th><th>Featured</th><th>Actions</th></tr></thead><tbody><tr><td colspan="6">Loading...</td></tr></tbody></table></div></div>
-        
-        <div id="blogPanel" class="content-panel"><div class="panel-header"><h2>Blog Posts</h2><button class="btn-add" onclick="showBlogModal()">+ Add Post</button></div><div style="overflow-x:auto;"><table class="data-table" id="blogTable"><thead><tr><th>Image</th><th>Title</th><th>Slug</th><th>Published</th><th>Actions</th></tr></thead><tbody><tr><td colspan="5">Loading...</td></tr></tbody></table></div></div>
-        
-        <div id="corporatePanel" class="content-panel"><div class="panel-header"><h2>Corporate Programs</h2><button class="btn-add" onclick="showCorporateModal()">+ Add Program</button></div><div style="overflow-x:auto;"><table class="data-table" id="corporateTable"><thead><tr><th>Image</th><th>Title</th><th>Price</th><th>Active</th><th>Actions</th></tr></thead><tbody><tr><td colspan="5">Loading...</td></tr></tbody></table></div></div>
-        
-        <div id="foundersPanel" class="content-panel"><div class="panel-header"><h2>Founders / Team Members</h2><button class="btn-add" onclick="showFounderModal()">+ Add Founder</button></div><div id="foundersList" class="founders-grid"></div></div>
-        
-        <div id="affiliatesPanel" class="content-panel"><div class="panel-header"><h2>Affiliate Links</h2><button class="btn-add" onclick="showAffiliateModal()">+ Add Link</button></div><div style="overflow-x:auto;"><table class="data-table" id="affiliatesTable"><thead><tr><th>Name</th><th>URL</th><th>Clicks</th><th>Actions</th></tr></thead><tbody><tr><td colspan="4">Loading...</td></tr></tbody></table></div></div>
-        
-        <div id="categoriesPanel" class="content-panel"><div class="panel-header"><h2>Product Categories</h2><button class="btn-add" onclick="showCategoryModal()">+ Add Category</button></div><div id="categoriesList" class="categories-grid"></div></div>
-        
-        <div id="ordersPanel" class="content-panel"><div class="panel-header"><h2>All Orders</h2></div><div style="overflow-x:auto;"><table class="data-table" id="ordersTable"><thead><tr><th>Order #</th><th>Customer</th><th>Amount</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead><tbody><tr><td colspan="6">Loading...</td></tr></tbody></table></div></div>
-        
-        <div id="messagesPanel" class="content-panel"><div class="panel-header"><h2>Contact Messages</h2></div><div style="overflow-x:auto;"><table class="data-table" id="messagesTable"><thead><tr><th>Name</th><th>Email</th><th>Subject</th><th>Message</th><th>Date</th><th>Actions</th></tr></thead><tbody><tr><td colspan="6">Loading...</td></tr></tbody></table></div></div>
-        
-        <div id="subscribersPanel" class="content-panel"><div class="panel-header"><h2>Newsletter Subscribers</h2></div><div style="overflow-x:auto;"><table class="data-table" id="subscribersTable"><thead><tr><th>Email</th><th>Date</th><th>Actions</th></tr></thead><tbody><tr><td colspan="3">Loading...</td></tr></tbody></table></div></div>
-        
-        <!-- COMPLETE PAYMENTS PANEL with all gateways -->
-        <div id="paymentsPanel" class="content-panel">
-            <div class="panel-header"><h2>Payment Gateway Settings</h2></div>
-            
-            <!-- Paystack Settings -->
-            <div class="payment-section">
-                <h3><i class="fas fa-credit-card"></i> Paystack (Card Payments)</h3>
-                <form id="paystackForm">
-                    <div class="form-group">
-                        <label>Paystack Public Key</label>
-                        <input type="text" id="paystackPublicKey" placeholder="pk_live_xxxxxxxxxxxxxxxx">
-                        <small>Get from: Paystack Dashboard → Settings → API Keys</small>
-                    </div>
-                    <div class="form-group">
-                        <label>Paystack Secret Key</label>
-                        <input type="password" id="paystackSecretKey" placeholder="sk_live_xxxxxxxxxxxxxxxx">
-                        <small>Keep this secret! Never share publicly.</small>
-                    </div>
-                    <div class="form-group">
-                        <label>Paystack Merchant Email</label>
-                        <input type="email" id="paystackEmail" placeholder="merchant@example.com">
-                    </div>
-                    <button type="submit" class="btn-add">Save Paystack Settings</button>
-                </form>
+        <!-- Visitors Analytics Panel -->
+        <div id="visitorsPanel" class="content-panel">
+            <div class="panel-header">
+                <h2>Visitor Analytics</h2>
+                <div>
+                    <select id="statsPeriod" onchange="loadVisitorStats()" style="padding: 8px; border-radius: 8px; margin-right: 10px;">
+                        <option value="today">Today</option>
+                        <option value="week" selected>Last 7 Days</option>
+                        <option value="month">Last 30 Days</option>
+                        <option value="all">All Time</option>
+                    </select>
+                    <button class="refresh-btn" onclick="loadVisitorStats()"><i class="fas fa-sync-alt"></i> Refresh</button>
+                </div>
             </div>
-            
-            <!-- M-Pesa Settings -->
-            <div class="payment-section">
-                <h3><i class="fas fa-mobile-alt"></i> M-Pesa (STK Push)</h3>
-                <form id="mpesaForm">
-                    <div class="form-group">
-                        <label>M-Pesa Shortcode (Till Number)</label>
-                        <input type="text" id="mpesaShortcode" placeholder="174379">
-                        <small>Your PayBill/Till Number from Safaricom</small>
-                    </div>
-                    <div class="form-group">
-                        <label>M-Pesa Consumer Key</label>
-                        <input type="text" id="mpesaConsumerKey" placeholder="xxxxxxxxxxxxxxxx">
-                        <small>Get from: Safaricom Developer Portal</small>
-                    </div>
-                    <div class="form-group">
-                        <label>M-Pesa Consumer Secret</label>
-                        <input type="password" id="mpesaConsumerSecret" placeholder="xxxxxxxxxxxxxxxx">
-                    </div>
-                    <div class="form-group">
-                        <label>M-Pesa Passkey</label>
-                        <input type="text" id="mpesaPasskey" placeholder="bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919">
-                        <small>Get from Safaricom Developer Portal</small>
-                    </div>
-                    <div class="form-group">
-                        <label>M-Pesa Callback URL</label>
-                        <input type="text" id="mpesaCallback" placeholder="https://yourdomain.com/api/mpesa/callback">
-                        <small>Your domain URL for payment confirmation</small>
-                    </div>
-                    <div class="form-group">
-                        <label>Environment</label>
-                        <select id="mpesaEnvironment">
-                            <option value="sandbox">Sandbox (Testing)</option>
-                            <option value="production">Production (Live)</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn-add">Save M-Pesa Settings</button>
-                </form>
+            <div class="stats-grid" style="margin-bottom: 30px;">
+                <div class="stat-card"><div><h3 id="totalVisitors">0</h3><p>Total Visitors</p></div><i class="fas fa-users"></i></div>
+                <div class="stat-card"><div><h3 id="uniqueVisitors">0</h3><p>Unique Visitors</p></div><i class="fas fa-user-check"></i></div>
+                <div class="stat-card"><div><h3 id="totalPageViews">0</h3><p>Page Views</p></div><i class="fas fa-eye"></i></div>
+                <div class="stat-card"><div><h3 id="avgPagesPerVisit">0</h3><p>Pages/Visit</p></div><i class="fas fa-chart-simple"></i></div>
             </div>
-            
-            <!-- PayPal Settings -->
-            <div class="payment-section">
-                <h3><i class="fab fa-paypal"></i> PayPal</h3>
-                <form id="paypalForm">
-                    <div class="form-group">
-                        <label>PayPal Client ID</label>
-                        <input type="text" id="paypalClientId" placeholder="AUXxxxxxxxxxxxxxxxxxxxxx">
-                        <small>Get from: PayPal Developer Dashboard → Apps & Credentials</small>
-                    </div>
-                    <div class="form-group">
-                        <label>PayPal Secret Key</label>
-                        <input type="password" id="paypalSecretKey" placeholder="xxxxxxxxxxxxxxxxxxxxx">
-                    </div>
-                    <div class="form-group">
-                        <label>PayPal Merchant Email</label>
-                        <input type="email" id="paypalEmail" placeholder="merchant@example.com">
-                    </div>
-                    <div class="form-group">
-                        <label>Environment</label>
-                        <select id="paypalEnvironment">
-                            <option value="sandbox">Sandbox (Testing)</option>
-                            <option value="production">Production (Live)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Currency</label>
-                        <select id="paypalCurrency">
-                            <option value="USD">USD - US Dollar</option>
-                            <option value="KES">KES - Kenyan Shilling</option>
-                            <option value="EUR">EUR - Euro</option>
-                            <option value="GBP">GBP - British Pound</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn-add">Save PayPal Settings</button>
-                </form>
+            <div style="background: #f9f9f9; border-radius: 12px; padding: 20px; margin-bottom: 30px;">
+                <h3 style="margin-bottom: 20px;">Daily Traffic</h3>
+                <canvas id="visitorChart" style="width: 100%; max-height: 300px;"></canvas>
             </div>
-            
-            <div class="info-box">
-                <h4><i class="fas fa-info-circle"></i> Payment Methods Information</h4>
-                <p><strong>Paystack:</strong> Accepts credit/debit cards, bank transfers, and mobile money from multiple African countries.</p>
-                <p><strong>M-Pesa:</strong> Direct STK Push to customer phones. Requires Safaricom developer account.</p>
-                <p><strong>PayPal:</strong> International payments via PayPal accounts and credit cards.</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
+                <div style="background: #f9f9f9; border-radius: 12px; padding: 20px;"><h3>Top Pages</h3><table class="data-table" id="topPagesTable"><thead><tr><th>Page</th><th>Views</th></thead><tbody><tr><td colspan="2">Loading...</td></tr></tbody></table></div>
+                <div style="background: #f9f9f9; border-radius: 12px; padding: 20px;"><h3>Devices</h3><div id="devicesList"></div></div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
+                <div style="background: #f9f9f9; border-radius: 12px; padding: 20px;"><h3>Browsers</h3><div id="browsersList"></div></div>
+                <div style="background: #f9f9f9; border-radius: 12px; padding: 20px;"><h3>Traffic Sources</h3><table class="data-table" id="referrersTable"><thead><tr><th>Source</th><th>Visits</th></thead><tbody><tr><td colspan="2">Loading...</td></tr></tbody></table></div>
+            </div>
+            <div style="background: #f9f9f9; border-radius: 12px; padding: 20px;">
+                <h3>Recent Visitors</h3>
+                <table class="data-table" id="recentVisitorsTable"><thead><tr><th>Device</th><th>Browser</th><th>Last Visit</th><th>Visits</th></thead><tbody><tr><td colspan="4">Loading...</td></tr></tbody></table>
             </div>
         </div>
         
+        <!-- Products Panel -->
+        <div id="productsPanel" class="content-panel"><div class="panel-header"><h2>Products</h2><button class="btn-add" onclick="showProductModal()">+ Add Product</button></div><div style="overflow-x:auto;"><table class="data-table" id="productsTable"><thead><tr><th>Image</th><th>Name</th><th>Price</th><th>Category</th><th>Featured</th><th>Actions</th></tr></thead><tbody><tr><td colspan="6">Loading...</td></tr></tbody></table></div></div>
+        
+        <!-- Blog Panel -->
+        <div id="blogPanel" class="content-panel"><div class="panel-header"><h2>Blog Posts</h2><button class="btn-add" onclick="showBlogModal()">+ Add Post</button></div><div style="overflow-x:auto;"><table class="data-table" id="blogTable"><thead><tr><th>Image</th><th>Title</th><th>Slug</th><th>Published</th><th>Actions</th></tr></thead><tbody><tr><td colspan="5">Loading...</td></tr></tbody></table></div></div>
+        
+        <!-- Corporate Panel -->
+        <div id="corporatePanel" class="content-panel"><div class="panel-header"><h2>Corporate Programs</h2><button class="btn-add" onclick="showCorporateModal()">+ Add Program</button></div><div style="overflow-x:auto;"><table class="data-table" id="corporateTable"><thead><tr><th>Image</th><th>Title</th><th>Price</th><th>Active</th><th>Actions</th></tr></thead><tbody><tr><td colspan="5">Loading...</td></tr></tbody></table></div></div>
+        
+        <!-- Founders Panel -->
+        <div id="foundersPanel" class="content-panel"><div class="panel-header"><h2>Founders / Team Members</h2><button class="btn-add" onclick="showFounderModal()">+ Add Founder</button></div><div id="foundersList" class="founders-grid"></div></div>
+        
+        <!-- Affiliates Panel -->
+        <div id="affiliatesPanel" class="content-panel"><div class="panel-header"><h2>Affiliate Links</h2><button class="btn-add" onclick="showAffiliateModal()">+ Add Link</button></div><div style="overflow-x:auto;"><table class="data-table" id="affiliatesTable"><thead><tr><th>Name</th><th>URL</th><th>Clicks</th><th>Actions</th></tr></thead><tbody><td><td colspan="4">Loading...</td></tr></tbody></table></div></div>
+        
+        <!-- Categories Panel -->
+        <div id="categoriesPanel" class="content-panel"><div class="panel-header"><h2>Product Categories</h2><button class="btn-add" onclick="showCategoryModal()">+ Add Category</button></div><div id="categoriesList" class="categories-grid"></div></div>
+        
+        <!-- Orders Panel -->
+        <div id="ordersPanel" class="content-panel"><div class="panel-header"><h2>All Orders</h2></div><div style="overflow-x:auto;"><table class="data-table" id="ordersTable"><thead><tr><th>Order #</th><th>Customer</th><th>Amount</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead><tbody><td><td colspan="6">Loading...</td></tr></tbody></table></div></div>
+        
+        <!-- Messages Panel -->
+        <div id="messagesPanel" class="content-panel"><div class="panel-header"><h2>Contact Messages</h2></div><div style="overflow-x:auto;"><table class="data-table" id="messagesTable"><thead><tr><th>Name</th><th>Email</th><th>Subject</th><th>Message</th><th>Date</th><th>Actions</th></tr></thead><tbody><tr><td colspan="6">Loading...</td></tr></tbody></table></div></div>
+        
+        <!-- Subscribers Panel -->
+        <div id="subscribersPanel" class="content-panel"><div class="panel-header"><h2>Newsletter Subscribers</h2></div><div style="overflow-x:auto;"><table class="data-table" id="subscribersTable"><thead><tr><th>Email</th><th>Date</th><th>Actions</th></tr></thead><tbody><tr><td colspan="3">Loading...</td></tr></tbody></table></div></div>
+        
+        <!-- Payments Panel -->
+        <div id="paymentsPanel" class="content-panel">
+            <div class="panel-header"><h2>Payment Gateway Settings</h2></div>
+            <div class="payment-section"><h3><i class="fas fa-credit-card"></i> Paystack</h3><form id="paystackForm"><div class="form-group"><label>Public Key</label><input type="text" id="paystackPublicKey"></div><div class="form-group"><label>Secret Key</label><input type="password" id="paystackSecretKey"></div><div class="form-group"><label>Merchant Email</label><input type="email" id="paystackEmail"></div><button type="submit" class="btn-add">Save Paystack</button></form></div>
+            <div class="payment-section"><h3><i class="fas fa-mobile-alt"></i> M-Pesa</h3><form id="mpesaForm"><div class="form-group"><label>Shortcode</label><input type="text" id="mpesaShortcode"></div><div class="form-group"><label>Consumer Key</label><input type="text" id="mpesaConsumerKey"></div><div class="form-group"><label>Consumer Secret</label><input type="password" id="mpesaConsumerSecret"></div><div class="form-group"><label>Passkey</label><input type="text" id="mpesaPasskey"></div><div class="form-group"><label>Environment</label><select id="mpesaEnvironment"><option value="sandbox">Sandbox</option><option value="production">Production</option></select></div><button type="submit" class="btn-add">Save M-Pesa</button></form></div>
+            <div class="payment-section"><h3><i class="fab fa-paypal"></i> PayPal</h3><form id="paypalForm"><div class="form-group"><label>Client ID</label><input type="text" id="paypalClientId"></div><div class="form-group"><label>Secret Key</label><input type="password" id="paypalSecretKey"></div><div class="form-group"><label>Merchant Email</label><input type="email" id="paypalEmail"></div><div class="form-group"><label>Environment</label><select id="paypalEnvironment"><option value="sandbox">Sandbox</option><option value="production">Production</option></select></div><div class="form-group"><label>Currency</label><select id="paypalCurrency"><option value="USD">USD</option><option value="KES">KES</option></select></div><button type="submit" class="btn-add">Save PayPal</button></form></div>
+        </div>
+        
+        <!-- Settings Panel -->
         <div id="settingsPanel" class="content-panel"><div class="panel-header"><h2>Site Settings</h2></div><form id="settingsForm"><div class="form-group"><label>Site Name</label><input type="text" id="siteName"></div><div class="form-group"><label>Contact Phone</label><input type="text" id="contactPhone"></div><div class="form-group"><label>Contact Email</label><input type="email" id="contactEmail"></div><div class="form-group"><label>Address</label><input type="text" id="address"></div><div class="form-group"><label>Exchange Rate (USD to KES)</label><input type="number" id="exchangeRate" step="0.01" value="115"></div><div class="form-group"><label>WhatsApp Number</label><input type="text" id="whatsappNumber"></div><div class="form-group"><label>Primary Color</label><input type="color" id="primaryColor"></div><div class="form-group"><label>Secondary Color</label><input type="color" id="secondaryColor"></div><div class="form-group"><label>Logo Image</label><input type="file" id="logoFile" accept="image/*"></div><img id="logoPreview" style="max-width: 100px; margin-top: 10px; display: none;"><button type="submit" class="btn-add" style="margin-top: 15px;">Save Settings</button></form></div>
     </div>
     
     <div id="modal" class="modal"><div class="modal-content" id="modalContent"></div></div>
 
     <script>
-        // ============================================
-        // AUTHENTICATION CHECK
-        // ============================================
-        function checkAuth() {
-            const isLoggedIn = localStorage.getItem('adminLoggedIn');
-            const loginTime = localStorage.getItem('adminLoginTime');
-            
-            if (isLoggedIn !== 'true') {
-                window.location.href = 'admin.html';
-            }
-            
-            // Auto logout after 8 hours (28800000 ms)
-            if (loginTime && (Date.now() - parseInt(loginTime)) > 28800000) {
-                logout();
-            }
-        }
-        checkAuth();
-        
-        function logout() {
-            localStorage.removeItem('adminLoggedIn');
-            localStorage.removeItem('adminUser');
-            localStorage.removeItem('adminLoginTime');
-            window.location.href = 'admin.html';
-        }
-        
-        // ============================================
-        // SUPABASE CONFIGURATION
-        // ============================================
         const SUPABASE_URL = 'https://qczrxqxwowfkltkbcyho.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFjenJ4cXh3b3dma2x0a2JjeWhvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzMjE1MDgsImV4cCI6MjA5MTg5NzUwOH0.VPDdz5bGuneuXSxAlhjMpFZbAzAkYeF9nYfgbopkZoE';
         
         let supabaseClient = null;
         let currentEditId = null;
         let blogEditor = null;
+        let visitorChart = null;
+        
+        // Authentication
+        function checkAuth() {
+            if (localStorage.getItem('adminLoggedIn') !== 'true') window.location.href = 'admin.html';
+        }
+        checkAuth();
+        
+        function logout() { localStorage.removeItem('adminLoggedIn'); window.location.href = 'admin.html'; }
+        function switchToPanel(panel) { document.querySelector(`.menu-item[data-panel="${panel}"]`).click(); }
+        function refreshAll() { loadDashboardStats(); loadProducts(); loadBlogs(); loadCorporate(); loadFounders(); loadAffiliates(); loadOrders(); loadMessages(); loadSubscribers(); loadCategories(); loadSettings(); loadVisitorStats(); showNotification('Data refreshed!'); }
+        function showNotification(msg) { const n = document.createElement('div'); n.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#2e7d32;color:white;padding:12px 20px;border-radius:8px;z-index:10000;'; n.innerHTML = '<i class="fas fa-check-circle"></i> ' + msg; document.body.appendChild(n); setTimeout(() => n.remove(), 3000); }
         
         function initSupabase() {
             if (typeof supabase !== 'undefined' && supabase.createClient) {
                 supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                loadDashboardStats(); loadProducts(); loadBlogs(); loadCorporate(); loadFounders(); loadAffiliates(); loadOrders(); loadMessages(); loadSubscribers(); loadCategories(); loadSettings(); loadPaymentSettings();
+                loadDashboardStats(); loadProducts(); loadBlogs(); loadCorporate(); loadFounders(); loadAffiliates(); loadOrders(); loadMessages(); loadSubscribers(); loadCategories(); loadSettings(); loadPaymentSettings(); loadVisitorStats();
                 return true;
             }
             setTimeout(initSupabase, 500);
-        }
-        
-        function showNotification(msg) { 
-            const n = document.createElement('div'); 
-            n.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#2e7d32;color:white;padding:12px 20px;border-radius:8px;z-index:10000;'; 
-            n.innerHTML = '<i class="fas fa-check-circle"></i> ' + msg; 
-            document.body.appendChild(n); 
-            setTimeout(() => n.remove(), 3000); 
-        }
-        
-        function refreshAll() { 
-            loadDashboardStats(); loadProducts(); loadBlogs(); loadCorporate(); loadFounders(); loadAffiliates(); loadOrders(); loadMessages(); loadSubscribers(); loadCategories(); loadSettings(); 
-            showNotification('Data refreshed!'); 
-        }
-        
-        function switchToPanel(panel) { 
-            document.querySelector(`.menu-item[data-panel="${panel}"]`).click(); 
         }
         
         // Dashboard Stats
@@ -349,379 +224,119 @@
             
             const { data: recent } = await supabaseClient.from('orders').select('*').order('created_at', { ascending: false }).limit(5);
             const tbody = document.querySelector('#recentOrdersTable tbody');
-            if (recent?.length) {
-                tbody.innerHTML = recent.map(o => `<tr><td>${o.order_number}</td><td>${o.customer_name}</td><td>$${o.total}</td><td><span style="background:${o.payment_status === 'completed' ? '#d4edda' : '#fff3cd'};padding:5px 10px;border-radius:20px;">${o.payment_status}</span></td></tr>`).join('');
-            } else { tbody.innerHTML = '<tr><td colspan="4">No orders yet</td></tr>'; }
+            if (recent?.length) tbody.innerHTML = recent.map(o => `<tr><td>${o.order_number}</td><td>${o.customer_name}</td><td>$${o.total}</td><td><span style="background:${o.payment_status === 'completed' ? '#d4edda' : '#fff3cd'};padding:5px 10px;border-radius:20px;">${o.payment_status}</span></td></tr>`).join('');
+            else tbody.innerHTML = '<tr><td colspan="4">No orders yet</td></tr>';
+        }
+        
+        // Visitor Stats Functions
+        async function loadVisitorStats() {
+            if (!supabaseClient) return;
+            const period = document.getElementById('statsPeriod').value;
+            let startDate = new Date();
+            if (period === 'today') startDate.setDate(startDate.getDate() - 1);
+            else if (period === 'week') startDate.setDate(startDate.getDate() - 7);
+            else if (period === 'month') startDate.setDate(startDate.getDate() - 30);
+            else startDate = new Date('2020-01-01');
+            const startDateStr = startDate.toISOString().split('T')[0];
+            
+            const { data: dailyData } = await supabaseClient.from('daily_stats').select('*').gte('date', startDateStr).order('date', { ascending: true });
+            const { data: pageViews } = await supabaseClient.from('page_views').select('*').gte('viewed_at', startDateStr);
+            const { data: visitors } = await supabaseClient.from('visitors').select('*').gte('first_visit', startDateStr);
+            
+            const uniqueVisitors = new Set(pageViews?.map(p => p.visitor_id) || []).size;
+            document.getElementById('totalVisitors').innerHTML = visitors?.length || 0;
+            document.getElementById('uniqueVisitors').innerHTML = uniqueVisitors;
+            document.getElementById('totalPageViews').innerHTML = pageViews?.length || 0;
+            document.getElementById('avgPagesPerVisit').innerHTML = uniqueVisitors ? ((pageViews?.length / uniqueVisitors) || 0).toFixed(1) : '0';
+            
+            // Chart
+            if (visitorChart) visitorChart.destroy();
+            const ctx = document.getElementById('visitorChart')?.getContext('2d');
+            if (ctx && dailyData?.length) {
+                visitorChart = new Chart(ctx, {
+                    type: 'line',
+                    data: { labels: dailyData.map(d => new Date(d.date).toLocaleDateString()), datasets: [{ label: 'Visitors', data: dailyData.map(d => d.unique_visitors), borderColor: '#2e7d32', fill: true }] },
+                    options: { responsive: true }
+                });
+            }
+            
+            // Top Pages
+            const pageCounts = {}; pageViews?.forEach(pv => { const page = pv.page_url || 'unknown'; pageCounts[page] = (pageCounts[page] || 0) + 1; });
+            const topPages = Object.entries(pageCounts).sort((a,b) => b[1] - a[1]).slice(0, 5);
+            document.querySelector('#topPagesTable tbody').innerHTML = topPages.map(([page, count]) => `<tr><td>${page}</td><td>${count}</td></tr>`).join('');
+            
+            // Devices
+            const devices = {}; visitors?.forEach(v => { if (v.device_type) devices[v.device_type] = (devices[v.device_type] || 0) + 1; });
+            document.getElementById('devicesList').innerHTML = Object.entries(devices).map(([name, count]) => `<div style="display:flex;justify-content:space-between;padding:8px 0;"><span>${name}</span><span>${count}</span></div>`).join('');
+            
+            // Browsers
+            const browsers = {}; visitors?.forEach(v => { if (v.browser) browsers[v.browser] = (browsers[v.browser] || 0) + 1; });
+            document.getElementById('browsersList').innerHTML = Object.entries(browsers).map(([name, count]) => `<div style="display:flex;justify-content:space-between;padding:8px 0;"><span>${name}</span><span>${count}</span></div>`).join('');
+            
+            // Referrers
+            const referrers = {}; pageViews?.forEach(pv => { let ref = pv.referrer || 'Direct'; if (ref.includes('google')) ref = 'Google'; else if (ref.includes('facebook')) ref = 'Facebook'; else if (ref !== 'Direct') ref = 'Other'; referrers[ref] = (referrers[ref] || 0) + 1; });
+            document.querySelector('#referrersTable tbody').innerHTML = Object.entries(referrers).map(([source, count]) => `<tr><td>${source}</td><td>${count}</td></tr>`).join('');
+            
+            // Recent Visitors
+            const recent = [...(visitors || [])].sort((a,b) => new Date(b.last_visit) - new Date(a.last_visit)).slice(0, 10);
+            document.querySelector('#recentVisitorsTable tbody').innerHTML = recent.map(v => `<tr><td>${v.device_type || '-'}</td><td>${v.browser || '-'}</td><td>${new Date(v.last_visit).toLocaleDateString()}</td><td>${v.visit_count || 1}</td></tr>`).join('');
         }
         
         // PRODUCTS
-        async function loadProducts() {
-            if (!supabaseClient) return;
-            const { data } = await supabaseClient.from('products').select('*');
-            const tbody = document.querySelector('#productsTable tbody');
-            if (data?.length) {
-                tbody.innerHTML = data.map(p => `<tr><td><img src="${p.image_url || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2250%22 height=%2250%22%3E%3Crect width=%2250%22 height=%2250%22 fill=%22%23ddd%22/%3E%3C/svg%3E'}" style="width:50px;height:50px;object-fit:cover;border-radius:8px;"></td><td>${p.name}</td><td>$${p.price}</td><td>${p.category || '-'}</td><td>${p.featured ? 'Yes' : 'No'}</td><td><button class="edit-btn" onclick="editProduct(${p.id})"><i class="fas fa-edit"></i></button> <button class="delete-btn" onclick="deleteProduct(${p.id})"><i class="fas fa-trash"></i></button></td></tr>`).join('');
-            } else { tbody.innerHTML = '<tr><td colspan="6">No products</td></tr>'; }
-        }
-        
-        function showProductModal(product = null) {
-            currentEditId = product?.id || null;
-            document.getElementById('modalContent').innerHTML = `
-                <div class="modal-header"><h3>${product ? 'Edit Product' : 'Add Product'}</h3><button class="close-modal" onclick="closeModal()">&times;</button></div>
-                <form id="modalForm"><div class="form-group"><label>Name</label><input type="text" id="name" value="${product?.name || ''}" required></div>
-                <div class="form-group"><label>Description</label><textarea id="desc">${product?.description || ''}</textarea></div>
-                <div class="form-group"><label>Price (USD)</label><input type="number" id="price" step="0.01" value="${product?.price || ''}" required></div>
-                <div class="form-group"><label>Category</label><input type="text" id="category" value="${product?.category || ''}"></div>
-                <div class="form-group"><label>Image (Upload from PC)</label><input type="file" id="imageFile" accept="image/*"></div>
-                <img id="preview" class="image-preview"><div class="form-group"><label><input type="checkbox" id="featured" ${product?.featured ? 'checked' : ''}> Featured</label></div>
-                <button type="submit" class="btn-add">Save</button></form>`;
-            document.getElementById('imageFile').addEventListener('change', function(e) { const reader = new FileReader(); reader.onload = (ev) => { document.getElementById('preview').src = ev.target.result; document.getElementById('preview').style.display = 'block'; }; if(e.target.files[0]) reader.readAsDataURL(e.target.files[0]); });
-            document.getElementById('modalForm').onsubmit = async (e) => {
-                e.preventDefault();
-                let imageUrl = product?.image_url || '';
-                const file = document.getElementById('imageFile').files[0];
-                const saveProduct = async (img) => {
-                    const data = { name: document.getElementById('name').value, description: document.getElementById('desc').value, price: parseFloat(document.getElementById('price').value), category: document.getElementById('category').value, image_url: img, featured: document.getElementById('featured').checked };
-                    if (currentEditId) await supabaseClient.from('products').update(data).eq('id', currentEditId);
-                    else await supabaseClient.from('products').insert([data]);
-                    closeModal(); loadProducts(); loadDashboardStats(); showNotification('Product saved!');
-                };
-                if (file) { const reader = new FileReader(); reader.onload = (ev) => saveProduct(ev.target.result); reader.readAsDataURL(file); }
-                else { saveProduct(imageUrl); }
-            };
-            document.getElementById('modal').classList.add('active');
-        }
+        async function loadProducts() { if (!supabaseClient) return; const { data } = await supabaseClient.from('products').select('*'); const tbody = document.querySelector('#productsTable tbody'); if (data?.length) { tbody.innerHTML = data.map(p => `<tr>}<td><img src="${p.image_url || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2250%22 height=%2250%22%3E%3Crect width=%2250%22 height=%2250%22 fill=%22%23ddd%22/%3E%3C/svg%3E'}" style="width:50px;height:50px;object-fit:cover;border-radius:8px;"></td><td>${p.name}</td><td>$${p.price}</td><td>${p.category || '-'}</td><td>${p.featured ? 'Yes' : 'No'}</td><td><button class="edit-btn" onclick="editProduct(${p.id})">Edit</button> <button class="delete-btn" onclick="deleteProduct(${p.id})">Delete</button></td></tr>`).join(''); } else { tbody.innerHTML = '<tr><td colspan="6">No products</td></tr>'; } }
+        function showProductModal(product = null) { currentEditId = product?.id || null; document.getElementById('modalContent').innerHTML = `<div class="modal-header"><h3>${product ? 'Edit Product' : 'Add Product'}</h3><button class="close-modal" onclick="closeModal()">&times;</button></div><form id="modalForm"><div class="form-group"><label>Name</label><input type="text" id="name" value="${product?.name || ''}" required></div><div class="form-group"><label>Description</label><textarea id="desc">${product?.description || ''}</textarea></div><div class="form-group"><label>Price (USD)</label><input type="number" id="price" step="0.01" value="${product?.price || ''}" required></div><div class="form-group"><label>Category</label><input type="text" id="category" value="${product?.category || ''}"></div><div class="form-group"><label>Image (Upload)</label><input type="file" id="imageFile" accept="image/*"></div><img id="preview" class="image-preview"><div class="form-group"><label><input type="checkbox" id="featured" ${product?.featured ? 'checked' : ''}> Featured</label></div><button type="submit" class="btn-add">Save</button></form>`; document.getElementById('imageFile').addEventListener('change', function(e) { const reader = new FileReader(); reader.onload = (ev) => { document.getElementById('preview').src = ev.target.result; document.getElementById('preview').style.display = 'block'; }; if(e.target.files[0]) reader.readAsDataURL(e.target.files[0]); }); document.getElementById('modalForm').onsubmit = async (e) => { e.preventDefault(); let imageUrl = product?.image_url || ''; const file = document.getElementById('imageFile').files[0]; const save = async (img) => { const data = { name: document.getElementById('name').value, description: document.getElementById('desc').value, price: parseFloat(document.getElementById('price').value), category: document.getElementById('category').value, image_url: img, featured: document.getElementById('featured').checked }; if (currentEditId) await supabaseClient.from('products').update(data).eq('id', currentEditId); else await supabaseClient.from('products').insert([data]); closeModal(); loadProducts(); loadDashboardStats(); showNotification('Product saved!'); }; if (file) { const reader = new FileReader(); reader.onload = (ev) => save(ev.target.result); reader.readAsDataURL(file); } else { save(imageUrl); } }; document.getElementById('modal').classList.add('active'); }
         window.editProduct = async (id) => { const { data } = await supabaseClient.from('products').select('*').eq('id', id).single(); showProductModal(data); };
         window.deleteProduct = async (id) => { if(confirm('Delete this product?')){ await supabaseClient.from('products').delete().eq('id', id); loadProducts(); loadDashboardStats(); showNotification('Product deleted'); } };
         
         // BLOG POSTS
-        async function loadBlogs() {
-            if (!supabaseClient) return;
-            const { data } = await supabaseClient.from('blog_posts').select('*');
-            const tbody = document.querySelector('#blogTable tbody');
-            if (data?.length) {
-                tbody.innerHTML = data.map(b => `<tr><td><img src="${b.image_url || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2250%22 height=%2250%22%3E%3Crect width=%2250%22 height=%2250%22 fill=%22%23ddd%22/%3E%3C/svg%3E'}" style="width:50px;height:50px;object-fit:cover;border-radius:8px;"></td><td>${b.title}</td><td>${b.slug}</td></td><td>${b.published ? 'Published' : 'Draft'}</td><td><button class="edit-btn" onclick="editBlog(${b.id})"><i class="fas fa-edit"></i></button> <button class="delete-btn" onclick="deleteBlog(${b.id})"><i class="fas fa-trash"></i></button></td></tr>`).join('');
-            } else { tbody.innerHTML = '<td><td colspan="5">No blog posts</td></tr>'; }
-        }
-        
-        function showBlogModal(post = null) {
-            currentEditId = post?.id || null;
-            document.getElementById('modalContent').innerHTML = `
-                <div class="modal-header"><h3>${post ? 'Edit Post' : 'Add Blog Post'}</h3><button class="close-modal" onclick="closeModal()">&times;</button></div>
-                <form id="modalForm"><div class="form-group"><label>Title</label><input type="text" id="title" value="${post?.title || ''}" required></div>
-                <div class="form-group"><label>Slug</label><input type="text" id="slug" value="${post?.slug || ''}" required></div>
-                <div class="form-group"><label>Excerpt</label><textarea id="excerpt">${post?.excerpt || ''}</textarea></div>
-                <div class="form-group"><label>Content</label><div id="editorContainer"></div><textarea id="content" style="display:none;">${post?.content || ''}</textarea></div>
-                <div class="form-group"><label>Author</label><input type="text" id="author" value="${post?.author || 'Dr. Zakiyah Arrey'}"></div>
-                <div class="form-group"><label>Image (Upload from PC)</label><input type="file" id="imageFile" accept="image/*"></div>
-                <img id="preview" class="image-preview"><div class="form-group"><label><input type="checkbox" id="published" ${post?.published ? 'checked' : ''}> Published</label></div>
-                <button type="submit" class="btn-add">Save</button></form>`;
-            
-            setTimeout(() => {
-                if (typeof ClassicEditor !== 'undefined') {
-                    ClassicEditor.create(document.querySelector('#editorContainer')).then(editor => {
-                        blogEditor = editor;
-                        if(document.getElementById('content').value) editor.setData(document.getElementById('content').value);
-                    }).catch(e => console.error(e));
-                }
-            }, 100);
-            
-            document.getElementById('imageFile').addEventListener('change', function(e) { const reader = new FileReader(); reader.onload = (ev) => { document.getElementById('preview').src = ev.target.result; document.getElementById('preview').style.display = 'block'; }; if(e.target.files[0]) reader.readAsDataURL(e.target.files[0]); });
-            document.getElementById('modalForm').onsubmit = async (e) => {
-                e.preventDefault();
-                let imageUrl = post?.image_url || '';
-                const file = document.getElementById('imageFile').files[0];
-                const saveBlog = async (img) => {
-                    const data = { title: document.getElementById('title').value, slug: document.getElementById('slug').value.toLowerCase().replace(/ /g, '-'), excerpt: document.getElementById('excerpt').value, content: blogEditor ? blogEditor.getData() : document.getElementById('content').value, author: document.getElementById('author').value, image_url: img, published: document.getElementById('published').checked };
-                    if (currentEditId) await supabaseClient.from('blog_posts').update(data).eq('id', currentEditId);
-                    else await supabaseClient.from('blog_posts').insert([data]);
-                    closeModal(); loadBlogs(); loadDashboardStats(); showNotification('Blog saved!');
-                };
-                if (file) { const reader = new FileReader(); reader.onload = (ev) => saveBlog(ev.target.result); reader.readAsDataURL(file); }
-                else { saveBlog(imageUrl); }
-            };
-            document.getElementById('modal').classList.add('active');
-        }
+        async function loadBlogs() { if (!supabaseClient) return; const { data } = await supabaseClient.from('blog_posts').select('*'); const tbody = document.querySelector('#blogTable tbody'); if (data?.length) { tbody.innerHTML = data.map(b => `<tr><td><img src="${b.image_url || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2250%22 height=%2250%22%3E%3Crect width=%2250%22 height=%2250%22 fill=%22%23ddd%22/%3E%3C/svg%3E'}" style="width:50px;height:50px;object-fit:cover;border-radius:8px;"></td><td>${b.title}</td><td>${b.slug}</td><td>${b.published ? 'Published' : 'Draft'}</td><td><button class="edit-btn" onclick="editBlog(${b.id})">Edit</button> <button class="delete-btn" onclick="deleteBlog(${b.id})">Delete</button></td></tr>`).join(''); } else { tbody.innerHTML = '<tr><td colspan="5">No blog posts</td></tr>'; } }
+        function showBlogModal(post = null) { currentEditId = post?.id || null; document.getElementById('modalContent').innerHTML = `<div class="modal-header"><h3>${post ? 'Edit Post' : 'Add Blog Post'}</h3><button class="close-modal" onclick="closeModal()">&times;</button></div><form id="modalForm"><div class="form-group"><label>Title</label><input type="text" id="title" value="${post?.title || ''}" required></div><div class="form-group"><label>Slug</label><input type="text" id="slug" value="${post?.slug || ''}" required></div><div class="form-group"><label>Excerpt</label><textarea id="excerpt">${post?.excerpt || ''}</textarea></div><div class="form-group"><label>Content</label><div id="editorContainer"></div><textarea id="content" style="display:none;">${post?.content || ''}</textarea></div><div class="form-group"><label>Author</label><input type="text" id="author" value="${post?.author || 'Dr. Zakiyah Arrey'}"></div><div class="form-group"><label>Image (Upload)</label><input type="file" id="imageFile" accept="image/*"></div><img id="preview" class="image-preview"><div class="form-group"><label><input type="checkbox" id="published" ${post?.published ? 'checked' : ''}> Published</label></div><button type="submit" class="btn-add">Save</button></form>`; setTimeout(() => { if (typeof ClassicEditor !== 'undefined') { ClassicEditor.create(document.querySelector('#editorContainer')).then(editor => { blogEditor = editor; if(document.getElementById('content').value) editor.setData(document.getElementById('content').value); }).catch(e => console.error(e)); } }, 100); document.getElementById('imageFile').addEventListener('change', function(e) { const reader = new FileReader(); reader.onload = (ev) => { document.getElementById('preview').src = ev.target.result; document.getElementById('preview').style.display = 'block'; }; if(e.target.files[0]) reader.readAsDataURL(e.target.files[0]); }); document.getElementById('modalForm').onsubmit = async (e) => { e.preventDefault(); let imageUrl = post?.image_url || ''; const file = document.getElementById('imageFile').files[0]; const save = async (img) => { const data = { title: document.getElementById('title').value, slug: document.getElementById('slug').value.toLowerCase().replace(/ /g, '-'), excerpt: document.getElementById('excerpt').value, content: blogEditor ? blogEditor.getData() : document.getElementById('content').value, author: document.getElementById('author').value, image_url: img, published: document.getElementById('published').checked }; if (currentEditId) await supabaseClient.from('blog_posts').update(data).eq('id', currentEditId); else await supabaseClient.from('blog_posts').insert([data]); closeModal(); loadBlogs(); loadDashboardStats(); showNotification('Blog saved!'); }; if (file) { const reader = new FileReader(); reader.onload = (ev) => save(ev.target.result); reader.readAsDataURL(file); } else { save(imageUrl); } }; document.getElementById('modal').classList.add('active'); }
         window.editBlog = async (id) => { const { data } = await supabaseClient.from('blog_posts').select('*').eq('id', id).single(); showBlogModal(data); };
         window.deleteBlog = async (id) => { if(confirm('Delete this blog post?')){ await supabaseClient.from('blog_posts').delete().eq('id', id); loadBlogs(); loadDashboardStats(); showNotification('Blog deleted'); } };
         
         // CORPORATE
-        async function loadCorporate() {
-            if (!supabaseClient) return;
-            const { data } = await supabaseClient.from('corporate_wellness').select('*');
-            const tbody = document.querySelector('#corporateTable tbody');
-            if (data?.length) {
-                tbody.innerHTML = data.map(c => `<tr><td><img src="${c.image_url || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2250%22 height=%2250%22%3E%3Crect width=%2250%22 height=%2250%22 fill=%22%23ddd%22/%3E%3C/svg%3E'}" style="width:50px;height:50px;object-fit:cover;border-radius:8px;"></td><td>${c.title}</td><td>$${c.price}</td><td>${c.active ? 'Active' : 'Inactive'}</td><td><button class="edit-btn" onclick="editCorporate(${c.id})"><i class="fas fa-edit"></i></button> <button class="delete-btn" onclick="deleteCorporate(${c.id})"><i class="fas fa-trash"></i></button></td></tr>`).join('');
-            } else { tbody.innerHTML = '<tr><td colspan="5">No programs</td></tr>'; }
-        }
-        
-        function showCorporateModal(program = null) {
-            currentEditId = program?.id || null;
-            document.getElementById('modalContent').innerHTML = `
-                <div class="modal-header"><h3>${program ? 'Edit Program' : 'Add Corporate Program'}</h3><button class="close-modal" onclick="closeModal()">&times;</button></div>
-                <form id="modalForm"><div class="form-group"><label>Title</label><input type="text" id="title" value="${program?.title || ''}" required></div>
-                <div class="form-group"><label>Description</label><textarea id="desc">${program?.description || ''}</textarea></div>
-                <div class="form-group"><label>Price (USD)</label><input type="number" id="price" step="0.01" value="${program?.price || ''}"></div>
-                <div class="form-group"><label>Type</label><select id="type"><option value="screening">Screening</option><option value="workshop">Workshop</option><option value="training">Training</option></select></div>
-                <div class="form-group"><label>Duration</label><input type="text" id="duration" value="${program?.duration || 'full-day'}"></div>
-                <div class="form-group"><label>Features (comma separated)</label><input type="text" id="features" value="${program?.features?.join(', ') || ''}"></div>
-                <div class="form-group"><label>Image (Upload from PC)</label><input type="file" id="imageFile" accept="image/*"></div>
-                <img id="preview" class="image-preview"><div class="form-group"><label><input type="checkbox" id="active" ${program?.active !== false ? 'checked' : ''}> Active</label></div>
-                <button type="submit" class="btn-add">Save</button></form>`;
-            if(program?.program_type) document.getElementById('type').value = program.program_type;
-            document.getElementById('imageFile').addEventListener('change', function(e) { const reader = new FileReader(); reader.onload = (ev) => { document.getElementById('preview').src = ev.target.result; document.getElementById('preview').style.display = 'block'; }; if(e.target.files[0]) reader.readAsDataURL(e.target.files[0]); });
-            document.getElementById('modalForm').onsubmit = async (e) => {
-                e.preventDefault();
-                let imageUrl = program?.image_url || '';
-                const file = document.getElementById('imageFile').files[0];
-                const features = document.getElementById('features').value.split(',').map(f=>f.trim()).filter(f=>f);
-                const saveCorporate = async (img) => {
-                    const data = { title: document.getElementById('title').value, description: document.getElementById('desc').value, price: parseFloat(document.getElementById('price').value) || 0, program_type: document.getElementById('type').value, duration: document.getElementById('duration').value, features: features, image_url: img, active: document.getElementById('active').checked };
-                    if (currentEditId) await supabaseClient.from('corporate_wellness').update(data).eq('id', currentEditId);
-                    else await supabaseClient.from('corporate_wellness').insert([data]);
-                    closeModal(); loadCorporate(); showNotification('Program saved!');
-                };
-                if (file) { const reader = new FileReader(); reader.onload = (ev) => saveCorporate(ev.target.result); reader.readAsDataURL(file); }
-                else { saveCorporate(imageUrl); }
-            };
-            document.getElementById('modal').classList.add('active');
-        }
+        async function loadCorporate() { if (!supabaseClient) return; const { data } = await supabaseClient.from('corporate_wellness').select('*'); const tbody = document.querySelector('#corporateTable tbody'); if (data?.length) { tbody.innerHTML = data.map(c => `<tr><td><img src="${c.image_url || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2250%22 height=%2250%22%3E%3Crect width=%2250%22 height=%2250%22 fill=%22%23ddd%22/%3E%3C/svg%3E'}" style="width:50px;height:50px;object-fit:cover;border-radius:8px;"></td><td>${c.title}</td><td>$${c.price}</td><td>${c.active ? 'Active' : 'Inactive'}</td><td><button class="edit-btn" onclick="editCorporate(${c.id})">Edit</button> <button class="delete-btn" onclick="deleteCorporate(${c.id})">Delete</button></td></tr>`).join(''); } else { tbody.innerHTML = '<tr><td colspan="5">No programs</td></tr>'; } }
+        function showCorporateModal(program = null) { currentEditId = program?.id || null; document.getElementById('modalContent').innerHTML = `<div class="modal-header"><h3>${program ? 'Edit Program' : 'Add Corporate Program'}</h3><button class="close-modal" onclick="closeModal()">&times;</button></div><form id="modalForm"><div class="form-group"><label>Title</label><input type="text" id="title" value="${program?.title || ''}" required></div><div class="form-group"><label>Description</label><textarea id="desc">${program?.description || ''}</textarea></div><div class="form-group"><label>Price (USD)</label><input type="number" id="price" step="0.01" value="${program?.price || ''}"></div><div class="form-group"><label>Type</label><select id="type"><option value="screening">Screening</option><option value="workshop">Workshop</option><option value="training">Training</option></select></div><div class="form-group"><label>Duration</label><input type="text" id="duration" value="${program?.duration || 'full-day'}"></div><div class="form-group"><label>Features (comma separated)</label><input type="text" id="features" value="${program?.features?.join(', ') || ''}"></div><div class="form-group"><label>Image (Upload)</label><input type="file" id="imageFile" accept="image/*"></div><img id="preview" class="image-preview"><div class="form-group"><label><input type="checkbox" id="active" ${program?.active !== false ? 'checked' : ''}> Active</label></div><button type="submit" class="btn-add">Save</button></form>`; if(program?.program_type) document.getElementById('type').value = program.program_type; document.getElementById('imageFile').addEventListener('change', function(e) { const reader = new FileReader(); reader.onload = (ev) => { document.getElementById('preview').src = ev.target.result; document.getElementById('preview').style.display = 'block'; }; if(e.target.files[0]) reader.readAsDataURL(e.target.files[0]); }); document.getElementById('modalForm').onsubmit = async (e) => { e.preventDefault(); let imageUrl = program?.image_url || ''; const file = document.getElementById('imageFile').files[0]; const features = document.getElementById('features').value.split(',').map(f=>f.trim()).filter(f=>f); const save = async (img) => { const data = { title: document.getElementById('title').value, description: document.getElementById('desc').value, price: parseFloat(document.getElementById('price').value) || 0, program_type: document.getElementById('type').value, duration: document.getElementById('duration').value, features: features, image_url: img, active: document.getElementById('active').checked }; if (currentEditId) await supabaseClient.from('corporate_wellness').update(data).eq('id', currentEditId); else await supabaseClient.from('corporate_wellness').insert([data]); closeModal(); loadCorporate(); showNotification('Program saved!'); }; if (file) { const reader = new FileReader(); reader.onload = (ev) => save(ev.target.result); reader.readAsDataURL(file); } else { save(imageUrl); } }; document.getElementById('modal').classList.add('active'); }
         window.editCorporate = async (id) => { const { data } = await supabaseClient.from('corporate_wellness').select('*').eq('id', id).single(); showCorporateModal(data); };
         window.deleteCorporate = async (id) => { if(confirm('Delete this program?')){ await supabaseClient.from('corporate_wellness').delete().eq('id', id); loadCorporate(); showNotification('Program deleted'); } };
         
         // FOUNDERS
-        async function loadFounders() {
-            if (!supabaseClient) return;
-            const { data } = await supabaseClient.from('founders').select('*').order('display_order', { ascending: true });
-            const container = document.getElementById('foundersList');
-            if (data?.length) {
-                container.innerHTML = data.map(f => `
-                    <div class="founder-card">
-                        <div class="founder-info">
-                            <img src="${f.image_url || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2250%22 height=%2250%22%3E%3Crect width=%2250%22 height=%2250%22 fill=%22%23ddd%22/%3E%3C/svg%3E'}" class="founder-avatar">
-                            <div><strong>${f.name}</strong><br><small>${f.title || ''}</small></div>
-                        </div>
-                        <div><button class="edit-btn" onclick="editFounder(${f.id})"><i class="fas fa-edit"></i></button> <button class="delete-btn" onclick="deleteFounder(${f.id})"><i class="fas fa-trash"></i></button></div>
-                    </div>
-                `).join('');
-            } else { container.innerHTML = '<p>No founders added yet. Click "Add Founder" to get started.</p>'; }
-        }
-        
-        function showFounderModal(founder = null) {
-            currentEditId = founder?.id || null;
-            document.getElementById('modalContent').innerHTML = `
-                <div class="modal-header"><h3>${founder ? 'Edit Founder' : 'Add Founder'}</h3><button class="close-modal" onclick="closeModal()">&times;</button></div>
-                <form id="modalForm"><div class="form-group"><label>Full Name *</label><input type="text" id="name" value="${founder?.name || ''}" required></div>
-                <div class="form-group"><label>Title / Position</label><input type="text" id="title" value="${founder?.title || ''}"></div>
-                <div class="form-group"><label>Bio / Description</label><textarea id="bio" rows="3">${founder?.bio || ''}</textarea></div>
-                <div class="form-group"><label>Display Order (1,2,3...)</label><input type="number" id="displayOrder" value="${founder?.display_order || 0}"></div>
-                <div class="form-group"><label>Profile Image</label><input type="file" id="imageFile" accept="image/*"></div>
-                <img id="preview" class="image-preview"><div class="form-group"><label><input type="checkbox" id="active" ${founder?.active !== false ? 'checked' : ''}> Active on website</label></div>
-                <button type="submit" class="btn-add">Save</button></form>`;
-            if(founder?.image_url) { document.getElementById('preview').src = founder.image_url; document.getElementById('preview').style.display = 'block'; }
-            document.getElementById('imageFile').addEventListener('change', function(e) { const reader = new FileReader(); reader.onload = (ev) => { document.getElementById('preview').src = ev.target.result; document.getElementById('preview').style.display = 'block'; }; if(e.target.files[0]) reader.readAsDataURL(e.target.files[0]); });
-            document.getElementById('modalForm').onsubmit = async (e) => {
-                e.preventDefault();
-                let imageUrl = founder?.image_url || '';
-                const file = document.getElementById('imageFile').files[0];
-                const saveFounder = async (img) => {
-                    const data = { name: document.getElementById('name').value, title: document.getElementById('title').value, bio: document.getElementById('bio').value, display_order: parseInt(document.getElementById('displayOrder').value) || 0, image_url: img, active: document.getElementById('active').checked };
-                    if (currentEditId) await supabaseClient.from('founders').update(data).eq('id', currentEditId);
-                    else await supabaseClient.from('founders').insert([data]);
-                    closeModal(); loadFounders(); showNotification('Founder saved!');
-                };
-                if (file) { const reader = new FileReader(); reader.onload = (ev) => saveFounder(ev.target.result); reader.readAsDataURL(file); }
-                else { saveFounder(imageUrl); }
-            };
-            document.getElementById('modal').classList.add('active');
-        }
+        async function loadFounders() { if (!supabaseClient) return; const { data } = await supabaseClient.from('founders').select('*').order('display_order', { ascending: true }); const container = document.getElementById('foundersList'); if (data?.length) { container.innerHTML = data.map(f => `<div class="founder-card"><div class="founder-info"><img src="${f.image_url || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2250%22 height=%2250%22%3E%3Crect width=%2250%22 height=%2250%22 fill=%22%23ddd%22/%3E%3C/svg%3E'}" class="founder-avatar"><div><strong>${f.name}</strong><br><small>${f.title || ''}</small></div></div><div><button class="edit-btn" onclick="editFounder(${f.id})">Edit</button> <button class="delete-btn" onclick="deleteFounder(${f.id})">Delete</button></div></div>`).join(''); } else { container.innerHTML = '<p>No founders added yet.</p>'; } }
+        function showFounderModal(founder = null) { currentEditId = founder?.id || null; document.getElementById('modalContent').innerHTML = `<div class="modal-header"><h3>${founder ? 'Edit Founder' : 'Add Founder'}</h3><button class="close-modal" onclick="closeModal()">&times;</button></div><form id="modalForm"><div class="form-group"><label>Full Name</label><input type="text" id="name" value="${founder?.name || ''}" required></div><div class="form-group"><label>Title</label><input type="text" id="title" value="${founder?.title || ''}"></div><div class="form-group"><label>Bio</label><textarea id="bio" rows="3">${founder?.bio || ''}</textarea></div><div class="form-group"><label>Display Order</label><input type="number" id="displayOrder" value="${founder?.display_order || 0}"></div><div class="form-group"><label>Profile Image</label><input type="file" id="imageFile" accept="image/*"></div><img id="preview" class="image-preview"><div class="form-group"><label><input type="checkbox" id="active" ${founder?.active !== false ? 'checked' : ''}> Active</label></div><button type="submit" class="btn-add">Save</button></form>`; if(founder?.image_url) { document.getElementById('preview').src = founder.image_url; document.getElementById('preview').style.display = 'block'; } document.getElementById('imageFile').addEventListener('change', function(e) { const reader = new FileReader(); reader.onload = (ev) => { document.getElementById('preview').src = ev.target.result; document.getElementById('preview').style.display = 'block'; }; if(e.target.files[0]) reader.readAsDataURL(e.target.files[0]); }); document.getElementById('modalForm').onsubmit = async (e) => { e.preventDefault(); let imageUrl = founder?.image_url || ''; const file = document.getElementById('imageFile').files[0]; const save = async (img) => { const data = { name: document.getElementById('name').value, title: document.getElementById('title').value, bio: document.getElementById('bio').value, display_order: parseInt(document.getElementById('displayOrder').value) || 0, image_url: img, active: document.getElementById('active').checked }; if (currentEditId) await supabaseClient.from('founders').update(data).eq('id', currentEditId); else await supabaseClient.from('founders').insert([data]); closeModal(); loadFounders(); showNotification('Founder saved!'); }; if (file) { const reader = new FileReader(); reader.onload = (ev) => save(ev.target.result); reader.readAsDataURL(file); } else { save(imageUrl); } }; document.getElementById('modal').classList.add('active'); }
         window.editFounder = async (id) => { const { data } = await supabaseClient.from('founders').select('*').eq('id', id).single(); showFounderModal(data); };
         window.deleteFounder = async (id) => { if(confirm('Delete this founder?')){ await supabaseClient.from('founders').delete().eq('id', id); loadFounders(); showNotification('Founder deleted'); } };
         
         // AFFILIATES
-        async function loadAffiliates() {
-            if (!supabaseClient) return;
-            const { data } = await supabaseClient.from('affiliate_links').select('*');
-            const tbody = document.querySelector('#affiliatesTable tbody');
-            if (data?.length) {
-                tbody.innerHTML = data.map(a => `<tr>}<td><a href="${a.url}" target="_blank">${a.name}</a></td><td>${a.url.substring(0,40)}...</td><td>${a.clicks||0}</td><td><button class="edit-btn" onclick="editAffiliate(${a.id})"><i class="fas fa-edit"></i></button> <button class="delete-btn" onclick="deleteAffiliate(${a.id})"><i class="fas fa-trash"></i></button></td></tr>`).join('');
-            } else { tbody.innerHTML = '<tr><td colspan="4">No affiliates</td></tr>'; }
-        }
-        
-        function showAffiliateModal(link = null) {
-            currentEditId = link?.id || null;
-            document.getElementById('modalContent').innerHTML = `
-                <div class="modal-header"><h3>${link ? 'Edit Affiliate' : 'Add Affiliate'}</h3><button class="close-modal" onclick="closeModal()">&times;</button></div>
-                <form id="modalForm"><div class="form-group"><label>Name</label><input type="text" id="name" value="${link?.name||''}" required></div>
-                <div class="form-group"><label>URL</label><input type="url" id="url" value="${link?.url||''}" required></div>
-                <div class="form-group"><label>Description</label><textarea id="desc">${link?.description||''}</textarea></div>
-                <button type="submit" class="btn-add">Save</button></form>`;
-            document.getElementById('modalForm').onsubmit = async (e) => {
-                e.preventDefault();
-                const data = { name: document.getElementById('name').value, url: document.getElementById('url').value, description: document.getElementById('desc').value, active: true };
-                if (currentEditId) await supabaseClient.from('affiliate_links').update(data).eq('id', currentEditId);
-                else await supabaseClient.from('affiliate_links').insert([data]);
-                closeModal(); loadAffiliates(); showNotification('Affiliate saved!');
-            };
-            document.getElementById('modal').classList.add('active');
-        }
+        async function loadAffiliates() { if (!supabaseClient) return; const { data } = await supabaseClient.from('affiliate_links').select('*'); const tbody = document.querySelector('#affiliatesTable tbody'); if (data?.length) { tbody.innerHTML = data.map(a => `<td><td><a href="${a.url}" target="_blank">${a.name}</a></td><td>${a.url.substring(0,40)}...</td><td>${a.clicks||0}</td><td><button class="edit-btn" onclick="editAffiliate(${a.id})">Edit</button> <button class="delete-btn" onclick="deleteAffiliate(${a.id})">Delete</button></td></tr>`).join(''); } else { tbody.innerHTML = '<td><td colspan="4">No affiliates</td></tr>'; } }
+        function showAffiliateModal(link = null) { currentEditId = link?.id || null; document.getElementById('modalContent').innerHTML = `<div class="modal-header"><h3>${link ? 'Edit Affiliate' : 'Add Affiliate'}</h3><button class="close-modal" onclick="closeModal()">&times;</button></div><form id="modalForm"><div class="form-group"><label>Name</label><input type="text" id="name" value="${link?.name||''}" required></div><div class="form-group"><label>URL</label><input type="url" id="url" value="${link?.url||''}" required></div><div class="form-group"><label>Description</label><textarea id="desc">${link?.description||''}</textarea></div><button type="submit" class="btn-add">Save</button></form>`; document.getElementById('modalForm').onsubmit = async (e) => { e.preventDefault(); const data = { name: document.getElementById('name').value, url: document.getElementById('url').value, description: document.getElementById('desc').value, active: true }; if (currentEditId) await supabaseClient.from('affiliate_links').update(data).eq('id', currentEditId); else await supabaseClient.from('affiliate_links').insert([data]); closeModal(); loadAffiliates(); showNotification('Affiliate saved!'); }; document.getElementById('modal').classList.add('active'); }
         window.editAffiliate = async (id) => { const { data } = await supabaseClient.from('affiliate_links').select('*').eq('id', id).single(); showAffiliateModal(data); };
         window.deleteAffiliate = async (id) => { if(confirm('Delete this affiliate?')){ await supabaseClient.from('affiliate_links').delete().eq('id', id); loadAffiliates(); showNotification('Affiliate deleted'); } };
         
         // CATEGORIES
-        async function loadCategories() {
-            if (!supabaseClient) return;
-            const { data } = await supabaseClient.from('categories').select('*');
-            const container = document.getElementById('categoriesList');
-            if (data?.length) {
-                container.innerHTML = data.map(cat => `<div class="category-card-admin"><span><i class="fas fa-tag"></i> ${cat.name}</span><button class="delete-btn" onclick="deleteCategory(${cat.id})">Delete</button></div>`).join('');
-            } else { container.innerHTML = '<p>No categories</p>'; }
-        }
-        
-        function showCategoryModal() {
-            document.getElementById('modalContent').innerHTML = `<div class="modal-header"><h3>Add Category</h3><button class="close-modal" onclick="closeModal()">&times;</button></div>
-                <form id="modalForm"><div class="form-group"><label>Category Name</label><input type="text" id="catName" required></div>
-                <div class="form-group"><label>Slug (auto)</label><input type="text" id="catSlug" placeholder="auto-generated"></div>
-                <button type="submit" class="btn-add">Add Category</button></form>`;
-            document.getElementById('modalForm').onsubmit = async (e) => {
-                e.preventDefault();
-                const name = document.getElementById('catName').value;
-                const slug = document.getElementById('catSlug').value || name.toLowerCase().replace(/ /g, '-');
-                await supabaseClient.from('categories').insert([{ name, slug, active: true }]);
-                closeModal(); loadCategories(); showNotification('Category added!');
-            };
-            document.getElementById('modal').classList.add('active');
-        }
+        async function loadCategories() { if (!supabaseClient) return; const { data } = await supabaseClient.from('categories').select('*'); const container = document.getElementById('categoriesList'); if (data?.length) { container.innerHTML = data.map(cat => `<div class="category-card-admin"><span><i class="fas fa-tag"></i> ${cat.name}</span><button class="delete-btn" onclick="deleteCategory(${cat.id})">Delete</button></div>`).join(''); } else { container.innerHTML = '<p>No categories</p>'; } }
+        function showCategoryModal() { document.getElementById('modalContent').innerHTML = `<div class="modal-header"><h3>Add Category</h3><button class="close-modal" onclick="closeModal()">&times;</button></div><form id="modalForm"><div class="form-group"><label>Category Name</label><input type="text" id="catName" required></div><div class="form-group"><label>Slug</label><input type="text" id="catSlug" placeholder="auto-generated"></div><button type="submit" class="btn-add">Add Category</button></form>`; document.getElementById('modalForm').onsubmit = async (e) => { e.preventDefault(); const name = document.getElementById('catName').value; const slug = document.getElementById('catSlug').value || name.toLowerCase().replace(/ /g, '-'); await supabaseClient.from('categories').insert([{ name, slug, active: true }]); closeModal(); loadCategories(); showNotification('Category added!'); }; document.getElementById('modal').classList.add('active'); }
         window.deleteCategory = async (id) => { if(confirm('Delete this category?')){ await supabaseClient.from('categories').delete().eq('id', id); loadCategories(); showNotification('Category deleted'); } };
         
-        // ORDERS
+        // ORDERS, MESSAGES, SUBSCRIBERS
         async function loadOrders() { if(!supabaseClient) return; const {data} = await supabaseClient.from('orders').select('*'); const tbody = document.querySelector('#ordersTable tbody'); if(data?.length) tbody.innerHTML = data.map(o => `<tr><td>${o.order_number}</td><td>${o.customer_name}</td><td>$${o.total}</td><td>${o.payment_status}</td><td>${new Date(o.created_at).toLocaleDateString()}</td><td><button class="delete-btn" onclick="deleteOrder(${o.id})">Delete</button></td></tr>`).join(); else tbody.innerHTML = '<tr><td colspan="6">No orders</td></tr>'; }
         window.deleteOrder = async (id) => { if(confirm('Delete this order?')){ await supabaseClient.from('orders').delete().eq('id', id); loadOrders(); loadDashboardStats(); showNotification('Order deleted'); } };
-        
-        // MESSAGES
-        async function loadMessages() { if(!supabaseClient) return; const {data} = await supabaseClient.from('contact_messages').select('*'); const tbody = document.querySelector('#messagesTable tbody'); if(data?.length) tbody.innerHTML = data.map(m => `<tr><td>${m.name}</td><td>${m.email}</td><td>${m.subject||'-'}</td><td>${m.message.substring(0,50)}...</td><td>${new Date(m.created_at).toLocaleDateString()}</td><td><button class="delete-btn" onclick="deleteMessage(${m.id})">Delete</button></td></tr>`).join(); else tbody.innerHTML = '<td><td colspan="6">No messages</td></tr>'; }
+        async function loadMessages() { if(!supabaseClient) return; const {data} = await supabaseClient.from('contact_messages').select('*'); const tbody = document.querySelector('#messagesTable tbody'); if(data?.length) tbody.innerHTML = data.map(m => `<td><td>${m.name}</td><td>${m.email}</td><td>${m.subject||'-'}</td><td>${m.message.substring(0,50)}...</td><td>${new Date(m.created_at).toLocaleDateString()}</td><td><button class="delete-btn" onclick="deleteMessage(${m.id})">Delete</button></td></tr>`).join(); else tbody.innerHTML = '<tr><td colspan="6">No messages</td></tr>'; }
         window.deleteMessage = async (id) => { if(confirm('Delete this message?')){ await supabaseClient.from('contact_messages').delete().eq('id', id); loadMessages(); showNotification('Message deleted'); } };
-        
-        // SUBSCRIBERS
-        async function loadSubscribers() { if(!supabaseClient) return; const {data} = await supabaseClient.from('newsletter_subscribers').select('*'); const tbody = document.querySelector('#subscribersTable tbody'); if(data?.length) tbody.innerHTML = data.map(s => `<td><td>${s.email}</td><td>${new Date(s.subscribed_at).toLocaleDateString()}</td><td><button class="delete-btn" onclick="deleteSubscriber(${s.id})">Delete</button></td></tr>`).join(); else tbody.innerHTML = '<tr><td colspan="3">No subscribers</td></tr>'; }
+        async function loadSubscribers() { if(!supabaseClient) return; const {data} = await supabaseClient.from('newsletter_subscribers').select('*'); const tbody = document.querySelector('#subscribersTable tbody'); if(data?.length) tbody.innerHTML = data.map(s => `<tr><td>${s.email}</td><td>${new Date(s.subscribed_at).toLocaleDateString()}</td><td><button class="delete-btn" onclick="deleteSubscriber(${s.id})">Delete</button></td></tr>`).join(); else tbody.innerHTML = '<tr><td colspan="3">No subscribers</td></tr>'; }
         window.deleteSubscriber = async (id) => { if(confirm('Delete this subscriber?')){ await supabaseClient.from('newsletter_subscribers').delete().eq('id', id); loadSubscribers(); showNotification('Subscriber deleted'); } };
         
-        // LOAD PAYMENT SETTINGS
-        async function loadPaymentSettings() {
-            if(!supabaseClient) return;
-            const {data} = await supabaseClient.from('site_settings').select('*');
-            const settings = {}; 
-            data?.forEach(s => settings[s.key] = s.value);
-            
-            // Paystack
-            document.getElementById('paystackPublicKey').value = settings.paystack_public_key || '';
-            document.getElementById('paystackSecretKey').value = settings.paystack_secret_key || '';
-            document.getElementById('paystackEmail').value = settings.paystack_email || '';
-            
-            // M-Pesa
-            document.getElementById('mpesaShortcode').value = settings.mpesa_shortcode || '';
-            document.getElementById('mpesaConsumerKey').value = settings.mpesa_consumer_key || '';
-            document.getElementById('mpesaConsumerSecret').value = settings.mpesa_consumer_secret || '';
-            document.getElementById('mpesaPasskey').value = settings.mpesa_passkey || '';
-            document.getElementById('mpesaCallback').value = settings.mpesa_callback || '';
-            document.getElementById('mpesaEnvironment').value = settings.mpesa_environment || 'sandbox';
-            
-            // PayPal
-            document.getElementById('paypalClientId').value = settings.paypal_client_id || '';
-            document.getElementById('paypalSecretKey').value = settings.paypal_secret_key || '';
-            document.getElementById('paypalEmail').value = settings.paypal_email || '';
-            document.getElementById('paypalEnvironment').value = settings.paypal_environment || 'sandbox';
-            document.getElementById('paypalCurrency').value = settings.paypal_currency || 'USD';
-            
-            // Paystack Form Submit
-            document.getElementById('paystackForm').onsubmit = async (e) => {
-                e.preventDefault();
-                const updates = [
-                    {key: 'paystack_public_key', value: document.getElementById('paystackPublicKey').value},
-                    {key: 'paystack_secret_key', value: document.getElementById('paystackSecretKey').value},
-                    {key: 'paystack_email', value: document.getElementById('paystackEmail').value}
-                ];
-                for(const u of updates) await supabaseClient.from('site_settings').upsert(u, {onConflict:'key'});
-                showNotification('Paystack settings saved!');
-            };
-            
-            // M-Pesa Form Submit
-            document.getElementById('mpesaForm').onsubmit = async (e) => {
-                e.preventDefault();
-                const updates = [
-                    {key: 'mpesa_shortcode', value: document.getElementById('mpesaShortcode').value},
-                    {key: 'mpesa_consumer_key', value: document.getElementById('mpesaConsumerKey').value},
-                    {key: 'mpesa_consumer_secret', value: document.getElementById('mpesaConsumerSecret').value},
-                    {key: 'mpesa_passkey', value: document.getElementById('mpesaPasskey').value},
-                    {key: 'mpesa_callback', value: document.getElementById('mpesaCallback').value},
-                    {key: 'mpesa_environment', value: document.getElementById('mpesaEnvironment').value}
-                ];
-                for(const u of updates) await supabaseClient.from('site_settings').upsert(u, {onConflict:'key'});
-                showNotification('M-Pesa settings saved!');
-            };
-            
-            // PayPal Form Submit
-            document.getElementById('paypalForm').onsubmit = async (e) => {
-                e.preventDefault();
-                const updates = [
-                    {key: 'paypal_client_id', value: document.getElementById('paypalClientId').value},
-                    {key: 'paypal_secret_key', value: document.getElementById('paypalSecretKey').value},
-                    {key: 'paypal_email', value: document.getElementById('paypalEmail').value},
-                    {key: 'paypal_environment', value: document.getElementById('paypalEnvironment').value},
-                    {key: 'paypal_currency', value: document.getElementById('paypalCurrency').value}
-                ];
-                for(const u of updates) await supabaseClient.from('site_settings').upsert(u, {onConflict:'key'});
-                showNotification('PayPal settings saved!');
-            };
-        }
-        
         // SETTINGS
-        async function loadSettings() {
-            if(!supabaseClient) return;
-            const {data} = await supabaseClient.from('site_settings').select('*');
-            const settings = {}; data?.forEach(s=>settings[s.key]=s.value);
-            document.getElementById('siteName').value = settings.site_name || '';
-            document.getElementById('contactPhone').value = settings.contact_phone || '';
-            document.getElementById('contactEmail').value = settings.contact_email || '';
-            document.getElementById('address').value = settings.address || '';
-            document.getElementById('exchangeRate').value = settings.exchange_rate || '115';
-            document.getElementById('whatsappNumber').value = settings.whatsapp_number || '';
-            document.getElementById('primaryColor').value = settings.primary_color || '#2e7d32';
-            document.getElementById('secondaryColor').value = settings.secondary_color || '#ff8f00';
-            if(settings.logo_url) { document.getElementById('logoPreview').src = settings.logo_url; document.getElementById('logoPreview').style.display = 'block'; }
-            
-            document.getElementById('settingsForm').onsubmit = async (e) => {
-                e.preventDefault();
-                let logoUrl = settings.logo_url || '';
-                const file = document.getElementById('logoFile').files[0];
-                const saveSettings = async (logo) => {
-                    const updates = [{key:'site_name', value:document.getElementById('siteName').value},{key:'contact_phone', value:document.getElementById('contactPhone').value},{key:'contact_email', value:document.getElementById('contactEmail').value},{key:'address', value:document.getElementById('address').value},{key:'exchange_rate', value:document.getElementById('exchangeRate').value},{key:'whatsapp_number', value:document.getElementById('whatsappNumber').value},{key:'primary_color', value:document.getElementById('primaryColor').value},{key:'secondary_color', value:document.getElementById('secondaryColor').value},{key:'logo_url', value:logo}];
-                    for(const u of updates) await supabaseClient.from('site_settings').upsert(u, {onConflict:'key'});
-                    showNotification('Settings saved!');
-                };
-                if (file) { const reader = new FileReader(); reader.onload = (ev) => saveSettings(ev.target.result); reader.readAsDataURL(file); }
-                else { saveSettings(logoUrl); }
-            };
-        }
+        async function loadSettings() { if(!supabaseClient) return; const {data} = await supabaseClient.from('site_settings').select('*'); const settings = {}; data?.forEach(s=>settings[s.key]=s.value); document.getElementById('siteName').value = settings.site_name || ''; document.getElementById('contactPhone').value = settings.contact_phone || ''; document.getElementById('contactEmail').value = settings.contact_email || ''; document.getElementById('address').value = settings.address || ''; document.getElementById('exchangeRate').value = settings.exchange_rate || '115'; document.getElementById('whatsappNumber').value = settings.whatsapp_number || ''; document.getElementById('primaryColor').value = settings.primary_color || '#2e7d32'; document.getElementById('secondaryColor').value = settings.secondary_color || '#ff8f00'; if(settings.logo_url) { document.getElementById('logoPreview').src = settings.logo_url; document.getElementById('logoPreview').style.display = 'block'; } document.getElementById('settingsForm').onsubmit = async (e) => { e.preventDefault(); let logoUrl = settings.logo_url || ''; const file = document.getElementById('logoFile').files[0]; const save = async (logo) => { const updates = [{key:'site_name', value:document.getElementById('siteName').value},{key:'contact_phone', value:document.getElementById('contactPhone').value},{key:'contact_email', value:document.getElementById('contactEmail').value},{key:'address', value:document.getElementById('address').value},{key:'exchange_rate', value:document.getElementById('exchangeRate').value},{key:'whatsapp_number', value:document.getElementById('whatsappNumber').value},{key:'primary_color', value:document.getElementById('primaryColor').value},{key:'secondary_color', value:document.getElementById('secondaryColor').value},{key:'logo_url', value:logo}]; for(const u of updates) await supabaseClient.from('site_settings').upsert(u, {onConflict:'key'}); showNotification('Settings saved!'); }; if (file) { const reader = new FileReader(); reader.onload = (ev) => save(ev.target.result); reader.readAsDataURL(file); } else { save(logoUrl); } }; }
+        async function loadPaymentSettings() { if(!supabaseClient) return; const {data} = await supabaseClient.from('site_settings').select('*'); const settings = {}; data?.forEach(s=>settings[s.key]=s.value); document.getElementById('paystackPublicKey').value = settings.paystack_public_key || ''; document.getElementById('paystackSecretKey').value = settings.paystack_secret_key || ''; document.getElementById('paystackEmail').value = settings.paystack_email || ''; document.getElementById('mpesaShortcode').value = settings.mpesa_shortcode || ''; document.getElementById('mpesaConsumerKey').value = settings.mpesa_consumer_key || ''; document.getElementById('mpesaConsumerSecret').value = settings.mpesa_consumer_secret || ''; document.getElementById('mpesaPasskey').value = settings.mpesa_passkey || ''; document.getElementById('mpesaEnvironment').value = settings.mpesa_environment || 'sandbox'; document.getElementById('paypalClientId').value = settings.paypal_client_id || ''; document.getElementById('paypalSecretKey').value = settings.paypal_secret_key || ''; document.getElementById('paypalEmail').value = settings.paypal_email || ''; document.getElementById('paypalEnvironment').value = settings.paypal_environment || 'sandbox'; document.getElementById('paypalCurrency').value = settings.paypal_currency || 'USD'; document.getElementById('paystackForm').onsubmit = async (e) => { e.preventDefault(); const updates = [{key:'paystack_public_key', value:document.getElementById('paystackPublicKey').value},{key:'paystack_secret_key', value:document.getElementById('paystackSecretKey').value},{key:'paystack_email', value:document.getElementById('paystackEmail').value}]; for(const u of updates) await supabaseClient.from('site_settings').upsert(u, {onConflict:'key'}); showNotification('Paystack saved!'); }; document.getElementById('mpesaForm').onsubmit = async (e) => { e.preventDefault(); const updates = [{key:'mpesa_shortcode', value:document.getElementById('mpesaShortcode').value},{key:'mpesa_consumer_key', value:document.getElementById('mpesaConsumerKey').value},{key:'mpesa_consumer_secret', value:document.getElementById('mpesaConsumerSecret').value},{key:'mpesa_passkey', value:document.getElementById('mpesaPasskey').value},{key:'mpesa_environment', value:document.getElementById('mpesaEnvironment').value}]; for(const u of updates) await supabaseClient.from('site_settings').upsert(u, {onConflict:'key'}); showNotification('M-Pesa saved!'); }; document.getElementById('paypalForm').onsubmit = async (e) => { e.preventDefault(); const updates = [{key:'paypal_client_id', value:document.getElementById('paypalClientId').value},{key:'paypal_secret_key', value:document.getElementById('paypalSecretKey').value},{key:'paypal_email', value:document.getElementById('paypalEmail').value},{key:'paypal_environment', value:document.getElementById('paypalEnvironment').value},{key:'paypal_currency', value:document.getElementById('paypalCurrency').value}]; for(const u of updates) await supabaseClient.from('site_settings').upsert(u, {onConflict:'key'}); showNotification('PayPal saved!'); }; }
         
-        function setupMenu() {
-            document.querySelectorAll('.menu-item').forEach(item => {
-                item.addEventListener('click', () => {
-                    document.querySelectorAll('.menu-item').forEach(m=>m.classList.remove('active'));
-                    item.classList.add('active');
-                    document.querySelectorAll('.content-panel').forEach(p=>p.classList.remove('active'));
-                    document.getElementById(`${item.dataset.panel}Panel`).classList.add('active');
-                    document.getElementById('pageTitle').innerText = item.querySelector('span')?.innerText || 'Dashboard';
-                });
-            });
-        }
-        
+        function setupMenu() { document.querySelectorAll('.menu-item').forEach(item => { item.addEventListener('click', () => { document.querySelectorAll('.menu-item').forEach(m=>m.classList.remove('active')); item.classList.add('active'); document.querySelectorAll('.content-panel').forEach(p=>p.classList.remove('active')); document.getElementById(`${item.dataset.panel}Panel`).classList.add('active'); document.getElementById('pageTitle').innerText = item.querySelector('span')?.innerText || 'Dashboard'; }); }); }
         function closeModal() { document.getElementById('modal').classList.remove('active'); if(blogEditor) { blogEditor.destroy(); blogEditor=null; } currentEditId=null; }
         
         document.addEventListener('DOMContentLoaded', () => { setupMenu(); initSupabase(); });
         window.closeModal = closeModal; window.logout = logout; window.refreshAll = refreshAll; window.switchToPanel = switchToPanel;
         window.showProductModal = showProductModal; window.showBlogModal = showBlogModal; window.showCorporateModal = showCorporateModal;
         window.showFounderModal = showFounderModal; window.showAffiliateModal = showAffiliateModal; window.showCategoryModal = showCategoryModal;
+        window.loadVisitorStats = loadVisitorStats;
     </script>
 </body>
 </html>
