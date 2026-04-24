@@ -9,6 +9,233 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        /* Smooth Scroll Behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Section Spacing & Animations */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .fade-left {
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .fade-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .fade-right {
+            opacity: 0;
+            transform: translateX(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .fade-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        /* Stagger Children Animations */
+        .stagger-children > * {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .stagger-children.visible > *:nth-child(1) { transition-delay: 0.1s; opacity: 1; transform: translateY(0); }
+        .stagger-children.visible > *:nth-child(2) { transition-delay: 0.2s; opacity: 1; transform: translateY(0); }
+        .stagger-children.visible > *:nth-child(3) { transition-delay: 0.3s; opacity: 1; transform: translateY(0); }
+        .stagger-children.visible > *:nth-child(4) { transition-delay: 0.4s; opacity: 1; transform: translateY(0); }
+        .stagger-children.visible > *:nth-child(5) { transition-delay: 0.5s; opacity: 1; transform: translateY(0); }
+        .stagger-children.visible > *:nth-child(6) { transition-delay: 0.6s; opacity: 1; transform: translateY(0); }
+        
+        /* Enhanced Section Spacing */
+        section {
+            padding: 6rem 0;
+            position: relative;
+        }
+        
+        /* Parallax Background Effect */
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        
+        /* Hero Enhanced */
+        .hero {
+            background: linear-gradient(135deg, rgba(13, 59, 46, 0.92) 0%, rgba(26, 92, 72, 0.88) 100%), url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        
+        /* Category Cards Enhanced */
+        .category-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Product Cards Enhanced */
+        .product-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .product-image {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+        
+        /* Blog Cards Enhanced */
+        .blog-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+        
+        /* About Preview Enhanced */
+        .about-preview {
+            background: linear-gradient(135deg, var(--bg-light) 0%, #ffffff 100%);
+            position: relative;
+        }
+        
+        .about-preview::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.03;
+            pointer-events: none;
+        }
+        
+        /* Focus Areas Enhanced */
+        .focus-item {
+            transition: all 0.3s ease;
+        }
+        
+        .focus-item:hover {
+            transform: translateX(8px);
+            background: white;
+            box-shadow: var(--shadow-md);
+        }
+        
+        /* Safety Commitment Enhanced */
+        .safety-commitment {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .safety-commitment::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=1920&q=80');
+            background-size: cover;
+            opacity: 0.05;
+            pointer-events: none;
+        }
+        
+        /* Newsletter Enhanced */
+        .newsletter {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            position: relative;
+        }
+        
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .scroll-indicator i {
+            font-size: 2rem;
+            color: white;
+            opacity: 0.8;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+        
+        /* Section Title Enhanced */
+        .section-title {
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            section {
+                padding: 4rem 0;
+            }
+            
+            .hero {
+                min-height: 70vh;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+                white-space: normal;
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="top-bar">
@@ -50,35 +277,44 @@
 
     <section class="hero">
         <div class="container">
-            <div class="hero-content">
+            <div class="hero-content fade-up">
                 <h2>Welcome to Zakiyah Arreys Healthcare</h2>
                 <p>Your trusted partner in natural wellness and preventive health</p>
-                <a href="products.html" class="btn btn-primary">Shop Now</a>
-                <a href="about.html" class="btn btn-secondary">Learn More</a>
+                <div class="stagger-children" style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                    <a href="products.html" class="btn btn-primary">Shop Now</a>
+                    <a href="about.html" class="btn btn-secondary">Learn More</a>
+                </div>
+            </div>
+            <div class="scroll-indicator" onclick="document.getElementById('categories').scrollIntoView({behavior: 'smooth'})">
+                <i class="fas fa-chevron-down"></i>
             </div>
         </div>
     </section>
 
-    <section class="categories">
+    <section id="categories" class="categories">
         <div class="container">
-            <h2 class="section-title">Our Product Categories</h2>
-            <div class="category-grid" id="categoryGrid"><div class="loader"><i class="fas fa-spinner"></i> Loading...</div></div>
+            <h2 class="section-title fade-up">Our Product Categories</h2>
+            <div class="category-grid stagger-children" id="categoryGrid">
+                <div class="loader"><i class="fas fa-spinner"></i> Loading...</div>
+            </div>
         </div>
     </section>
 
     <section class="featured-products">
         <div class="container">
-            <h2 class="section-title">Featured Supplements</h2>
-            <div class="products-grid" id="featuredProducts"><div class="loader"><i class="fas fa-spinner"></i> Loading products...</div></div>
+            <h2 class="section-title fade-up">Featured Supplements</h2>
+            <div class="products-grid stagger-children" id="featuredProducts">
+                <div class="loader"><i class="fas fa-spinner"></i> Loading products...</div>
+            </div>
         </div>
     </section>
 
     <section class="about-preview">
         <div class="container">
-            <div class="about-content">
+            <div class="about-content fade-left">
                 <h2>About Zakiyah Arreys Healthcare</h2>
                 <p>Founded with the vision of empowering people to take an active role in their health through natural wellness solutions.</p>
-                <div class="focus-areas">
+                <div class="focus-areas stagger-children">
                     <div class="focus-item"><i class="fas fa-check-circle"></i><span>Quality supplements</span></div>
                     <div class="focus-item"><i class="fas fa-check-circle"></i><span>Expert guidance</span></div>
                     <div class="focus-item"><i class="fas fa-check-circle"></i><span>Natural solutions</span></div>
@@ -91,23 +327,29 @@
 
     <section class="latest-blog">
         <div class="container">
-            <h2 class="section-title">Latest Health Articles</h2>
-            <div class="blog-grid" id="latestPosts"><div class="loader"><i class="fas fa-spinner"></i> Loading articles...</div></div>
+            <h2 class="section-title fade-up">Latest Health Articles</h2>
+            <div class="blog-grid stagger-children" id="latestPosts">
+                <div class="loader"><i class="fas fa-spinner"></i> Loading articles...</div>
+            </div>
         </div>
     </section>
 
     <section class="safety-commitment">
         <div class="container">
-            <h2>Our Commitment to Safety</h2>
-            <p>At Zakiyah Arreys Healthcare, safety and responsibility are our priority.</p>
-            <div class="disclaimer"><strong>Disclaimer:</strong><p>Always seek advice from a qualified healthcare professional.</p></div>
+            <h2 class="section-title fade-up" style="color: white;">Our Commitment to Safety</h2>
+            <p class="fade-up" style="text-align: center; max-width: 800px; margin: 0 auto;">At Zakiyah Arreys Healthcare, safety and responsibility are our priority. We encourage all customers to use supplements responsibly and consult qualified healthcare professionals before starting any new health product.</p>
+            <div class="disclaimer fade-up">
+                <strong>Health Information Disclaimer:</strong>
+                <p>Always seek advice from a qualified healthcare professional regarding any medical concerns or before beginning any supplement program.</p>
+            </div>
         </div>
     </section>
 
     <section class="newsletter">
         <div class="container">
-            <h3>Subscribe to Our Newsletter</h3>
-            <form class="newsletter-form" id="newsletterForm">
+            <h3 class="fade-up">Subscribe to Our Wellness Newsletter</h3>
+            <p class="fade-up">Get health tips, product updates, and exclusive offers</p>
+            <form class="newsletter-form fade-up" id="newsletterForm">
                 <input type="email" id="newsletterEmail" placeholder="Your email address" required>
                 <button type="submit" class="btn btn-primary">Subscribe</button>
             </form>
@@ -160,5 +402,57 @@
     <script src="js/cart.js"></script>
     <script src="js/main.js"></script>
     <script src="js/tracker.js"></script>
+    
+    <script>
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        
+        // Observe all elements with animation classes
+        document.querySelectorAll('.fade-up, .fade-left, .fade-right, .stagger-children').forEach(el => {
+            observer.observe(el);
+        });
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+        
+        // Parallax effect on scroll
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                hero.style.backgroundPositionY = scrolled * 0.5 + 'px';
+            }
+        });
+        
+        // Add visible class to elements already in view on load
+        setTimeout(() => {
+            document.querySelectorAll('.fade-up, .fade-left, .fade-right, .stagger-children').forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < window.innerHeight - 100) {
+                    el.classList.add('visible');
+                }
+            });
+        }, 100);
+    </script>
 </body>
 </html>
