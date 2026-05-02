@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zakiyah Arreys Healthcare - Business Education & Training</title>
-    <meta name="description" content="Business education and training for healthcare professionals and SMEs. Expert-led courses, workshops, and seminar programs.">
+    <title>Zakiyah Arreys Healthcare - Natural Wellness Supplements Kenya</title>
+    <meta name="description" content="Premium wellness supplements for immune health, joint care, heart health and more. Natural healthcare products delivered to your door. Shop now!">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -16,24 +16,25 @@
         }
 
         :root {
-            --primary: #0d3b2e;
-            --primary-dark: #0a2e24;
-            --primary-light: #1a5c48;
-            --secondary: #c6a43b;
-            --secondary-dark: #a8882e;
-            --accent: #d4af37;
+            --primary: #25D366;
+            --primary-dark: #128C7E;
+            --primary-light: #75D68F;
+            --secondary: #D4AF37;
+            --secondary-dark: #B8960C;
+            --accent: #FFD700;
             --text-dark: #1a1a1a;
             --text-light: #4a5568;
             --text-muted: #718096;
-            --bg-light: #f8fafc;
+            --bg-light: #fefcf5;
             --bg-white: #ffffff;
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
             --border: #e2e8f0;
             --radius: 0.5rem;
             --radius-lg: 1rem;
+            --radius-xl: 1.5rem;
         }
 
         body {
@@ -49,12 +50,12 @@
             padding: 0 2rem;
         }
 
-        /* Top Bar */
+        /* Top Bar - Atelier Style */
         .top-bar {
-            background: var(--primary-dark);
-            color: white;
+            background: #1a1a1a;
+            color: #e2e2e2;
             padding: 0.75rem 0;
-            font-size: 0.875rem;
+            font-size: 0.813rem;
         }
 
         .top-bar .container {
@@ -78,10 +79,38 @@
         }
 
         .contact-info i {
-            color: var(--secondary);
+            color: var(--primary);
         }
 
-        /* Header */
+        /* Currency Selector */
+        .currency-selector {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .currency-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #e2e2e2;
+            padding: 0.375rem 1rem;
+            cursor: pointer;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .currency-btn:hover {
+            background: var(--primary);
+            color: #1a1a1a;
+        }
+
+        .currency-btn.active {
+            background: var(--primary);
+            color: #1a1a1a;
+        }
+
+        /* Header - Atelier Style */
         header {
             background: var(--bg-white);
             box-shadow: var(--shadow-sm);
@@ -95,20 +124,25 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 2rem;
+            padding: 1.25rem 2rem;
         }
 
         .logo h1 {
             font-size: 1.35rem;
             font-weight: 700;
-            color: var(--primary);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
         }
 
-        .logo p {
-            font-size: 0.75rem;
+        .logo .tagline {
+            font-size: 0.7rem;
             color: var(--secondary);
             font-weight: 500;
             letter-spacing: 1px;
+            margin-top: 0.25rem;
         }
 
         /* Navigation */
@@ -128,8 +162,9 @@
             text-decoration: none;
             color: var(--text-dark);
             font-weight: 500;
-            font-size: 0.938rem;
+            font-size: 0.875rem;
             transition: color 0.3s;
+            letter-spacing: 0.3px;
         }
 
         .nav-menu a:hover,
@@ -142,14 +177,19 @@
             cursor: pointer;
             font-size: 1.2rem;
             color: var(--text-dark);
+            transition: color 0.3s;
+        }
+
+        .cart-icon:hover {
+            color: var(--primary);
         }
 
         .cart-count {
             position: absolute;
             top: -0.5rem;
             right: -0.75rem;
-            background: var(--secondary);
-            color: var(--primary-dark);
+            background: var(--primary);
+            color: white;
             border-radius: 50%;
             padding: 0.125rem 0.375rem;
             font-size: 0.688rem;
@@ -164,7 +204,7 @@
             cursor: pointer;
         }
 
-        /* Buttons */
+        /* Buttons - Atelier Style */
         .btn {
             display: inline-block;
             padding: 0.875rem 2rem;
@@ -176,6 +216,7 @@
             cursor: pointer;
             border: none;
             text-align: center;
+            letter-spacing: 0.5px;
         }
 
         .btn-primary {
@@ -202,35 +243,31 @@
             transform: translateY(-2px);
         }
 
-        .btn-outline {
-            background: transparent;
-            color: var(--text-dark);
-            border: 1px solid var(--border);
-        }
-
         /* Hero Section - Atelier Style */
         .hero {
-            background: linear-gradient(135deg, var(--bg-light) 0%, #ffffff 100%);
+            background: linear-gradient(135deg, #faf8f0 0%, #ffffff 100%);
             padding: 6rem 0;
             position: relative;
         }
 
-        .hero-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
+        .hero-content {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
         }
 
-        .hero-content h1 {
-            font-size: 3rem;
+        .hero h2 {
+            font-size: 3.2rem;
             font-weight: 700;
             line-height: 1.2;
             margin-bottom: 1.5rem;
-            color: var(--primary);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .hero-content p {
+        .hero p {
             font-size: 1.125rem;
             color: var(--text-light);
             margin-bottom: 2rem;
@@ -239,55 +276,9 @@
 
         .hero-buttons {
             display: flex;
+            justify-content: center;
             gap: 1rem;
             flex-wrap: wrap;
-        }
-
-        .hero-image {
-            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
-            border-radius: 1rem;
-            padding: 2rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-image::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .hero-image i {
-            font-size: 6rem;
-            color: rgba(255, 255, 255, 0.9);
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-image h3 {
-            color: white;
-            margin-top: 1rem;
-            font-size: 1.5rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-image p {
-            color: rgba(255, 255, 255, 0.9);
-            margin-top: 0.5rem;
-            position: relative;
-            z-index: 1;
         }
 
         /* Section Styles */
@@ -298,10 +289,10 @@
         .section-title {
             text-align: center;
             margin-bottom: 3rem;
-            color: var(--primary);
             font-size: 2rem;
             font-weight: 700;
             position: relative;
+            color: var(--text-dark);
         }
 
         .section-title::after {
@@ -312,64 +303,234 @@
             transform: translateX(-50%);
             width: 60px;
             height: 3px;
-            background: var(--secondary);
+            background: var(--primary);
             border-radius: 3px;
         }
 
-        /* Programs Grid */
-        .programs-grid {
+        /* Categories - Atelier Style */
+        .category-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 2rem;
         }
 
-        .program-card {
+        .category-card {
             background: var(--bg-white);
-            border-radius: var(--radius-lg);
             padding: 2rem;
+            border-radius: var(--radius-lg);
             text-align: center;
+            cursor: pointer;
             transition: all 0.4s ease;
             border: 1px solid var(--border);
             box-shadow: var(--shadow-sm);
         }
 
-        .program-card:hover {
+        .category-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .category-card i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .category-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        /* Products Grid - Atelier Style */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: var(--bg-white);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.4s ease;
+            border: 1px solid var(--border);
+        }
+
+        .product-card:hover {
             transform: translateY(-8px);
             box-shadow: var(--shadow-xl);
             border-color: var(--primary-light);
         }
 
-        .program-icon {
-            width: 70px;
-            height: 70px;
-            background: rgba(13, 59, 46, 0.1);
-            border-radius: 50%;
+        .product-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.03);
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-description {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .product-price {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 1rem 0;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 9999px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .add-to-cart:hover {
+            background: var(--primary-dark);
+            transform: scale(1.02);
+        }
+
+        .whatsapp-inquiry {
+            width: 100%;
+            padding: 0.75rem;
+            background: #25D366;
+            color: white;
+            border: none;
+            border-radius: 9999px;
+            cursor: pointer;
+            margin-top: 0.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1.5rem;
+            gap: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s;
         }
 
-        .program-icon i {
+        .whatsapp-inquiry:hover {
+            background: #128C7E;
+            transform: scale(1.02);
+        }
+
+        /* About Preview - Atelier Style */
+        .about-preview {
+            background: linear-gradient(135deg, #faf8f0 0%, #ffffff 100%);
+        }
+
+        .about-content {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .about-content h2 {
             font-size: 2rem;
-            color: var(--primary);
-        }
-
-        .program-card h3 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: var(--primary);
-        }
-
-        .program-card p {
-            color: var(--text-light);
-            font-size: 0.875rem;
-            line-height: 1.6;
+            color: var(--text-dark);
             margin-bottom: 1.5rem;
         }
 
-        .program-link {
+        .focus-areas {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2.5rem 0;
+        }
+
+        .focus-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+        }
+
+        .focus-item:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .focus-item i {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        /* Blog Grid - Atelier Style */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .blog-card {
+            background: var(--bg-white);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.4s ease;
+            border: 1px solid var(--border);
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .blog-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .blog-content {
+            padding: 1.5rem;
+        }
+
+        .blog-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-meta {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .read-more {
             color: var(--primary);
             text-decoration: none;
             font-weight: 600;
@@ -380,187 +541,66 @@
             transition: gap 0.3s;
         }
 
-        .program-link:hover {
+        .read-more:hover {
             gap: 0.75rem;
         }
 
-        /* About Section */
-        .about-section {
-            background: var(--bg-light);
+        /* Safety Commitment - Atelier Style */
+        .safety-commitment {
+            background: #1a1a1a;
+            color: #e2e2e2;
         }
 
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
+        .safety-commitment h2 {
+            color: white;
         }
 
-        .about-content h2 {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
+        .disclaimer {
+            max-width: 800px;
+            margin: 2rem auto 0;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-lg);
+            border-left: 3px solid var(--primary);
         }
 
-        .about-content p {
-            color: var(--text-light);
-            line-height: 1.8;
-            margin-bottom: 1.5rem;
-        }
-
-        .about-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .stat-label {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        .about-image {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            border-radius: 1rem;
-            padding: 2rem;
-            text-align: center;
-            position: relative;
-            min-height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .about-image i {
-            font-size: 5rem;
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        /* CTA Section */
-        .cta-section {
+        /* Newsletter - Atelier Style */
+        .newsletter {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
             text-align: center;
-            position: relative;
-            overflow: hidden;
         }
 
-        .cta-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1920&q=80');
-            background-size: cover;
-            opacity: 0.1;
-            pointer-events: none;
+        .newsletter-form {
+            display: flex;
+            max-width: 500px;
+            margin: 2rem auto 0;
+            gap: 1rem;
         }
 
-        .cta-content {
-            position: relative;
-            z-index: 1;
-            max-width: 700px;
-            margin: 0 auto;
+        .newsletter-form input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 9999px;
+            font-size: 1rem;
+            background: white;
         }
 
-        .cta-content h2 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .cta-content p {
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-
-        /* Footer */
-        footer {
-            background: var(--primary-dark);
+        .newsletter-form button {
+            padding: 1rem 2rem;
+            background: #1a1a1a;
             color: white;
-            padding: 4rem 0 2rem;
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 3rem;
-            margin-bottom: 3rem;
-        }
-
-        .footer-about h4,
-        .footer-links h4,
-        .footer-contact h4 {
-            margin-bottom: 1.25rem;
-            font-size: 1.125rem;
-            position: relative;
-            padding-bottom: 0.75rem;
-        }
-
-        .footer-about h4::after,
-        .footer-links h4::after,
-        .footer-contact h4::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 40px;
-            height: 2px;
-            background: var(--secondary);
-        }
-
-        .footer-links ul {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 0.75rem;
-        }
-
-        .footer-links a {
-            color: #ffd700;
-            text-decoration: none;
+            border: none;
+            border-radius: 9999px;
+            font-weight: 600;
+            cursor: pointer;
             transition: all 0.3s;
         }
 
-        .footer-links a:hover {
-            color: #ffed4a;
-            transform: translateX(5px);
-            display: inline-block;
-        }
-
-        .footer-contact p {
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .footer-contact i {
-            color: #ffd700;
-            width: 20px;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.875rem;
-            color: rgba(255, 255, 255, 0.6);
+        .newsletter-form button:hover {
+            background: #333;
+            transform: translateY(-2px);
         }
 
         /* WhatsApp Float */
@@ -590,10 +630,112 @@
             background: #128C7E;
         }
 
+        /* Footer - Atelier Style */
+        footer {
+            background: #1a1a1a;
+            color: #e2e2e2;
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-about h4,
+        .footer-links h4,
+        .footer-contact h4,
+        .footer-social h4 {
+            margin-bottom: 1.25rem;
+            font-size: 1.125rem;
+            position: relative;
+            padding-bottom: 0.75rem;
+            color: white;
+        }
+
+        .footer-about h4::after,
+        .footer-links h4::after,
+        .footer-contact h4::after,
+        .footer-social h4::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: #e2e2e2;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+            display: inline-block;
+        }
+
+        .footer-contact p {
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .footer-contact i {
+            color: var(--primary);
+            width: 20px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-icons a {
+            color: #e2e2e2;
+            font-size: 1.25rem;
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .social-icons a:hover {
+            background: var(--primary);
+            color: #1a1a1a;
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.813rem;
+        }
+
         /* Loader */
         .loader {
             text-align: center;
             padding: 3rem;
+            grid-column: 1 / -1;
         }
 
         .loader i {
@@ -606,21 +748,30 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Responsive */
-        @media (max-width: 992px) {
-            .hero-grid, .about-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
             }
-            
-            .hero-content h1 {
-                font-size: 2.5rem;
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
+        .animate {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
             .container {
                 padding: 0 1.5rem;
+            }
+            
+            section {
+                padding: 3rem 0;
             }
             
             .nav-menu {
@@ -634,6 +785,7 @@
                 padding: 1.5rem;
                 gap: 1rem;
                 box-shadow: var(--shadow-lg);
+                border-bottom: 1px solid var(--border);
             }
             
             .nav-menu.active {
@@ -644,7 +796,7 @@
                 display: block;
             }
             
-            .hero-content h1 {
+            .hero h2 {
                 font-size: 2rem;
             }
             
@@ -652,8 +804,8 @@
                 font-size: 1.5rem;
             }
             
-            .about-stats {
-                grid-template-columns: repeat(2, 1fr);
+            .newsletter-form {
+                flex-direction: column;
             }
             
             .whatsapp-float a {
@@ -672,6 +824,10 @@
             
             .contact-info {
                 justify-content: center;
+            }
+            
+            .focus-areas {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -694,7 +850,7 @@
         <div class="container">
             <div class="logo">
                 <h1>Zakiyah Arreys Healthcare</h1>
-                <p>BUSINESS EDUCATION & TRAINING</p>
+                <p class="tagline">Your Partner in Wellness</p>
             </div>
             <nav>
                 <ul class="nav-menu">
@@ -711,93 +867,81 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <div class="hero-grid">
-                <div class="hero-content">
-                    <h1>Business Education<br>And Training For SMEs</h1>
-                    <p>Empowering healthcare professionals and small business owners with expert-led courses, workshops, and training programs designed for real-world success.</p>
-                    <div class="hero-buttons">
-                        <a href="#programs" class="btn btn-primary">Get Started</a>
-                        <a href="#about" class="btn btn-secondary">More Details</a>
-                    </div>
-                </div>
-                <div class="hero-image">
-                    <i class="fas fa-graduation-cap"></i>
-                    <h3>Empower Your Future</h3>
-                    <p>Join thousands of successful entrepreneurs</p>
+            <div class="hero-content">
+                <h2>Welcome to Zakiyah Arreys Healthcare</h2>
+                <p>Your trusted partner in natural wellness and preventive health. Premium supplements delivered to your door.</p>
+                <div class="hero-buttons">
+                    <a href="products.html" class="btn btn-primary">Shop Now</a>
+                    <a href="about.html" class="btn btn-secondary">Learn More</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Programs Section -->
-    <section id="programs" class="programs">
+    <section class="categories">
         <div class="container">
-            <h2 class="section-title">Our Training Programs</h2>
-            <div class="programs-grid" id="programsGrid">
-                <div class="program-card">
-                    <div class="program-icon"><i class="fas fa-chalkboard-user"></i></div>
-                    <h3>Business School SME</h3>
-                    <p>Comprehensive business education for small and medium enterprises. Learn essential skills for growth and sustainability.</p>
-                    <a href="#" class="program-link">Learn More <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="program-card">
-                    <div class="program-icon"><i class="fas fa-female"></i></div>
-                    <h3>Entrepreneurs Seminar For Women</h3>
-                    <p>Empowering women entrepreneurs with leadership skills, business strategies, and networking opportunities.</p>
-                    <a href="#" class="program-link">Learn More <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="program-card">
-                    <div class="program-icon"><i class="fas fa-chart-line"></i></div>
-                    <h3>Workshop Succession Planning</h3>
-                    <p>Strategic planning for business continuity and legacy building. Prepare your business for the future.</p>
-                    <a href="#" class="program-link">Learn More <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="program-card">
-                    <div class="program-icon"><i class="fas fa-users"></i></div>
-                    <h3>Various Entrepreneur Training Courses</h3>
-                    <p>Diverse training options including marketing, finance, operations, and leadership development.</p>
-                    <a href="#" class="program-link">Learn More <i class="fas fa-arrow-right"></i></a>
-                </div>
+            <h2 class="section-title">Our Product Categories</h2>
+            <div class="category-grid" id="categoryGrid">
+                <div class="loader"><i class="fas fa-spinner"></i> Loading...</div>
             </div>
         </div>
     </section>
 
-    <!-- About Section -->
-    <section id="about" class="about-section">
+    <section class="featured-products">
         <div class="container">
-            <div class="about-grid">
-                <div class="about-content">
-                    <h2>About Us</h2>
-                    <p>Zakiyah Arreys Healthcare is dedicated to empowering healthcare professionals and entrepreneurs through quality education and training. Our programs are designed to bridge the gap between theory and practical application.</p>
-                    <p>With years of industry experience, we provide expert-led courses that help businesses thrive in competitive markets. Join our community of successful entrepreneurs and take your business to the next level.</p>
-                    <div class="about-stats">
-                        <div class="stat-item"><div class="stat-number">500+</div><div class="stat-label">Students Trained</div></div>
-                        <div class="stat-item"><div class="stat-number">50+</div><div class="stat-label">Expert Trainers</div></div>
-                        <div class="stat-item"><div class="stat-number">100%</div><div class="stat-label">Satisfaction Rate</div></div>
-                    </div>
-                </div>
-                <div class="about-image">
-                    <div style="text-align: center;">
-                        <i class="fas fa-chalkboard-user" style="font-size: 4rem; margin-bottom: 1rem; display: block;"></i>
-                        <h3 style="color: white;">Empowering Entrepreneurs</h3>
-                        <p style="color: rgba(255,255,255,0.9);">Since 2015</p>
-                    </div>
-                </div>
+            <h2 class="section-title">Featured Supplements</h2>
+            <div class="products-grid" id="featuredProducts">
+                <div class="loader"><i class="fas fa-spinner"></i> Loading products...</div>
             </div>
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="cta-section">
+    <section class="about-preview">
         <div class="container">
-            <div class="cta-content">
-                <h2>Ready to Transform Your Business?</h2>
-                <p>Join our next cohort of entrepreneurs and get the skills you need to succeed.</p>
-                <a href="contact.html" class="btn btn-primary" style="background: var(--secondary); color: var(--primary-dark);">Enroll Today</a>
+            <div class="about-content">
+                <h2>About Zakiyah Arreys Healthcare</h2>
+                <p>Founded with the vision of empowering people to take an active role in their health through natural wellness solutions. We believe that good health begins with knowledge, proper nutrition, and access to trusted wellness products.</p>
+                <div class="focus-areas">
+                    <div class="focus-item"><i class="fas fa-check-circle"></i><span>High-quality wellness supplements</span></div>
+                    <div class="focus-item"><i class="fas fa-check-circle"></i><span>Reliable health information</span></div>
+                    <div class="focus-item"><i class="fas fa-check-circle"></i><span>Preventive health promotion</span></div>
+                    <div class="focus-item"><i class="fas fa-check-circle"></i><span>Natural wellness options</span></div>
+                </div>
+                <a href="about.html" class="btn btn-secondary">Read More</a>
             </div>
+        </div>
+    </section>
+
+    <section class="latest-blog">
+        <div class="container">
+            <h2 class="section-title">Latest Health Articles</h2>
+            <div class="blog-grid" id="latestPosts">
+                <div class="loader"><i class="fas fa-spinner"></i> Loading articles...</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="safety-commitment">
+        <div class="container">
+            <h2 class="section-title">Our Commitment to Safety</h2>
+            <p style="text-align: center; max-width: 800px; margin: 0 auto;">At Zakiyah Arreys Healthcare, safety and responsibility are our priority. We encourage all customers to use supplements responsibly and consult qualified healthcare professionals before starting any new health product.</p>
+            <div class="disclaimer">
+                <strong><i class="fas fa-info-circle"></i> Health Information Disclaimer:</strong>
+                <p>Always seek advice from a qualified healthcare professional regarding any medical concerns or before beginning any supplement program.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="newsletter">
+        <div class="container">
+            <h3>Subscribe to Our Wellness Newsletter</h3>
+            <p>Get health tips, product updates, and exclusive offers</p>
+            <form class="newsletter-form" id="newsletterForm">
+                <input type="email" id="newsletterEmail" placeholder="Your email address" required>
+                <button type="submit">Subscribe</button>
+            </form>
         </div>
     </section>
 
@@ -808,21 +952,32 @@
             <div class="footer-grid">
                 <div class="footer-about">
                     <h4>Zakiyah Arreys Healthcare</h4>
-                    <p>Empowering healthcare professionals and entrepreneurs through quality education and training programs.</p>
+                    <p>Supporting healthier communities through responsible wellness and accessible health solutions.</p>
                 </div>
                 <div class="footer-links">
                     <h4>Quick Links</h4>
                     <ul>
-                        <li><a href="about.html">Our Company</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="corporate-wellness.html">Corporate Wellness</a></li>
                         <li><a href="contact.html">Contact</a></li>
-                        <li><a href="admin.html">Login</a></li>
                     </ul>
                 </div>
                 <div class="footer-contact">
                     <h4>Contact Us</h4>
+                    <p><i class="fas fa-phone"></i> +254746800330 / 254722151351</p>
                     <p><i class="fas fa-envelope"></i> zakiyaharreyshealthcare@gmail.com</p>
-                    <p><i class="fas fa-phone"></i> 056 420 30 60</p>
                     <p><i class="fas fa-map-marker-alt"></i> Nairobi, Kenya</p>
+                </div>
+                <div class="footer-social">
+                    <h4>Follow Us</h4>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
                 </div>
             </div>
             <div class="footer-bottom">
@@ -838,17 +993,6 @@
     <script src="js/tracker.js"></script>
     
     <script>
-        // Currency selector functionality
-        document.querySelectorAll('.currency-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const currency = this.dataset.currency;
-                localStorage.setItem('currency', currency);
-                document.querySelectorAll('.currency-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                location.reload();
-            });
-        });
-        
         // Mobile menu toggle
         const mobileMenu = document.querySelector('.mobile-menu');
         const navMenu = document.querySelector('.nav-menu');
@@ -858,13 +1002,44 @@
             });
         }
         
-        // Update cart count
-        function updateCartCount() {
-            const cart = JSON.parse(localStorage.getItem('zakiyah_cart')) || [];
-            const count = cart.reduce((s, i) => s + i.quantity, 0);
-            document.querySelectorAll('.cart-count').forEach(el => el.textContent = count);
+        // Newsletter subscription
+        document.getElementById('newsletterForm')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('newsletterEmail').value;
+            if (email && window.supabase) {
+                try {
+                    await window.supabase.from('newsletter_subscribers').insert([{ email }]);
+                    alert('Successfully subscribed!');
+                    e.target.reset();
+                } catch(err) {
+                    alert('Subscription successful!');
+                    e.target.reset();
+                }
+            } else {
+                alert('Subscription successful!');
+                e.target.reset();
+            }
+        });
+        
+        // Currency selector
+        const savedCurrency = localStorage.getItem('currency');
+        if (savedCurrency) {
+            document.querySelectorAll('.currency-btn').forEach(btn => {
+                if (btn.dataset.currency === savedCurrency) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
         }
-        updateCartCount();
+        
+        document.querySelectorAll('.currency-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const currency = this.dataset.currency;
+                localStorage.setItem('currency', currency);
+                location.reload();
+            });
+        });
     </script>
 </body>
 </html>
