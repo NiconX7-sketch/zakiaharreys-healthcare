@@ -1,18 +1,27 @@
 {
-  "rewrites": [
-    { "source": "/about", "destination": "/about.html" },
-    { "source": "/products", "destination": "/products.html" },
-    { "source": "/blog", "destination": "/blog.html" },
-    { "source": "/blog-post", "destination": "/blog-post.html" },
-    { "source": "/corporate-wellness", "destination": "/corporate-wellness.html" },
-    { "source": "/wellness-program", "destination": "/wellness-program.html" },
-    { "source": "/contact", "destination": "/contact.html" },
-    { "source": "/cart", "destination": "/cart.html" },
-    { "source": "/checkout", "destination": "/checkout.html" },
-    { "source": "/admin", "destination": "/admin.html" },
-    { "source": "/dashboard", "destination": "/dashboard.html" },
-    { "source": "/success", "destination": "/success.html" },
-    { "source": "/failure", "destination": "/failure.html" },
-    { "source": "/(.*)", "destination": "/$1.html" }
+  "version": 2,
+  "name": "zakiyah-healthcare",
+  "builds": [
+    { "src": "*.html", "use": "@vercel/static" },
+    { "src": "css/*.css", "use": "@vercel/static" },
+    { "src": "js/*.js", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/", "dest": "/index.html" },
+    { "src": "/index", "dest": "/index.html" },
+    { "src": "/about", "dest": "/about.html" },
+    { "src": "/products", "dest": "/products.html" },
+    { "src": "/blog", "dest": "/blog.html" },
+    { "src": "/blog-post", "dest": "/blog-post.html" },
+    { "src": "/corporate-wellness", "dest": "/corporate-wellness.html" },
+    { "src": "/wellness-program", "dest": "/wellness-program.html" },
+    { "src": "/contact", "dest": "/contact.html" },
+    { "src": "/cart", "dest": "/cart.html" },
+    { "src": "/checkout", "dest": "/checkout.html" },
+    { "src": "/admin", "dest": "/admin.html" },
+    { "src": "/dashboard", "dest": "/dashboard.html" },
+    { "src": "/success", "dest": "/success.html" },
+    { "src": "/failure", "dest": "/failure.html" },
+    { "src": "/(.*)", "dest": "/$1.html" }
   ]
 }
