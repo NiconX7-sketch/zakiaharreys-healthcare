@@ -1,6 +1,6 @@
 /* ============================================
    ZAKIYAH ARREYS HEALTHCARE - ATELIER THEME
-   WhatsApp Green (#25D366) as Primary Color
+   Healthcare Color Palette
    ============================================ */
 
 * {
@@ -10,23 +10,23 @@
 }
 
 :root {
-    --primary: #25D366;
-    --primary-dark: #128C7E;
-    --primary-light: #75D68F;
-    --secondary: #D4AF37;
-    --secondary-dark: #B8960C;
-    --accent: #FFD700;
-    --text-dark: #1a1a1a;
-    --text-light: #4a5568;
-    --text-muted: #718096;
-    --bg-light: #fefcf5;
-    --bg-white: #ffffff;
-    --bg-dark: #1a1a1a;
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
-    --border: #e2e8f0;
+    --primary: #0D6B5E;
+    --primary-dark: #0A5247;
+    --primary-light: #1A8F7C;
+    --secondary: #F4A261;
+    --secondary-dark: #E76F51;
+    --accent: #E9C46A;
+    --text-dark: #264653;
+    --text-light: #5A7D8C;
+    --text-muted: #8DA3B0;
+    --bg-light: #E9F5F2;
+    --bg-white: #FFFFFF;
+    --bg-dark: #264653;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+    --shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.12);
+    --border: #E2E8F0;
     --radius: 0.5rem;
     --radius-lg: 1rem;
     --radius-xl: 1.5rem;
@@ -46,11 +46,11 @@ body {
 }
 
 /* ============================================
-   TOP BAR - ATELIER STYLE
+   TOP BAR
    ============================================ */
 .top-bar {
     background: var(--bg-dark);
-    color: #e2e2e2;
+    color: white;
     padding: 0.75rem 0;
     font-size: 0.813rem;
 }
@@ -76,7 +76,7 @@ body {
 }
 
 .contact-info i {
-    color: var(--primary);
+    color: var(--secondary);
 }
 
 /* Currency Selector */
@@ -88,7 +88,7 @@ body {
 .currency-btn {
     background: rgba(255, 255, 255, 0.1);
     border: none;
-    color: #e2e2e2;
+    color: white;
     padding: 0.375rem 1rem;
     cursor: pointer;
     border-radius: 9999px;
@@ -98,17 +98,17 @@ body {
 }
 
 .currency-btn:hover {
-    background: var(--primary);
+    background: var(--secondary);
     color: var(--bg-dark);
 }
 
 .currency-btn.active {
-    background: var(--primary);
+    background: var(--secondary);
     color: var(--bg-dark);
 }
 
 /* ============================================
-   HEADER - ATELIER STYLE
+   HEADER
    ============================================ */
 header {
     background: var(--bg-white);
@@ -123,7 +123,7 @@ header .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.25rem 2rem;
+    padding: 1rem 2rem;
 }
 
 .logo img {
@@ -134,12 +134,9 @@ header .container {
 .logo h1 {
     font-size: 1.35rem;
     font-weight: 700;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    letter-spacing: -0.5px;
+    color: var(--primary);
     margin: 0;
+    letter-spacing: -0.5px;
 }
 
 .tagline {
@@ -169,7 +166,6 @@ nav {
     font-weight: 500;
     font-size: 0.875rem;
     transition: color 0.3s;
-    letter-spacing: 0.3px;
 }
 
 .nav-menu a:hover,
@@ -193,8 +189,8 @@ nav {
     position: absolute;
     top: -0.5rem;
     right: -0.75rem;
-    background: var(--primary);
-    color: white;
+    background: var(--secondary);
+    color: var(--bg-dark);
     border-radius: 50%;
     padding: 0.125rem 0.375rem;
     font-size: 0.688rem;
@@ -210,7 +206,7 @@ nav {
 }
 
 /* ============================================
-   BUTTONS - ATELIER STYLE
+   BUTTONS
    ============================================ */
 .btn {
     display: inline-block;
@@ -223,7 +219,6 @@ nav {
     cursor: pointer;
     border: none;
     text-align: center;
-    letter-spacing: 0.5px;
 }
 
 .btn-primary {
@@ -250,24 +245,16 @@ nav {
     transform: translateY(-2px);
 }
 
-.btn-outline {
-    background: transparent;
-    color: var(--text-dark);
-    border: 1px solid var(--border);
-}
-
-.btn-outline:hover {
-    border-color: var(--primary);
-    color: var(--primary);
-}
-
 /* ============================================
    HERO SECTION - ATELIER STYLE
    ============================================ */
 .hero {
-    background: linear-gradient(135deg, var(--bg-light) 0%, #ffffff 100%);
-    padding: 6rem 0;
+    background: linear-gradient(135deg, var(--bg-light) 0%, #FFFFFF 100%);
+    padding: 5rem 0;
     position: relative;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
 }
 
 .hero-content {
@@ -277,14 +264,11 @@ nav {
 }
 
 .hero h2 {
-    font-size: 3.2rem;
+    font-size: 3rem;
     font-weight: 700;
     line-height: 1.2;
     margin-bottom: 1.5rem;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--primary);
 }
 
 .hero p {
@@ -314,7 +298,7 @@ section {
     font-size: 2rem;
     font-weight: 700;
     position: relative;
-    color: var(--text-dark);
+    color: var(--primary);
 }
 
 .section-title::after {
@@ -325,26 +309,26 @@ section {
     transform: translateX(-50%);
     width: 60px;
     height: 3px;
-    background: var(--primary);
+    background: var(--secondary);
     border-radius: 3px;
 }
 
 /* ============================================
-   CATEGORIES - ATELIER STYLE
+   CATEGORIES - CARD DESIGN
    ============================================ */
 .category-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 2rem;
+    gap: 1.5rem;
 }
 
 .category-card {
     background: var(--bg-white);
-    padding: 2rem;
+    padding: 2rem 1.5rem;
     border-radius: var(--radius-lg);
     text-align: center;
     cursor: pointer;
-    transition: all 0.4s ease;
+    transition: all 0.3s ease;
     border: 1px solid var(--border);
     box-shadow: var(--shadow-sm);
 }
@@ -368,7 +352,7 @@ section {
 }
 
 /* ============================================
-   PRODUCTS GRID - ATELIER STYLE
+   PRODUCTS GRID
    ============================================ */
 .products-grid {
     display: grid;
@@ -381,7 +365,7 @@ section {
     border-radius: var(--radius-lg);
     overflow: hidden;
     box-shadow: var(--shadow-sm);
-    transition: all 0.4s ease;
+    transition: all 0.3s ease;
     border: 1px solid var(--border);
 }
 
@@ -409,15 +393,8 @@ section {
 .product-title {
     font-size: 1.1rem;
     font-weight: 700;
-    color: var(--primary-dark);
+    color: var(--primary);
     margin-bottom: 0.5rem;
-}
-
-.product-description {
-    font-size: 0.875rem;
-    color: var(--text-light);
-    margin-bottom: 1rem;
-    line-height: 1.5;
 }
 
 .product-price {
@@ -463,14 +440,13 @@ section {
 
 .whatsapp-inquiry:hover {
     background: #128C7E;
-    transform: scale(1.02);
 }
 
 /* ============================================
-   ABOUT PREVIEW - ATELIER STYLE
+   ABOUT PREVIEW
    ============================================ */
 .about-preview {
-    background: linear-gradient(135deg, var(--bg-light) 0%, #ffffff 100%);
+    background: var(--bg-light);
 }
 
 .about-content {
@@ -481,7 +457,7 @@ section {
 
 .about-content h2 {
     font-size: 2rem;
-    color: var(--text-dark);
+    color: var(--primary);
     margin-bottom: 1.5rem;
 }
 
@@ -514,7 +490,7 @@ section {
 }
 
 /* ============================================
-   BLOG GRID - ATELIER STYLE
+   BLOG GRID
    ============================================ */
 .blog-grid {
     display: grid;
@@ -527,7 +503,7 @@ section {
     border-radius: var(--radius-lg);
     overflow: hidden;
     box-shadow: var(--shadow-sm);
-    transition: all 0.4s ease;
+    transition: all 0.3s ease;
     border: 1px solid var(--border);
 }
 
@@ -576,11 +552,11 @@ section {
 }
 
 /* ============================================
-   SAFETY COMMITMENT - ATELIER STYLE
+   SAFETY COMMITMENT
    ============================================ */
 .safety-commitment {
     background: var(--bg-dark);
-    color: #e2e2e2;
+    color: white;
 }
 
 .safety-commitment .section-title {
@@ -588,20 +564,20 @@ section {
 }
 
 .safety-commitment .section-title::after {
-    background: var(--primary);
+    background: var(--secondary);
 }
 
 .disclaimer {
     max-width: 800px;
     margin: 2rem auto 0;
     padding: 1.5rem;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-lg);
-    border-left: 3px solid var(--primary);
+    border-left: 3px solid var(--secondary);
 }
 
 /* ============================================
-   NEWSLETTER - ATELIER STYLE
+   NEWSLETTER
    ============================================ */
 .newsletter {
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
@@ -632,17 +608,17 @@ section {
 
 .newsletter-form button {
     padding: 1rem 2rem;
-    background: var(--bg-dark);
-    color: white;
+    background: var(--secondary);
+    color: var(--bg-dark);
     border: none;
     border-radius: 9999px;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.3s;
 }
 
 .newsletter-form button:hover {
-    background: #333;
+    background: var(--secondary-dark);
     transform: translateY(-2px);
 }
 
@@ -676,11 +652,11 @@ section {
 }
 
 /* ============================================
-   FOOTER - ATELIER STYLE
+   FOOTER - WITH YOUR INFORMATION
    ============================================ */
 footer {
     background: var(--bg-dark);
-    color: #e2e2e2;
+    color: #E2E8F0;
     padding: 4rem 0 2rem;
 }
 
@@ -712,7 +688,7 @@ footer {
     left: 0;
     width: 40px;
     height: 2px;
-    background: var(--primary);
+    background: var(--secondary);
 }
 
 .footer-links ul {
@@ -724,13 +700,13 @@ footer {
 }
 
 .footer-links a {
-    color: #e2e2e2;
+    color: #E2E8F0;
     text-decoration: none;
     transition: all 0.3s;
 }
 
 .footer-links a:hover {
-    color: var(--primary);
+    color: var(--secondary);
     transform: translateX(5px);
     display: inline-block;
 }
@@ -743,7 +719,7 @@ footer {
 }
 
 .footer-contact i {
-    color: var(--primary);
+    color: var(--secondary);
     width: 20px;
 }
 
@@ -753,7 +729,7 @@ footer {
 }
 
 .social-icons a {
-    color: #e2e2e2;
+    color: #E2E8F0;
     font-size: 1.25rem;
     width: 36px;
     height: 36px;
@@ -766,7 +742,7 @@ footer {
 }
 
 .social-icons a:hover {
-    background: var(--primary);
+    background: var(--secondary);
     color: var(--bg-dark);
     transform: translateY(-3px);
 }
@@ -779,7 +755,7 @@ footer {
 }
 
 /* ============================================
-   LOADER
+   LOADER - FAST LOADING FIX
    ============================================ */
 .loader {
     text-align: center;
@@ -795,24 +771,6 @@ footer {
 
 @keyframes spin {
     to { transform: rotate(360deg); }
-}
-
-/* ============================================
-   ANIMATIONS
-   ============================================ */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.animate {
-    animation: fadeInUp 0.6s ease forwards;
 }
 
 /* ============================================
@@ -849,12 +807,13 @@ footer {
         display: block;
     }
     
-    .hero h2 {
-        font-size: 2rem;
+    .hero {
+        padding: 3rem 0;
+        min-height: auto;
     }
     
-    .hero {
-        padding: 4rem 0;
+    .hero h2 {
+        font-size: 2rem;
     }
     
     .section-title {
@@ -905,16 +864,5 @@ footer {
     
     .social-icons {
         justify-content: center;
-    }
-}
-
-@media (max-width: 480px) {
-    .hero h2 {
-        font-size: 1.6rem;
-    }
-    
-    .btn {
-        padding: 0.75rem 1.5rem;
-        font-size: 0.813rem;
     }
 }
