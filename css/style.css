@@ -1,6 +1,6 @@
 /* ============================================
    ZAKIYAH ARREYS HEALTHCARE - ATELIER THEME
-   Healthcare Color Palette
+   Original Colors Restored
    ============================================ */
 
 * {
@@ -10,23 +10,23 @@
 }
 
 :root {
-    --primary: #0D6B5E;
-    --primary-dark: #0A5247;
-    --primary-light: #1A8F7C;
-    --secondary: #F4A261;
-    --secondary-dark: #E76F51;
-    --accent: #E9C46A;
-    --text-dark: #264653;
-    --text-light: #5A7D8C;
-    --text-muted: #8DA3B0;
-    --bg-light: #E9F5F2;
-    --bg-white: #FFFFFF;
-    --bg-dark: #264653;
-    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.04);
-    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
-    --shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.12);
-    --border: #E2E8F0;
+    --primary: #0d3b2e;
+    --primary-dark: #0a2e24;
+    --primary-light: #1a5c48;
+    --secondary: #c6a43b;
+    --secondary-dark: #a8882e;
+    --accent: #d4af37;
+    --text-dark: #1a1a1a;
+    --text-light: #4a5568;
+    --text-muted: #718096;
+    --bg-light: #fefcf5;
+    --bg-white: #ffffff;
+    --bg-dark: #0a2e24;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+    --border: #e2e8f0;
     --radius: 0.5rem;
     --radius-lg: 1rem;
     --radius-xl: 1.5rem;
@@ -314,7 +314,7 @@ section {
 }
 
 /* ============================================
-   CATEGORIES - CARD DESIGN
+   CATEGORIES - MODERN CARD DESIGN
    ============================================ */
 .category-grid {
     display: grid;
@@ -352,7 +352,7 @@ section {
 }
 
 /* ============================================
-   PRODUCTS GRID
+   PRODUCTS GRID - MODERN CARD DESIGN
    ============================================ */
 .products-grid {
     display: grid;
@@ -379,11 +379,6 @@ section {
     width: 100%;
     height: 220px;
     object-fit: cover;
-    transition: transform 0.5s ease;
-}
-
-.product-card:hover .product-image {
-    transform: scale(1.03);
 }
 
 .product-info {
@@ -490,7 +485,7 @@ section {
 }
 
 /* ============================================
-   BLOG GRID
+   BLOG GRID - MODERN CARD DESIGN
    ============================================ */
 .blog-grid {
     display: grid;
@@ -652,7 +647,7 @@ section {
 }
 
 /* ============================================
-   FOOTER - WITH YOUR INFORMATION
+   FOOTER - WITH ALL YOUR INFORMATION
    ============================================ */
 footer {
     background: var(--bg-dark);
@@ -755,7 +750,7 @@ footer {
 }
 
 /* ============================================
-   LOADER - FAST LOADING FIX
+   LOADER
    ============================================ */
 .loader {
     text-align: center;
