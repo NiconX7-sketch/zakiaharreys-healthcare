@@ -1,0 +1,18 @@
+{
+  "rewrites": [
+    { "source": "/about", "destination": "/about.html" },
+    { "source": "/products", "destination": "/products.html" },
+    { "source": "/blog", "destination": "/blog.html" },
+    { "source": "/blog-post", "destination": "/blog-post.html" },
+    { "source": "/corporate-wellness", "destination": "/corporate-wellness.html" },
+    { "source": "/wellness-program", "destination": "/wellness-program.html" },
+    { "source": "/contact", "destination": "/contact.html" },
+    { "source": "/cart", "destination": "/cart.html" },
+    { "source": "/checkout", "destination": "/checkout.html" },
+    { "source": "/admin", "destination": "/admin.html" },
+    { "source": "/dashboard", "destination": "/dashboard.html" },
+    { "source": "/success", "destination": "/success.html" },
+    { "source": "/failure", "destination": "/failure.html" },
+    { "source": "/(.*)", "destination": "/$1.html" }
+  ]
+}
