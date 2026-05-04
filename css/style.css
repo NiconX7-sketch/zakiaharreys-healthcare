@@ -1,6 +1,6 @@
 /* ============================================
-   ZAKIYAH ARREYS HEALTHCARE - KELLY GREEN THEME
-   Primary Color: #4CBB17
+   ZAKIYAH ARREYS HEALTHCARE - BRIGHT GREEN + YELLOW THEME
+   Primary: #22BB22 | Accent: #F4D03F
    ============================================ */
 
 * {
@@ -10,12 +10,13 @@
 }
 
 :root {
-    --primary: #4CBB17;
-    --primary-dark: #3A8E12;
-    --primary-light: #6DCC3E;
-    --secondary: #8BA89A;
-    --secondary-light: #A8C4B6;
-    --accent: #D4B896;
+    --primary: #22BB22;
+    --primary-dark: #1A8E1A;
+    --primary-light: #4DCC4D;
+    --secondary: #F4D03F;
+    --secondary-dark: #E6C200;
+    --secondary-light: #F7DC6F;
+    --accent: #FFD700;
     --text-dark: #2C3E3E;
     --text-light: #5A6E6E;
     --text-muted: #8DA3A3;
@@ -45,7 +46,7 @@ body {
 }
 
 /* ============================================
-   ANIMATIONS FOR SPLIT SECTIONS
+   ANIMATIONS
    ============================================ */
 @keyframes slideInLeft {
     from { opacity: 0; transform: translateX(-60px); }
@@ -65,6 +66,11 @@ body {
 @keyframes float {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-12px); }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
 }
 
 /* Scroll Reveal Classes */
@@ -143,7 +149,7 @@ body {
 }
 
 .contact-info i {
-    color: var(--primary);
+    color: var(--secondary);
 }
 
 .currency-selector {
@@ -164,8 +170,8 @@ body {
 }
 
 .currency-btn:hover, .currency-btn.active {
-    background: var(--primary);
-    color: white;
+    background: var(--secondary);
+    color: var(--text-dark);
 }
 
 /* ============================================
@@ -228,8 +234,8 @@ header .container {
     position: absolute;
     top: -0.5rem;
     right: -0.75rem;
-    background: var(--primary);
-    color: white;
+    background: var(--secondary);
+    color: var(--text-dark);
     border-radius: 50%;
     padding: 0.125rem 0.375rem;
     font-size: 0.688rem;
@@ -284,11 +290,14 @@ header .container {
 }
 
 /* ============================================
-   HERO - SPLIT LAYOUT WITH ANIMATION
+   HERO - WITH VISIBLE BACKGROUND IMAGE
    ============================================ */
 .hero {
     padding: 5rem 0;
-    background: linear-gradient(135deg, var(--bg-light) 0%, #FFFFFF 100%);
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3)), url('https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=1920&q=80');
+    background-size: cover;
+    background-position: center;
+    position: relative;
 }
 
 .hero-split {
@@ -306,20 +315,33 @@ header .container {
     font-size: 3.2rem;
     font-weight: 600;
     line-height: 1.2;
-    color: var(--primary);
+    color: white;
     margin-bottom: 1.25rem;
 }
 
 .hero-content p {
     font-size: 1.1rem;
-    color: var(--text-light);
+    color: rgba(255, 255, 255, 0.95);
     margin-bottom: 2rem;
 }
 
-.hero-buttons {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
+.hero-content .btn-primary {
+    background: var(--secondary);
+    color: var(--text-dark);
+}
+
+.hero-content .btn-primary:hover {
+    background: var(--secondary-dark);
+}
+
+.hero-content .btn-secondary {
+    color: white;
+    border-color: white;
+}
+
+.hero-content .btn-secondary:hover {
+    background: white;
+    color: var(--primary);
 }
 
 .hero-image {
@@ -329,8 +351,7 @@ header .container {
 .hero-image img {
     width: 100%;
     border-radius: 2rem;
-    box-shadow: var(--shadow-lg);
-    transition: var(--transition);
+    box-shadow: var(--shadow-xl);
     animation: float 4s ease-in-out infinite;
 }
 
@@ -369,6 +390,36 @@ header .container {
     font-size: 0.95rem;
     font-weight: 500;
     color: var(--text-dark);
+}
+
+/* ============================================
+   SECTION TITLES WITH YELLOW ACCENT
+   ============================================ */
+.section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--secondary);
+    margin: 0.75rem auto 0;
+    border-radius: 3px;
+}
+
+.section-subtitle {
+    text-align: center;
+    color: var(--text-light);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto 3rem;
 }
 
 /* ============================================
@@ -459,10 +510,11 @@ header .container {
 }
 
 /* ============================================
-   ABOUT - SPLIT LAYOUT
+   ABOUT - WITH VISIBLE BACKGROUND
    ============================================ */
 .about-preview {
-    background: var(--bg-light);
+    background: linear-gradient(135deg, var(--bg-light) 0%, #FFFFFF 100%);
+    position: relative;
 }
 
 .about-split {
@@ -504,6 +556,7 @@ header .container {
     background: var(--bg-white);
     border-radius: 1rem;
     transition: var(--transition);
+    border-left: 3px solid var(--secondary);
 }
 
 .focus-item:hover {
@@ -568,10 +621,10 @@ header .container {
 }
 
 /* ============================================
-   SAFETY - WITH BACKGROUND IMAGE
+   SAFETY - WITH VISIBLE BACKGROUND IMAGE
    ============================================ */
 .safety-commitment {
-    background: linear-gradient(rgba(44, 62, 62, 0.85), rgba(44, 62, 62, 0.9)), url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1920&q=80');
+    background: linear-gradient(rgba(44, 62, 62, 0.75), rgba(44, 62, 62, 0.8)), url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1920&q=80');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -582,27 +635,35 @@ header .container {
     color: white;
 }
 
+.safety-commitment .section-title::after {
+    background: var(--secondary);
+}
+
 .disclaimer {
     max-width: 800px;
     margin: 2rem auto 0;
     padding: 1.5rem;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 1.5rem;
-    border-left: 3px solid var(--primary);
+    border-left: 3px solid var(--secondary);
 }
 
 /* ============================================
-   NEWSLETTER
+   NEWSLETTER - WITH YELLOW ACCENT
    ============================================ */
 .newsletter {
-    background: linear-gradient(135deg, var(--bg-light) 0%, #FFFFFF 100%);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
     text-align: center;
+    color: white;
 }
 
 .newsletter h3 {
     font-size: 2rem;
-    color: var(--primary);
     margin-bottom: 0.5rem;
+}
+
+.newsletter .section-title::after {
+    background: var(--secondary);
 }
 
 .newsletter-form {
@@ -615,24 +676,26 @@ header .container {
 .newsletter-form input {
     flex: 1;
     padding: 1rem 1.5rem;
-    border: 1px solid var(--border);
+    border: none;
     border-radius: 2rem;
+    font-size: 0.9rem;
     background: var(--bg-white);
 }
 
 .newsletter-form button {
     padding: 1rem 2rem;
-    background: var(--primary);
-    color: white;
+    background: var(--secondary);
+    color: var(--text-dark);
     border: none;
     border-radius: 2rem;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
     transition: var(--transition);
 }
 
 .newsletter-form button:hover {
-    background: var(--primary-dark);
+    background: var(--secondary-dark);
+    transform: translateY(-2px);
 }
 
 /* ============================================
@@ -691,7 +754,7 @@ footer {
 }
 
 .footer-links a:hover {
-    color: var(--primary);
+    color: var(--secondary);
     transform: translateX(5px);
 }
 
@@ -703,7 +766,7 @@ footer {
 }
 
 .footer-contact i {
-    color: var(--primary);
+    color: var(--secondary);
 }
 
 .social-icons {
@@ -724,8 +787,8 @@ footer {
 }
 
 .social-icons a:hover {
-    background: var(--primary);
-    color: white;
+    background: var(--secondary);
+    color: var(--text-dark);
     transform: translateY(-4px);
 }
 
