@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zakiyah Arreys Healthcare - Natural Wellness & Supplements</title>
+    <title>Zakiyah Arreys Healthcare - Natural Wellness & Supplements Kenya</title>
     <meta name="description" content="Premium wellness supplements for immune health, joint care, heart health and more. Natural healthcare products delivered to your door in Kenya.">
     <meta name="keywords" content="healthcare, wellness supplements, immune boosters, joint care, natural remedies, Kenya health">
     <meta name="author" content="Zakiyah Arreys Healthcare">
@@ -74,8 +74,8 @@
 
     <section class="categories">
         <div class="container">
-            <h2 class="section-title">Shop by Category</h2>
-            <p class="section-subtitle">Discover our range of premium wellness products</p>
+            <h2 class="section-title reveal">Shop by Category</h2>
+            <p class="section-subtitle reveal">Discover our range of premium wellness products</p>
             <div class="category-grid" id="categoryGrid">
                 <div class="loader"><i class="fas fa-spinner"></i> Loading...</div>
             </div>
@@ -84,8 +84,8 @@
 
     <section class="featured-products">
         <div class="container">
-            <h2 class="section-title">Featured Supplements</h2>
-            <p class="section-subtitle">Our most popular wellness solutions</p>
+            <h2 class="section-title reveal">Featured Supplements</h2>
+            <p class="section-subtitle reveal">Our most popular wellness solutions</p>
             <div class="products-grid" id="featuredProducts">
                 <div class="loader"><i class="fas fa-spinner"></i> Loading products...</div>
             </div>
@@ -95,23 +95,23 @@
     <section class="about-preview">
         <div class="container">
             <div class="about-content">
-                <h2>About Zakiyah Arreys Healthcare</h2>
-                <p>Founded with the vision of empowering people to take an active role in their health through natural wellness solutions. We believe that good health begins with knowledge, proper nutrition, and access to trusted wellness products.</p>
-                <div class="focus-areas">
-                    <div class="focus-item"><i class="fas fa-leaf"></i><span>Natural Ingredients</span></div>
-                    <div class="focus-item"><i class="fas fa-flask"></i><span>Science-Backed</span></div>
-                    <div class="focus-item"><i class="fas fa-heartbeat"></i><span>Preventive Care</span></div>
-                    <div class="focus-item"><i class="fas fa-star-of-life"></i><span>Quality Assured</span></div>
+                <h2 class="reveal-left">About Zakiyah Arreys Healthcare</h2>
+                <p class="reveal-right">Founded with the vision of empowering people to take an active role in their health through natural wellness solutions. We believe that good health begins with knowledge, proper nutrition, and access to trusted wellness products.</p>
+                <div class="focus-areas stagger-container">
+                    <div class="focus-item stagger-item"><i class="fas fa-leaf"></i><span>Natural Ingredients</span></div>
+                    <div class="focus-item stagger-item"><i class="fas fa-flask"></i><span>Science-Backed</span></div>
+                    <div class="focus-item stagger-item"><i class="fas fa-heartbeat"></i><span>Preventive Care</span></div>
+                    <div class="focus-item stagger-item"><i class="fas fa-star-of-life"></i><span>Quality Assured</span></div>
                 </div>
-                <a href="about.html" class="btn btn-secondary">Learn More About Us</a>
+                <a href="about.html" class="btn btn-secondary reveal">Learn More About Us</a>
             </div>
         </div>
     </section>
 
     <section class="latest-blog">
         <div class="container">
-            <h2 class="section-title">Health Insights</h2>
-            <p class="section-subtitle">Expert articles on wellness and healthy living</p>
+            <h2 class="section-title reveal">Health Insights</h2>
+            <p class="section-subtitle reveal">Expert articles on wellness and healthy living</p>
             <div class="blog-grid" id="latestPosts">
                 <div class="loader"><i class="fas fa-spinner"></i> Loading articles...</div>
             </div>
@@ -120,9 +120,9 @@
 
     <section class="safety-commitment">
         <div class="container">
-            <h2 class="section-title">Our Commitment to Safety</h2>
-            <p>At Zakiyah Arreys Healthcare, safety and responsibility are our priority. We encourage all customers to use supplements responsibly and consult qualified healthcare professionals before starting any new health product.</p>
-            <div class="disclaimer">
+            <h2 class="section-title reveal">Our Commitment to Safety</h2>
+            <p class="reveal">At Zakiyah Arreys Healthcare, safety and responsibility are our priority. We encourage all customers to use supplements responsibly and consult qualified healthcare professionals before starting any new health product.</p>
+            <div class="disclaimer reveal">
                 <strong><i class="fas fa-info-circle"></i> Health Information Disclaimer</strong>
                 <p>Always seek advice from a qualified healthcare professional regarding any medical concerns or before beginning any supplement program.</p>
             </div>
@@ -131,9 +131,9 @@
 
     <section class="newsletter">
         <div class="container">
-            <h3>Join Our Wellness Community</h3>
-            <p>Subscribe for health tips, product updates, and exclusive offers</p>
-            <form class="newsletter-form" id="newsletterForm">
+            <h3 class="reveal">Join Our Wellness Community</h3>
+            <p class="reveal">Subscribe for health tips, product updates, and exclusive offers</p>
+            <form class="newsletter-form reveal" id="newsletterForm">
                 <input type="email" id="newsletterEmail" placeholder="Your email address" required>
                 <button type="submit">Subscribe</button>
             </form>
@@ -205,6 +205,20 @@
             });
         }
         
+        // Scroll Reveal Animation
+        const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .stagger-item');
+        
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+        
+        revealElements.forEach(el => revealObserver.observe(el));
+        
         // Newsletter subscription
         document.getElementById('newsletterForm')?.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -242,6 +256,15 @@
                 localStorage.setItem('currency', currency);
                 location.reload();
             });
+        });
+        
+        // Parallax effect on hero
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                hero.style.backgroundPositionY = scrolled * 0.3 + 'px';
+            }
         });
     </script>
 </body>
