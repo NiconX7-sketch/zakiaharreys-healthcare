@@ -1,6 +1,6 @@
 /* ============================================
-   ZAKIYAH ARREYS HEALTHCARE - SPLIT LAYOUT THEME
-   With Beautiful Green & Animations
+   ZAKIYAH ARREYS HEALTHCARE - KELLY GREEN THEME
+   Primary Color: #4CBB17
    ============================================ */
 
 * {
@@ -10,9 +10,9 @@
 }
 
 :root {
-    --primary: #1A5F5F;
-    --primary-dark: #124545;
-    --primary-light: #2E7D7D;
+    --primary: #4CBB17;
+    --primary-dark: #3A8E12;
+    --primary-light: #6DCC3E;
     --secondary: #8BA89A;
     --secondary-light: #A8C4B6;
     --accent: #D4B896;
@@ -21,7 +21,7 @@
     --text-muted: #8DA3A3;
     --bg-light: #F5F0E8;
     --bg-white: #FFFFFF;
-    --bg-dark: #1A5F5F;
+    --bg-dark: #2C3E3E;
     --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.04);
     --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
     --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.12);
@@ -45,49 +45,29 @@ body {
 }
 
 /* ============================================
-   ANIMATIONS
+   ANIMATIONS FOR SPLIT SECTIONS
    ============================================ */
+@keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-60px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(60px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
 @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(40px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes fadeInLeft {
-    from { opacity: 0; transform: translateX(-50px); }
-    to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes fadeInRight {
-    from { opacity: 0; transform: translateX(50px); }
-    to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes scaleIn {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
-}
-
 @keyframes float {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
+    50% { transform: translateY(-12px); }
 }
 
-@keyframes slowZoom {
-    from { transform: scale(1); }
-    to { transform: scale(1.05); }
-}
-
-.reveal {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: all 0.8s ease;
-}
-
-.reveal.active {
-    opacity: 1;
-    transform: translateY(0);
-}
-
+/* Scroll Reveal Classes */
 .reveal-left {
     opacity: 0;
     transform: translateX(-50px);
@@ -110,11 +90,33 @@ body {
     transform: translateX(0);
 }
 
+.reveal-up {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s ease;
+}
+
+.reveal-up.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.stagger-container > * {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease;
+}
+
+.stagger-container.active > *:nth-child(1) { transition-delay: 0.05s; opacity: 1; transform: translateY(0); }
+.stagger-container.active > *:nth-child(2) { transition-delay: 0.15s; opacity: 1; transform: translateY(0); }
+.stagger-container.active > *:nth-child(3) { transition-delay: 0.25s; opacity: 1; transform: translateY(0); }
+.stagger-container.active > *:nth-child(4) { transition-delay: 0.35s; opacity: 1; transform: translateY(0); }
+
 /* ============================================
    TOP BAR
    ============================================ */
 .top-bar {
-    background: var(--primary-dark);
+    background: var(--text-dark);
     color: white;
     padding: 0.75rem 0;
     font-size: 0.875rem;
@@ -141,7 +143,7 @@ body {
 }
 
 .contact-info i {
-    color: var(--accent);
+    color: var(--primary);
 }
 
 .currency-selector {
@@ -162,8 +164,8 @@ body {
 }
 
 .currency-btn:hover, .currency-btn.active {
-    background: var(--accent);
-    color: var(--primary-dark);
+    background: var(--primary);
+    color: white;
 }
 
 /* ============================================
@@ -226,8 +228,8 @@ header .container {
     position: absolute;
     top: -0.5rem;
     right: -0.75rem;
-    background: var(--accent);
-    color: var(--primary-dark);
+    background: var(--primary);
+    color: white;
     border-radius: 50%;
     padding: 0.125rem 0.375rem;
     font-size: 0.688rem;
@@ -282,12 +284,11 @@ header .container {
 }
 
 /* ============================================
-   HERO - SPLIT LAYOUT
+   HERO - SPLIT LAYOUT WITH ANIMATION
    ============================================ */
 .hero {
     padding: 5rem 0;
     background: linear-gradient(135deg, var(--bg-light) 0%, #FFFFFF 100%);
-    overflow: hidden;
 }
 
 .hero-split {
@@ -298,7 +299,7 @@ header .container {
 }
 
 .hero-content {
-    animation: fadeInLeft 0.8s ease;
+    animation: slideInLeft 0.8s ease forwards;
 }
 
 .hero-content h2 {
@@ -322,52 +323,15 @@ header .container {
 }
 
 .hero-image {
-    position: relative;
-    animation: fadeInRight 0.8s ease;
+    animation: slideInRight 0.8s ease forwards;
 }
 
 .hero-image img {
     width: 100%;
     border-radius: 2rem;
-    box-shadow: var(--shadow-xl);
+    box-shadow: var(--shadow-lg);
     transition: var(--transition);
     animation: float 4s ease-in-out infinite;
-}
-
-.hero-image::before {
-    content: '';
-    position: absolute;
-    top: -20px;
-    left: -20px;
-    right: -20px;
-    bottom: -20px;
-    background: var(--primary-light);
-    border-radius: 2rem;
-    opacity: 0.1;
-    z-index: -1;
-}
-
-/* ============================================
-   SECTIONS
-   ============================================ */
-section {
-    padding: 5rem 0;
-}
-
-.section-title {
-    text-align: center;
-    font-size: 2.5rem;
-    font-weight: 600;
-    color: var(--primary);
-    margin-bottom: 1rem;
-}
-
-.section-subtitle {
-    text-align: center;
-    color: var(--text-light);
-    font-size: 1.1rem;
-    max-width: 600px;
-    margin: 0 auto 3rem;
 }
 
 /* ============================================
@@ -401,8 +365,14 @@ section {
     margin-bottom: 1rem;
 }
 
+.category-card h3 {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
 /* ============================================
-   FEATURED PRODUCTS - SPLIT CARD LAYOUT
+   PRODUCTS
    ============================================ */
 .products-grid {
     display: grid;
@@ -420,7 +390,7 @@ section {
 
 .product-card:hover {
     transform: translateY(-10px);
-    box-shadow: var(--shadow-xl);
+    box-shadow: var(--shadow-lg);
 }
 
 .product-image {
@@ -467,9 +437,34 @@ section {
     background: var(--primary-dark);
 }
 
+.whatsapp-inquiry {
+    width: 100%;
+    padding: 0.75rem;
+    background: #25D366;
+    color: white;
+    border: none;
+    border-radius: 2rem;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.whatsapp-inquiry:hover {
+    background: #128C7E;
+}
+
 /* ============================================
    ABOUT - SPLIT LAYOUT
    ============================================ */
+.about-preview {
+    background: var(--bg-light);
+}
+
 .about-split {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -506,8 +501,14 @@ section {
     align-items: center;
     gap: 0.75rem;
     padding: 0.75rem;
-    background: var(--bg-light);
+    background: var(--bg-white);
     border-radius: 1rem;
+    transition: var(--transition);
+}
+
+.focus-item:hover {
+    transform: translateX(5px);
+    box-shadow: var(--shadow-sm);
 }
 
 .focus-item i {
@@ -567,11 +568,12 @@ section {
 }
 
 /* ============================================
-   SAFETY
+   SAFETY - WITH BACKGROUND IMAGE
    ============================================ */
 .safety-commitment {
-    background: linear-gradient(rgba(26, 95, 95, 0.92), rgba(18, 69, 69, 0.95)), url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1920&q=80');
+    background: linear-gradient(rgba(44, 62, 62, 0.85), rgba(44, 62, 62, 0.9)), url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1920&q=80');
     background-size: cover;
+    background-position: center;
     background-attachment: fixed;
     color: white;
 }
@@ -586,14 +588,14 @@ section {
     padding: 1.5rem;
     background: rgba(255, 255, 255, 0.08);
     border-radius: 1.5rem;
-    border-left: 3px solid var(--accent);
+    border-left: 3px solid var(--primary);
 }
 
 /* ============================================
    NEWSLETTER
    ============================================ */
 .newsletter {
-    background: var(--bg-light);
+    background: linear-gradient(135deg, var(--bg-light) 0%, #FFFFFF 100%);
     text-align: center;
 }
 
@@ -666,7 +668,7 @@ section {
    FOOTER
    ============================================ */
 footer {
-    background: var(--primary-dark);
+    background: var(--text-dark);
     color: #E8E0D5;
     padding: 4rem 0 2rem;
 }
@@ -689,9 +691,8 @@ footer {
 }
 
 .footer-links a:hover {
-    color: var(--accent);
+    color: var(--primary);
     transform: translateX(5px);
-    display: inline-block;
 }
 
 .footer-contact p {
@@ -702,7 +703,7 @@ footer {
 }
 
 .footer-contact i {
-    color: var(--accent);
+    color: var(--primary);
 }
 
 .social-icons {
@@ -723,8 +724,8 @@ footer {
 }
 
 .social-icons a:hover {
-    background: var(--accent);
-    color: var(--primary-dark);
+    background: var(--primary);
+    color: white;
     transform: translateY(-4px);
 }
 
